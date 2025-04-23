@@ -15,7 +15,7 @@ public class Validacion {
 		else if(cadena.trim().isEmpty())
 			errores = "Error, " + tipoDato + " no puede estar vacio/a.\n";
 		else if(!cadena.matches("^[\\p{L} .'-]+$"))
-			errores = "Error, " + tipoDato + " contiene caracteres inv·lidos.\n";
+			errores = "Error, " + tipoDato + " contiene caracteres inv√°lidos.\n";
 		
 		return errores;
 	}
