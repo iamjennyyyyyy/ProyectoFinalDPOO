@@ -2,14 +2,14 @@ package Publicacion;
 
 public class Revista extends Publicacion {
 
-	private int año;
+	private int anno;
 	private int num;
 	
-	public int getAño() {
-		return año;
+	public int getAnno() {
+		return anno;
 	}
-	public void setAño(int año) {
-		this.año = año;
+	public void setAnno(int anno) {
+		this.anno = anno;
 	}
 	public int getNum() {
 		return num;
