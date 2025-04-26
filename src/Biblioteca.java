@@ -10,18 +10,11 @@ public class Biblioteca {
 	private String horario;
 	private String nombreCompletoAdmin;
 	private int annosEnCargo;
-<<<<<<< HEAD
 	private ArrayList<UsuarioAcreditado> usuarios = new ArrayList<UsuarioAcreditado>();
 	private ArrayList<Libro> libros = new ArrayList<Libro>();
 	private ArrayList<Revista> revistas = new ArrayList<Revista>();
 	private ArrayList<Articulo> articulos = new ArrayList<Articulo>();
-
-=======
-	private ArrayList<Libro> libros = new ArrayList<Libro>(); // no se incializan aca
-	private ArrayList<Revista> revistas = new ArrayList<Revista>();
-	private ArrayList<Articulo> articulos = new ArrayList<Articulo>();
 	
->>>>>>> de00dd96cfd9856b9871f4a60583918abc0dc7c9
 	public int getId() {
 		return id;
 	}
@@ -58,15 +51,12 @@ public class Biblioteca {
 	public void setNombreCompletoAdmin(String nombreCompletoAdmin) {
 		this.nombreCompletoAdmin = nombreCompletoAdmin;
 	}
-<<<<<<< HEAD
 	public int getAnnosEnCargo() {
 		return annosEnCargo;
 	}
 	public void setAnnosEnCargo(int annosEnCargo) {
 		this.annosEnCargo = annosEnCargo;
 	}
-=======
->>>>>>> de00dd96cfd9856b9871f4a60583918abc0dc7c9
 	public ArrayList<Libro> getLibros() {
 		return libros;
 	}
@@ -82,7 +72,6 @@ public class Biblioteca {
 	public ArrayList<Articulo> getArticulos() {
 		return articulos;
 	}
-<<<<<<< HEAD
 
 	public void setArticulos(ArrayList<Articulo> articulos) {
 		this.articulos = articulos;
@@ -128,18 +117,4 @@ public class Biblioteca {
 		}
 		return usuario;
 	}
-
-=======
-	public void setArticulos(ArrayList<Articulo> articulos) {
-		this.articulos = articulos;
-	}
-     public int getAnnosEnCargo() {
-          return annosEnCargo;
-     }
-     public void setAnnosEnCargo(int annosEnCargo) {
-          this.annosEnCargo = annosEnCargo;
-     }
-
-	
->>>>>>> de00dd96cfd9856b9871f4a60583918abc0dc7c9
 }

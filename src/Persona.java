@@ -12,7 +12,6 @@ public class Persona {
 	public int getId() {
 		return id;
 	}
-	//Implementar
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -35,9 +34,9 @@ public class Persona {
 	}
 	
 	public void setEdad(int edad) {
-		if(edad > 12 && edad < 100)
+		if(edad > 6 && edad < 110)
 			this.edad = edad;
-		else throw new IllegalArgumentException("Edad insuficiente.\n");
+		else throw new IllegalArgumentException("Edad no admitida.\n");
 	}
 
 	public char getSexo() {
@@ -68,7 +67,4 @@ public class Persona {
 		setSexo(sexo);
 		setFecha(fecha);
 	}
-
-	
-
 }
