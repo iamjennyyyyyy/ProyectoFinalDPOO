@@ -115,7 +115,7 @@ public class Biblioteca {
 
 			for(Prestamo p : user.getPrestamos()){
 				if(p.getPub().equals(pub)){
-					if(p.getFechaDevolucion() != null && !p.getFechaDevolucion().plusDays(14).isAfter(LocalDate.now()))
+					if(p.getFechaDevolucion() != null && p.getFechaDevolucion().plusDays(14).isAfter(LocalDate.now()))
 						dosSemanasTranscurridas = false;
 				}
 			}
