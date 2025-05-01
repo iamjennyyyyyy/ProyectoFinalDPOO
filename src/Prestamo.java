@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Prestamo {
@@ -6,7 +7,8 @@ public class Prestamo {
 	private LocalDateTime fechaMax;
 	private Publicacion pub;
 	private UsuarioAcreditado user;
-	private String trabPrestamo;
+	private Trabajador trabPrestamo;
+	private LocalDate fechaDevolucion = null;
 	
 	public LocalDateTime getFechaP() {
 		return fechaP;
@@ -32,15 +34,21 @@ public class Prestamo {
 	public void setUser(UsuarioAcreditado user) {
 		this.user = user;
 	}
-	public String getTrabPrestamo() {
+	public Trabajador getTrabPrestamo() {
 		return trabPrestamo;
 	}
-	public void setTrabPrestamo(String trabPrestamo) {
+	public void setTrabPrestamo(Trabajador trabPrestamo) {
 		this.trabPrestamo = trabPrestamo;
+	}
+	public LocalDate getFechaDevolucion() {
+		return fechaDevolucion;
+	}
+	public void setFechaDevolucion(LocalDate fechaDevolucion) {
+		this.fechaDevolucion = fechaDevolucion;
 	}
 	
 	public Prestamo(LocalDateTime fechaP, LocalDateTime fechaMax, Publicacion pub,
-			UsuarioAcreditado user, String trabPrestamo) {
+			UsuarioAcreditado user, Trabajador trabPrestamo) {
 		
 		setFechaP(fechaP);
 		setFechaMax(fechaMax);
@@ -48,6 +56,7 @@ public class Prestamo {
 		setUser(user);
 		setTrabPrestamo(trabPrestamo);
 	}
-	
-	
+	public Prestamo(Prestamo p, LocalDate fechaDevolucion){
+		p.fechaDevolucion = fechaDevolucion;
+	}
 }
