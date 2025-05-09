@@ -59,4 +59,9 @@ public class Prestamo {
 	public Prestamo(Prestamo p, LocalDate fechaDevolucion){
 		p.fechaDevolucion = fechaDevolucion;
 	}
+	
+	public void concederProrroga(){
+		int tiempoMax = pub.tiempoMaximoPrestamo();
+		fechaMax.plusDays(tiempoMax);
+	}
 }

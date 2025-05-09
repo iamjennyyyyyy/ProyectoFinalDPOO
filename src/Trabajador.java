@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 
 
 public class Trabajador extends Persona {
@@ -18,7 +20,7 @@ public class Trabajador extends Persona {
 		this.cargo = cargo;
 	}
 	
-	public Trabajador(int id, String nombreCompleto, int edad, char sexo, String fecha, String nivelEscolar, String cargo) {
+	public Trabajador(int id, String nombreCompleto, int edad, char sexo, LocalDate fecha, String nivelEscolar, String cargo) {
 		super(id, nombreCompleto, edad, sexo, fecha);
 		
 		setNivelEscolar(nivelEscolar);

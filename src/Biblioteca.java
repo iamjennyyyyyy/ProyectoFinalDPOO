@@ -11,12 +11,12 @@ public class Biblioteca {
 	private String horario;
 	private String nombreCompletoAdmin;
 	private int annosEnCargo;
-	private ArrayList<Trabajador> trabajadores;
-	private ArrayList<UsuarioAcreditado> usuarios;
-	private ArrayList<Libro> libros;
-	private ArrayList<Revista> revistas;
-	private ArrayList<Articulo> articulos;
-	private ArrayList<Prestamo> prestamosTotales;
+	private ArrayList<Trabajador> trabajadores = new ArrayList<Trabajador>();
+	private ArrayList<UsuarioAcreditado> usuarios = new ArrayList<UsuarioAcreditado>();
+	private ArrayList<Libro> libros = new ArrayList<Libro>();
+	private ArrayList<Revista> revistas = new ArrayList<Revista>();
+	private ArrayList<Articulo> articulos = new ArrayList<Articulo>();
+	private ArrayList<Prestamo> prestamosTotales = new ArrayList<Prestamo>();
 
 	public Biblioteca(int id, String nombre, String provincia,
 			String municipio, String horario, String nombreCompletoAdmin,
@@ -32,12 +32,12 @@ public class Biblioteca {
 		this.horario = horario;
 		this.nombreCompletoAdmin = nombreCompletoAdmin;
 		this.annosEnCargo = annosEnCargo;
-		trabajadores = new ArrayList<Trabajador>();
-		usuarios = new ArrayList<UsuarioAcreditado>();
-		libros = new ArrayList<Libro>();
-		revistas = new ArrayList<Revista>();
-		articulos = new ArrayList<Articulo>();
-		prestamosTotales = new ArrayList<Prestamo>();
+		this.trabajadores = trabajadores;
+		this.usuarios = usuarios;
+		this.libros = libros;
+		this.revistas = revistas;
+		this.articulos = articulos;
+		this.prestamosTotales = prestamosTotales;
 	}
 
 	public int getId() {
@@ -102,73 +102,117 @@ public class Biblioteca {
 		this.articulos = articulos;
 	}
 
+	public ArrayList<Trabajador> getTrabajadores() {
+		return trabajadores;
+	}
+
+	public void setTrabajadores(ArrayList<Trabajador> trabajadores) {
+		this.trabajadores = trabajadores;
+	}
+
+	public ArrayList<UsuarioAcreditado> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(ArrayList<UsuarioAcreditado> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public ArrayList<Prestamo> getPrestamosTotales() {
+		return prestamosTotales;
+	}
+
+	public void setPrestamosTotales(ArrayList<Prestamo> prestamosTotales) {
+		this.prestamosTotales = prestamosTotales;
+	}
+
 	//Metodo para realizar o no el prestamo
 	public boolean solicitarPrestamo(int id, Publicacion pub, Trabajador trabajador){
 
-		UsuarioAcreditado user = buscarUsuarioPorId(id);
+		if (pub == null || trabajador == null) {
+			throw new IllegalArgumentException("Publicacion o trabajador no pueden ser null");
+		}
 
-		boolean esUsuario = user != null? true : false;
-		boolean dosSemanasTranscurridas = true;
+		UsuarioAcreditado user = buscarUsuarioPorId(id);
+		if (user == null) {
+			throw new IllegalArgumentException("Usuario no encontrado.");
+		}
+
 		boolean prestamoRealizado = false;
 
-		if(esUsuario){
-
-			for(Prestamo p : user.getPrestamos()){
-				if(p.getPub().equals(pub)){
-					if(p.getFechaDevolucion() != null && p.getFechaDevolucion().plusDays(14).isAfter(LocalDate.now()))
-						dosSemanasTranscurridas = false;
-				}
+		for(Prestamo p : user.getPrestamos()){
+			if(p.getPub().equals(pub) && p.getFechaDevolucion() != null && 
+					p.getFechaDevolucion().plusDays(14).isAfter(LocalDate.now())){
+				throw new IllegalArgumentException("No han transcurrido dos semanas desde la última devolucion.");
 			}
-			if(dosSemanasTranscurridas){
-				if(pub.getCantEjemplares() > 2){
-					if(user.getPrestamos().size() < 3){
-						pub.disminuirStock();
-						LocalDateTime fechaActual = LocalDateTime.now();
-						int tiempo = pub.tiempoMaximoPrestamo();
-						LocalDateTime fechaDevolucion = fechaActual.plusDays(tiempo);
-						Prestamo p = new Prestamo(fechaActual,fechaDevolucion,pub,user,trabajador);
-						user.getPrestamos().add(p);
-						prestamosTotales.add(p);
-						prestamoRealizado = true;
-					}
-					else
-						throw new IllegalArgumentException("El usuario tiene ya 3 prestamos.");
-				}
-				else
-					throw new IllegalArgumentException("Publicacion no disponible.");
+		}
+		if(pub.getCantEjemplares() > 2){
+			if(user.getPrestamos().size() < 3){
+				pub.disminuirStock();
+				LocalDateTime fechaActual = LocalDateTime.now();
+				int tiempo = pub.tiempoMaximoPrestamo();
+				LocalDateTime fechaDevolucion = fechaActual.plusDays(tiempo);
+				Prestamo p = new Prestamo(fechaActual,fechaDevolucion,pub,user,trabajador);
+				user.getPrestamos().add(p);
+				prestamosTotales.add(p);
+				prestamoRealizado = true;
 			}
 			else
-				throw new IllegalArgumentException("No han transcurrido dos semanas de su devolucion de esta publicacion.");
+				throw new IllegalArgumentException("El usuario tiene ya 3 prestamos.");
 		}
 		else
-			throw new IllegalArgumentException("Usuario no encontrado.");
+			throw new IllegalArgumentException("Publicacion no disponible.");
+	return prestamoRealizado;
+}
 
-		return prestamoRealizado;
-	}
+public void devolverPublicacion(int id, Publicacion pub){
 
-	public void devolverPublicacion(int id, Publicacion pub){
+	UsuarioAcreditado user = buscarUsuarioPorId(id);
 
-		UsuarioAcreditado user = buscarUsuarioPorId(id);
-
-		if(user != null){
-			for(Prestamo p : user.getPrestamos()){
-				if(p.getPub().equals(pub)){
-					LocalDate fechaActual = LocalDate.now();
-					p.setFechaDevolucion(fechaActual);
-					prestamosTotales.add(p);
-					user.getPrestamos().remove(p);
-				}
+	if(user != null){
+		for(Prestamo p : user.getPrestamos()){
+			if(p.getPub().equals(pub)){
+				LocalDate fechaActual = LocalDate.now();
+				p.setFechaDevolucion(fechaActual);
+				prestamosTotales.add(p);
+				user.getPrestamos().remove(p);
 			}
 		}
 	}
+}
 
-	public UsuarioAcreditado buscarUsuarioPorId(int id){
+public UsuarioAcreditado buscarUsuarioPorId(int id){
+	UsuarioAcreditado usuario = null;
 
-		UsuarioAcreditado usuario = null;
-		for (UsuarioAcreditado user : usuarios){
-			if(user.getId() == id)
+	if (usuarios == null) {
+		throw new IllegalStateException("Lista de usuarios no inicializada");
+	}
+	for (UsuarioAcreditado user : usuarios){
+			if(user != null && user.getId() == id)
 				usuario = user;
 		}
-		return usuario;
+	return usuario;
+}
+
+public Prestamo buscarPrestamoPorPublicacion(Publicacion pub){
+
+	for (Prestamo p : prestamosTotales){
+		if(p.getPub().equals(pub))
+			return p;
 	}
+	return null;
+}
+
+public boolean realizarProrroga(int id, Publicacion pub){
+	boolean realizada = false;
+	UsuarioAcreditado user = buscarUsuarioPorId(id);
+	if(user != null){
+		Prestamo p = buscarPrestamoPorPublicacion(pub);
+		if(p != null && p.getUser().equals(user)){
+			p.concederProrroga();
+			realizada = true;
+		}
+	}
+	return realizada;
+}
 }

@@ -8,34 +8,52 @@ public class Articulo extends Publicacion {
 	public ArrayList<String> getAutores() {
 		return autores;
 	}
-	public void setAutores(String autor) {
+	public void setAutores(ArrayList<String> autores) {
 
-		String errores = Validacion.validarCadena(autor, "nombre");
+		if (autores == null) {
+	        throw new IllegalArgumentException("La lista de autores no puede ser null");
+	    }
 
-		if(errores.isEmpty())
-			autores.add(autor);
-		else throw new IllegalArgumentException(errores);
-		
+	    ArrayList<String> autoresValidados = new ArrayList<String>(); // Lista temporal
+
+	    for (String a : autores) {
+	        String errores = Validacion.validarCadena(a, "nombre");
+	        if (!errores.isEmpty()) {
+	            throw new IllegalArgumentException(errores);
+	        }
+	        autoresValidados.add(a);
+	    }
+
+	    this.autores = autoresValidados;
 	}
 	
 	public ArrayList<String> getArbitros() {
 		return arbitros;
 	}
-	public void setArbitros(String arbitro) {
+	public void setArbitros(ArrayList<String> arbitros) {
 
-		String errores = Validacion.validarCadena(arbitro, "nombre");
+		if (arbitros == null) {
+	        throw new IllegalArgumentException("La lista de arbitros no puede ser null");
+	    }
 
-		if(errores.isEmpty())
-			arbitros.add(arbitro);
-		else throw new IllegalArgumentException(errores);
-		
+	    ArrayList<String> arbitrosValidados = new ArrayList<String>(); // Lista temporal
+
+	    for (String a : arbitros) {
+	        String errores = Validacion.validarCadena(a, "nombre del arbitro");
+	        if (!errores.isEmpty()) {
+	            throw new IllegalArgumentException(errores);
+	        }
+	        arbitrosValidados.add(a);
+	    }
+
+	    this.arbitros = arbitrosValidados;
 	}
 	
-	public Articulo(int id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String arbitro) {
+	public Articulo(int id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {
 		super(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado);
 		
-		setAutores(autor);
-		setArbitros(arbitro);
+		setAutores(autores);
+		setArbitros(arbitros);
 	}
 	
 	@Override

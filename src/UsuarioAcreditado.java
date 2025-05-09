@@ -23,9 +23,8 @@ public class UsuarioAcreditado extends Persona {
 	}
 
 
-	public UsuarioAcreditado(int id, String nombreCompleto, int edad, char sexo, String fecha, int numUsuario, LocalDate fechaAcreditacion) {
+	public UsuarioAcreditado(int id, String nombreCompleto, int edad, char sexo, LocalDate fecha, int numUsuario, LocalDate fechaAcreditacion) {
 		super(id, nombreCompleto, edad, sexo, fecha);
 		setNumUsuario(numUsuario);
 	}
-	
 }

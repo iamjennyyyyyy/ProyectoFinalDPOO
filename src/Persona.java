@@ -1,5 +1,4 @@
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Persona {
 
@@ -53,14 +52,12 @@ public class Persona {
 		return fecha;
 	}
 	
-	public void setFecha(String fecha) {
+	public void setFecha(LocalDate fecha) {
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate fechaNew = LocalDate.parse(fecha, formatter);
-		this.fecha = fechaNew;
+		this.fecha = fecha;
 		
 	}
-	public Persona(int id, String nombreCompleto, int edad, char sexo, String fecha) {
+	public Persona(int id, String nombreCompleto, int edad, char sexo, LocalDate fecha) {
 		setId(id);
 		setNombreCompleto(nombreCompleto);
 		setEdad(edad);
