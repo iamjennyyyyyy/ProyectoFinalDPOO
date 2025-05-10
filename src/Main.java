@@ -185,7 +185,7 @@ public class Main {
 				usuarios, 
 				libros, 
 				revistas, 
-				articulos, 
+				articulos,
 				prestamosTotales
 				);
 
@@ -208,22 +208,38 @@ public class Main {
 					", acreditado desde " + u.getFecha() + ")");
 		}
 
-		System.out.println("\nPréstamos activos (" + prestamosTotales.size() + "):");
+		biblioteca.devolverPublicacion(101, libro1);
+
+		
+		System.out.println("\nPréstamos activos (" + biblioteca.contarPrestamosActivos() + "):");
 		for (Prestamo p : prestamosTotales) {
-			System.out.println(" - " + p.getPub().getTitulo() + 
-					"\n   Prestado a: " + p.getUser().getNombreCompleto() +
-					"\n   Fecha préstamo: " + p.getFechaP() +
-					"\n   Devolución antes de: " + p.getFechaMax() +
-					"\n   Gestor: " + p.getTrabPrestamo().getNombreCompleto());
+			if(p.getFechaDevolucion() == null){
+				System.out.println(" - " + p.getPub().getTitulo() + 
+						"\n   Prestado a: " + p.getUser().getNombreCompleto() +
+						"\n   Fecha préstamo: " + p.getFechaP() +
+						"\n   Devolución antes de: " + p.getFechaMax() +
+						"\n   Devuelta el dia: " + p.getFechaDevolucion() +
+						"\n   Gestor: " + p.getTrabPrestamo().getNombreCompleto());
+			}
 		}
 
 		System.out.println("\nInventario:");
 		System.out.println(" - Libros: " + libros.size() + " títulos");
 		System.out.println(" - Revistas: " + revistas.size() + " títulos");
 		System.out.println(" - Artículos: " + articulos.size() + " títulos");
+
+		Prestamo nuevoP = biblioteca.solicitarPrestamo(101, libro1, trabajador1);
+		biblioteca.devolverPublicacion(101, libro1);
+
+		String mensajeR;
 		
-		boolean realizado = biblioteca.solicitarPrestamo(101, libro1, trabajador1);
-		
-		System.out.println(realizado + " " + biblioteca.getPrestamosTotales().toString());
+		if(nuevoP != null){
+			nuevoP.concederProrroga();
+			mensajeR = "Prestamo realizado - Prorroga concedida \n" + nuevoP.toString();
+		}
+		else
+			mensajeR = "No fue posible realizar el prestamo";
+		System.out.println(mensajeR);
+
 	}
 }

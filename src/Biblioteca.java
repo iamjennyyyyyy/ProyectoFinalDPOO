@@ -18,6 +18,7 @@ public class Biblioteca {
 	private ArrayList<Articulo> articulos = new ArrayList<Articulo>();
 	private ArrayList<Prestamo> prestamosTotales = new ArrayList<Prestamo>();
 
+
 	public Biblioteca(int id, String nombre, String provincia,
 			String municipio, String horario, String nombreCompletoAdmin,
 			int annosEnCargo, ArrayList<Trabajador> trabajadores,
@@ -127,7 +128,7 @@ public class Biblioteca {
 	}
 
 	//Metodo para realizar o no el prestamo
-	public boolean solicitarPrestamo(int id, Publicacion pub, Trabajador trabajador){
+	public Prestamo solicitarPrestamo(int id, Publicacion pub, Trabajador trabajador){
 
 		if (pub == null || trabajador == null) {
 			throw new IllegalArgumentException("Publicacion o trabajador no pueden ser null");
@@ -138,7 +139,7 @@ public class Biblioteca {
 			throw new IllegalArgumentException("Usuario no encontrado.");
 		}
 
-		boolean prestamoRealizado = false;
+		Prestamo prestamoNuevo;
 
 		for(Prestamo p : user.getPrestamos()){
 			if(p.getPub().equals(pub) && p.getFechaDevolucion() != null && 
@@ -152,67 +153,73 @@ public class Biblioteca {
 				LocalDateTime fechaActual = LocalDateTime.now();
 				int tiempo = pub.tiempoMaximoPrestamo();
 				LocalDateTime fechaDevolucion = fechaActual.plusDays(tiempo);
-				Prestamo p = new Prestamo(fechaActual,fechaDevolucion,pub,user,trabajador);
-				user.getPrestamos().add(p);
-				prestamosTotales.add(p);
-				prestamoRealizado = true;
+				prestamoNuevo = new Prestamo(fechaActual,fechaDevolucion,pub,user,trabajador);
+				user.getPrestamos().add(prestamoNuevo);
+				prestamosTotales.add(prestamoNuevo);
 			}
 			else
 				throw new IllegalArgumentException("El usuario tiene ya 3 prestamos.");
 		}
 		else
 			throw new IllegalArgumentException("Publicacion no disponible.");
-	return prestamoRealizado;
-}
 
-public void devolverPublicacion(int id, Publicacion pub){
+		return prestamoNuevo;
+	}
 
-	UsuarioAcreditado user = buscarUsuarioPorId(id);
+	public void devolverPublicacion(int id, Publicacion pub){
 
-	if(user != null){
-		for(Prestamo p : user.getPrestamos()){
-			if(p.getPub().equals(pub)){
-				LocalDate fechaActual = LocalDate.now();
-				p.setFechaDevolucion(fechaActual);
-				prestamosTotales.add(p);
-				user.getPrestamos().remove(p);
+		UsuarioAcreditado user = buscarUsuarioPorId(id);
+		if(user != null){
+			Prestamo prestamo = buscarPrestamoPorPublicacion(user, pub);
+			if(prestamo != null){
+				prestamo.setFechaDevolucion(LocalDate.now());
+				user.getPrestamos().remove(prestamo);
 			}
 		}
 	}
-}
 
-public UsuarioAcreditado buscarUsuarioPorId(int id){
-	UsuarioAcreditado usuario = null;
+	public UsuarioAcreditado buscarUsuarioPorId(int id){
+		UsuarioAcreditado usuario = null;
 
-	if (usuarios == null) {
-		throw new IllegalStateException("Lista de usuarios no inicializada");
-	}
-	for (UsuarioAcreditado user : usuarios){
+		if (usuarios == null) {
+			throw new IllegalStateException("Lista de usuarios no inicializada");
+		}
+		for (UsuarioAcreditado user : usuarios){
 			if(user != null && user.getId() == id)
 				usuario = user;
 		}
-	return usuario;
-}
-
-public Prestamo buscarPrestamoPorPublicacion(Publicacion pub){
-
-	for (Prestamo p : prestamosTotales){
-		if(p.getPub().equals(pub))
-			return p;
+		return usuario;
 	}
-	return null;
-}
 
-public boolean realizarProrroga(int id, Publicacion pub){
-	boolean realizada = false;
-	UsuarioAcreditado user = buscarUsuarioPorId(id);
-	if(user != null){
-		Prestamo p = buscarPrestamoPorPublicacion(pub);
-		if(p != null && p.getUser().equals(user)){
-			p.concederProrroga();
-			realizada = true;
+	public Prestamo buscarPrestamoPorPublicacion(UsuarioAcreditado user, Publicacion pub){
+
+		for (Prestamo p : prestamosTotales){
+			if(p.getPub().equals(pub) && user != null)
+				return p;
 		}
+		return null;
 	}
-	return realizada;
-}
+
+	public boolean realizarProrroga(int id, Publicacion pub){
+		
+		boolean realizada = false;
+		UsuarioAcreditado user = buscarUsuarioPorId(id);
+		if(user != null){
+			Prestamo p = buscarPrestamoPorPublicacion(user, pub);
+			if(p != null){
+				p.concederProrroga();
+				realizada = true;
+			}
+		}
+		return realizada;
+	}
+	public int contarPrestamosActivos(){
+		int cont = 0;
+		
+		for(Prestamo p : prestamosTotales){
+			if(p.getFechaDevolucion() == null)
+				cont++;
+		}
+		return cont;
+	}
 }

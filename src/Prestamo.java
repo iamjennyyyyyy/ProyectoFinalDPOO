@@ -64,4 +64,30 @@ public class Prestamo {
 		int tiempoMax = pub.tiempoMaximoPrestamo();
 		fechaMax.plusDays(tiempoMax);
 	}
+	@Override
+	public String toString() {
+		
+		String tipoPublicacion;
+		if(pub instanceof Libro)
+			tipoPublicacion = "Libro";
+		else if(pub instanceof Revista)
+			tipoPublicacion = "Revista";
+		else
+			tipoPublicacion = "Articulo";
+		
+		String mensaje = tipoPublicacion + ": " + pub.getTitulo() + 
+				"\n" + "Usuario: " + user.getNombreCompleto() + 
+				"\n" + "Gestor: " + trabPrestamo.getNombreCompleto() + 
+				"\n" + "Fecha prestamo: " + fechaP + 
+				"\n" + "Fecha maxima: " + fechaMax + 
+				"\n";
+		
+		if(fechaDevolucion != null)
+			mensaje += "Devuelta en la fecha " + fechaDevolucion;
+		else
+			mensaje += "Aun no devuelto ";
+		
+		return mensaje;
+	}
+	
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class UsuarioAcreditado extends Persona {
 
 	private int numUsuario;
-	private ArrayList<Prestamo> prestamos;
+	private ArrayList<Prestamo> prestamos = new ArrayList<Prestamo>();
 
 	public ArrayList<Prestamo> getPrestamos() {
 		return prestamos;
