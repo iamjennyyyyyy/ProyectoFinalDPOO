@@ -51,7 +51,6 @@ public class Principal extends JFrame {
 	private JMenuItem mntmCentro;
 	private JMenuItem mntmNosotros;
 	private Login l;
-	private AgregarUsuario a;
 
 	/**
 	 * Launch the application.
@@ -76,7 +75,6 @@ public class Principal extends JFrame {
 		
 		l = new Login(this);
 		l.setVisible(true);
-		a.setVisible(false);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 1375, 773);
@@ -185,7 +183,8 @@ public class Principal extends JFrame {
 			mntmAgregarUsuario = new JMenuItem("Agregar Usuario");
 			mntmAgregarUsuario.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					a = new AgregarUsuario();
+					AgregarUsuario pantalla = new AgregarUsuario();
+					pantalla.setVisible(true);
 				}
 			});
 		}
