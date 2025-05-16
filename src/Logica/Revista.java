@@ -1,3 +1,4 @@
+package Logica;
 
 
 public class Revista extends Publicacion {
