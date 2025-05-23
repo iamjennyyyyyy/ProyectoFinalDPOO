@@ -19,7 +19,7 @@ public class Revista extends Publicacion {
 		this.num = num;
 	}
 	
-	public Revista(int id, String titulo, String materia, int numPaginas,
+	public Revista(String id, String titulo, String materia, int numPaginas,
 			int cantEjemplares, boolean estaPrestado) {
 		
 		super(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado);

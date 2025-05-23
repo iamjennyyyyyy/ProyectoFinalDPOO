@@ -42,7 +42,7 @@ public class Libro extends Publicacion {
 		else throw new IllegalArgumentException(errores);
 	}
 
-	public Libro(int id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, String editorial){
+	public Libro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, String editorial){
 		super(id,titulo,materia,numPaginas,cantEjemplares,estaPrestado);
 
 		setAutores(autores);

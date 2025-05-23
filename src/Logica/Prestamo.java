@@ -6,10 +6,10 @@ public class Prestamo {
 
 	private LocalDateTime fechaP;
 	private LocalDateTime fechaMax;
+	private LocalDate fechaDevolucion = null;
 	private Publicacion pub;
 	private UsuarioAcreditado user;
 	private Trabajador trabPrestamo;
-	private LocalDate fechaDevolucion = null;
 	
 	public LocalDateTime getFechaP() {
 		return fechaP;
@@ -56,9 +56,6 @@ public class Prestamo {
 		setPub(pub);
 		setUser(user);
 		setTrabPrestamo(trabPrestamo);
-	}
-	public Prestamo(Prestamo p, LocalDate fechaDevolucion){
-		p.fechaDevolucion = fechaDevolucion;
 	}
 	
 	public void concederProrroga(){

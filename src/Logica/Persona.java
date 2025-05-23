@@ -3,16 +3,16 @@ import java.time.LocalDate;
 
 public class Persona {
 
-	protected int id;
+	protected String id;
 	protected String nombreCompleto;
 	protected int edad;
-	protected char sexo;
+	protected String sexo;
 	protected LocalDate fecha;
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	private void setId(String id) {
 		this.id = id;
 	}
 	
@@ -21,12 +21,7 @@ public class Persona {
 	}
 
 	public void setNombreCompleto(String nombreCompleto) {
-
-		String errores = Validacion.validarCadena(nombreCompleto, "nombre");
-
-		if(errores.isEmpty())
-			this.nombreCompleto = nombreCompleto;
-		else throw new IllegalArgumentException(errores);
+		this.nombreCompleto = nombreCompleto;
 	}
 
 	public int getEdad() {
@@ -36,17 +31,14 @@ public class Persona {
 	public void setEdad(int edad) {
 		if(edad > 6 && edad < 110)
 			this.edad = edad;
-		else throw new IllegalArgumentException("Edad no admitida.\n");
 	}
 
-	public char getSexo() {
+	public String getSexo() {
 		return sexo;
 	}
 	
-	public void setSexo(char sexo) {
-		if(sexo == 'f' || sexo == 'F' || sexo == 'm' || sexo == 'M')
+	public void setSexo(String sexo) {
 			this.sexo = sexo;
-		else throw new IllegalArgumentException("Caracter de sexo no valido");
 	}
 	
 	public LocalDate getFecha() {
@@ -58,11 +50,13 @@ public class Persona {
 		this.fecha = fecha;
 		
 	}
-	public Persona(int id, String nombreCompleto, int edad, char sexo, LocalDate fecha) {
+	public Persona(String id,String nombreCompleto, int edad, String sexo) {
+		
 		setId(id);
 		setNombreCompleto(nombreCompleto);
 		setEdad(edad);
 		setSexo(sexo);
+		LocalDate fecha = LocalDate.now();
 		setFecha(fecha);
 	}
 }

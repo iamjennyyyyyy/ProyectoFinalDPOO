@@ -1,6 +1,7 @@
 package Visual;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -19,24 +20,30 @@ import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import Logica.Biblioteca;
+import Logica.Trabajador;
 import Utiles.Colores;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import javax.swing.JPasswordField;
 
 public class Login extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lblUsuario;
 	private JTextField textField;
-	private JTextField textField_1;
 	private JLabel lblContrasea;
 	private JLabel lblBienvenido;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
+		
 			Principal p = new Principal();
 			Login dialog = new Login(p);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -59,15 +66,20 @@ public class Login extends JDialog {
 		contentPanel.setLayout(null);
 		contentPanel.add(getLblUsuario());
 		contentPanel.add(getTextField());
-		contentPanel.add(getTextField_1());
 		contentPanel.add(getLblContrasea());
 		contentPanel.add(getLblBienvenido());
+		contentPanel.add(getPasswordField());
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				final JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						dispose();
+					}
+				});
 				okButton.setBackground(Colores.getcolorBotonClaro());
 				okButton.addMouseListener(new MouseAdapter() {
 					@Override
@@ -112,14 +124,6 @@ public class Login extends JDialog {
 		}
 		return textField;
 	}
-	private JTextField getTextField_1() {
-		if (textField_1 == null) {
-			textField_1 = new JTextField();
-			textField_1.setColumns(10);
-			textField_1.setBounds(54, 220, 218, 24);
-		}
-		return textField_1;
-	}
 	private JLabel getLblContrasea() {
 		if (lblContrasea == null) {
 			lblContrasea = new JLabel("Contrase\u00F1a");
@@ -135,5 +139,17 @@ public class Login extends JDialog {
 			lblBienvenido.setBounds(119, 11, 116, 24);
 		}
 		return lblBienvenido;
+	}
+	
+	public static Trabajador obtenerAdmin(){
+		Trabajador t = new Trabajador("3", "Amelia Ramos", 35, "F", "Universitario", "Bibliotecario Jefe");
+		return t;
+	}
+	private JPasswordField getPasswordField() {
+		if (passwordField == null) {
+			passwordField = new JPasswordField();
+			passwordField.setBounds(57, 232, 215, 24);
+		}
+		return passwordField;
 	}
 }

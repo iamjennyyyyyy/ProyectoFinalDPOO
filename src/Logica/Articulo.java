@@ -50,7 +50,7 @@ public class Articulo extends Publicacion {
 	    this.arbitros = arbitrosValidados;
 	}
 	
-	public Articulo(int id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {
+	public Articulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {
 		super(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado);
 		
 		setAutores(autores);

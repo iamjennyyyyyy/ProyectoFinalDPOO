@@ -21,9 +21,8 @@ public class Trabajador extends Persona {
 		this.cargo = cargo;
 	}
 	
-	public Trabajador(int id, String nombreCompleto, int edad, char sexo, LocalDate fecha, String nivelEscolar, String cargo) {
-		super(id, nombreCompleto, edad, sexo, fecha);
-		
+	public Trabajador(String id,String nombreCompleto, int edad, String sexo, String nivelEscolar, String cargo) {
+		super(id,nombreCompleto, edad, sexo);
 		setNivelEscolar(nivelEscolar);
 		setNivelEscolar(cargo);
 	}

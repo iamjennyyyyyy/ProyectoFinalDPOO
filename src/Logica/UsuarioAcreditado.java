@@ -4,46 +4,44 @@ import java.util.ArrayList;
 
 public class UsuarioAcreditado extends Persona {
 
-	private int numUsuario;
-	private String usuarioLogeo;
-	private String contrasenia;
-	private String info;
-	private String materiaPreferida;
+	private static int numUsuario = 0;
+//	private String usuarioLogeo;
+//	private String contrasenia;
+//	private String info;
+//	private String materiaPreferida;
+	private ArrayList<Prestamo> prestamos;
 	
-	public String getInfo() {
-		return info;
-	}
-
-	public void setInfo(String info) {
-		this.info = info;
-	}
-
-	public String getMateriaPreferida() {
-		return materiaPreferida;
-	}
-
-	public void setMateriaPreferida(String materiaPreferida) {
-		this.materiaPreferida = materiaPreferida;
-	}
-
-	public String getContrasenia() {
-		return contrasenia;
-	}
-
-	public void setContrasenia(String contrasenia) {
-		this.contrasenia = contrasenia;
-	}
-
-
-	private ArrayList<Prestamo> prestamos = new ArrayList<Prestamo>();
-	
-	public String getUsuarioLogeo() {
-		return usuarioLogeo;
-	}
-
-	public void setUsuarioLogeo(String usuarioLogeo) {
-		this.usuarioLogeo = usuarioLogeo;
-	}
+//	public String getInfo() {
+//		return info;
+//	}
+//
+//	public void setInfo(String info) {
+//		this.info = info;
+//	}
+//
+//	public String getMateriaPreferida() {
+//		return materiaPreferida;
+//	}
+//
+//	public void setMateriaPreferida(String materiaPreferida) {
+//		this.materiaPreferida = materiaPreferida;
+//	}
+//
+//	public String getContrasenia() {
+//		return contrasenia;
+//	}
+//
+//	public void setContrasenia(String contrasenia) {
+//		this.contrasenia = contrasenia;
+//	}
+//	
+//	public String getUsuarioLogeo() {
+//		return usuarioLogeo;
+//	}
+//
+//	public void setUsuarioLogeo(String usuarioLogeo) {
+//		this.usuarioLogeo = usuarioLogeo;
+//	}
 
 	public ArrayList<Prestamo> getPrestamos() {
 		return prestamos;
@@ -57,15 +55,16 @@ public class UsuarioAcreditado extends Persona {
 		return numUsuario;
 	}
 
-	public void setNumUsuario(int numUsuario) {
-		this.numUsuario = numUsuario;
+	public static void setNumUsuario() {
+		numUsuario++;
 	}
 
 
-	public UsuarioAcreditado(int id, String nombreCompleto, int edad, char sexo, LocalDate fecha, int numUsuario, LocalDate fechaAcreditacion, String usuarioLogeo, String contrasenia) {
-		super(id, nombreCompleto, edad, sexo, fecha);
-		setNumUsuario(numUsuario);
-		setUsuarioLogeo(usuarioLogeo);
-		setContrasenia(contrasenia);
+	public UsuarioAcreditado(String id, String nombreCompleto, int edad, String sexo) {
+		super(id, nombreCompleto, edad, sexo);
+		setNumUsuario();
+//		setUsuarioLogeo(usuarioLogeo);
+//		setContrasenia(contrasenia);
+		prestamos = new ArrayList<Prestamo>();
 	}
 }

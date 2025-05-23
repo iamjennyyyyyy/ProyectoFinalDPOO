@@ -3,19 +3,18 @@ package Logica;
 
 public abstract class Publicacion {
 
-	protected int id;
+	protected String id;
 	protected String titulo;
 	protected String materia;
 	protected int numPaginas;
 	protected int cantEjemplares;
 	protected boolean estaPrestado;
 
-	public int getId(){
+	public String getId(){
 		return id;
 	}
 	//Comprueba que tenga exactamente 6 cifras
-	public void setId(int id) {
-		if(id / 100000 >= 1 && id / 100000 < 10)
+	private void setId(String id) {
 			this.id = id;
 	}
 
@@ -75,7 +74,7 @@ public abstract class Publicacion {
 		this.estaPrestado = estaPrestado;
 	}
 	
-	public Publicacion(int id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado) {
+	public Publicacion(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado) {
 		super();
 		
 		setId(id);

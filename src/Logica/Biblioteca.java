@@ -3,43 +3,58 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import Visual.Login;
+import Inicializadora.Inicializar;
+
 public class Biblioteca {
 
+	private static Biblioteca unicaInstancia;
 	private int id;
 	private String nombre;
 	private String provincia;
 	private String municipio;
 	private String horario;
-	private String nombreCompletoAdmin;
+	private static Trabajador admin = Login.obtenerAdmin();
 	private int annosEnCargo;
-	private ArrayList<Trabajador> trabajadores = new ArrayList<Trabajador>();
-	private ArrayList<UsuarioAcreditado> usuarios = new ArrayList<UsuarioAcreditado>();
-	private ArrayList<Libro> libros = new ArrayList<Libro>();
-	private ArrayList<Revista> revistas = new ArrayList<Revista>();
-	private ArrayList<Articulo> articulos = new ArrayList<Articulo>();
-	private ArrayList<Prestamo> prestamosTotales = new ArrayList<Prestamo>();
+	private ArrayList<Trabajador> trabajadores;
+	private ArrayList<UsuarioAcreditado> usuarios;
+	private ArrayList<Libro> libros;
+	private ArrayList<Revista> revistas;
+	private ArrayList<Articulo> articulos;
+	private ArrayList<Prestamo> prestamosTotales;
 
 
-	public Biblioteca(int id, String nombre, String provincia,
-			String municipio, String horario, String nombreCompletoAdmin,
-			int annosEnCargo, ArrayList<Trabajador> trabajadores,
-			ArrayList<UsuarioAcreditado> usuarios, ArrayList<Libro> libros,
-			ArrayList<Revista> revistas, ArrayList<Articulo> articulos,
-			ArrayList<Prestamo> prestamosTotales) {
+	private Biblioteca(int id, String nombre, String provincia,
+			String municipio, String horario, Trabajador admin,
+			int annosEnCargo) {
 
 		this.id = id;
 		this.nombre = nombre;
 		this.provincia = provincia;
 		this.municipio = municipio;
 		this.horario = horario;
-		this.nombreCompletoAdmin = nombreCompletoAdmin;
 		this.annosEnCargo = annosEnCargo;
-		this.trabajadores = trabajadores;
-		this.usuarios = usuarios;
-		this.libros = libros;
-		this.revistas = revistas;
-		this.articulos = articulos;
-		this.prestamosTotales = prestamosTotales;
+		trabajadores = new ArrayList<Trabajador>();
+		usuarios = new ArrayList<UsuarioAcreditado>();
+		libros = new ArrayList<Libro>();
+		revistas = new ArrayList<Revista>();
+		articulos = new ArrayList<Articulo>();
+		prestamosTotales = new ArrayList<Prestamo>();
+	}
+
+	public static Biblioteca getInstancia() {
+		if (unicaInstancia == null) {
+			unicaInstancia = new Biblioteca(
+	                1,
+	                "Biblioteca Municipal Central",
+	                "Barcelona",
+	                "Barcelona",
+	                "09:00-21:00 L-V, 10:00-14:00 S",
+	                Login.obtenerAdmin(),
+	                5
+	        );
+		}
+		return unicaInstancia;
 	}
 
 	public int getId() {
@@ -72,11 +87,8 @@ public class Biblioteca {
 	public void setHorario(String horario) {
 		this.horario = horario;
 	}
-	public String getNombreCompletoAdmin() {
-		return nombreCompletoAdmin;
-	}
-	public void setNombreCompletoAdmin(String nombreCompletoAdmin) {
-		this.nombreCompletoAdmin = nombreCompletoAdmin;
+	public Trabajador getAdmin() {
+		return admin;
 	}
 	public int getAnnosEnCargo() {
 		return annosEnCargo;
@@ -129,15 +141,18 @@ public class Biblioteca {
 	}
 
 	//Metodo para realizar o no el prestamo
-	public Prestamo solicitarPrestamo(int id, Publicacion pub, Trabajador trabajador){
+	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador){
 
-		if (pub == null || trabajador == null) {
-			throw new IllegalArgumentException("Publicacion o trabajador no pueden ser null");
+		if (pub == null) {
+			throw new IllegalArgumentException("Publicacion no encontrada");
 		}
 
-		UsuarioAcreditado user = buscarUsuarioPorId(id);
 		if (user == null) {
 			throw new IllegalArgumentException("Usuario no encontrado.");
+		}
+		
+		if (trabajador == null) {
+			throw new IllegalArgumentException("Trabajador no encontrado.");
 		}
 
 		Prestamo prestamoNuevo;
@@ -167,7 +182,7 @@ public class Biblioteca {
 		return prestamoNuevo;
 	}
 
-	public void devolverPublicacion(int id, Publicacion pub){
+	public void devolverPublicacion(String id, Publicacion pub){
 
 		UsuarioAcreditado user = buscarUsuarioPorId(id);
 		if(user != null){
@@ -179,48 +194,100 @@ public class Biblioteca {
 		}
 	}
 
-	public UsuarioAcreditado buscarUsuarioPorId(int id){
+	public UsuarioAcreditado buscarUsuarioPorId(String id){
 		UsuarioAcreditado usuario = null;
 
 		if (usuarios == null) {
 			throw new IllegalStateException("Lista de usuarios no inicializada");
 		}
 		for (UsuarioAcreditado user : usuarios){
-			if(user != null && user.getId() == id)
+			if(user != null && user.getId().equals(id))
 				usuario = user;
 		}
 		return usuario;
 	}
 
-	public Prestamo buscarPrestamoPorPublicacion(UsuarioAcreditado user, Publicacion pub){
+	public Publicacion buscarPublicacionPorId(String id){
 
-		for (Prestamo p : prestamosTotales){
-			if(p.getPub().equals(pub) && user != null)
-				return p;
-		}
-		return null;
-	}
-
-	public boolean realizarProrroga(int id, Publicacion pub){
-		
-		boolean realizada = false;
-		UsuarioAcreditado user = buscarUsuarioPorId(id);
-		if(user != null){
-			Prestamo p = buscarPrestamoPorPublicacion(user, pub);
-			if(p != null){
-				p.concederProrroga();
-				realizada = true;
+		if (libros == null)
+			throw new IllegalStateException("Lista de libros no inicializada");
+		else if (revistas == null)
+			throw new IllegalStateException("Lista de revistas no inicializada");
+		else if (articulos == null)
+			throw new IllegalStateException("Lista de articulos no inicializada");
+			
+			for (Libro l : libros){
+				if(l != null && l.getId().equals(id))
+					return l;
 			}
+			for (Revista r : revistas){
+				if(r != null && r.getId().equals(id))
+					return r;
+			}
+			for (Articulo a : articulos){
+				if(a != null && a.getId().equals(id))
+					return a;
+			}
+			return null;
 		}
-		return realizada;
-	}
-	public int contarPrestamosActivos(){
-		int cont = 0;
+
+		public Prestamo buscarPrestamoPorPublicacion(UsuarioAcreditado user, Publicacion pub){
+
+			for (Prestamo p : prestamosTotales){
+				if(p.getPub().equals(pub) && user != null)
+					return p;
+			}
+			return null;
+		}
+
+		public boolean realizarProrroga(String id, Publicacion pub){
+
+			boolean realizada = false;
+			UsuarioAcreditado user = buscarUsuarioPorId(id);
+			if(user != null){
+				Prestamo p = buscarPrestamoPorPublicacion(user, pub);
+				if(p != null){
+					p.concederProrroga();
+					realizada = true;
+				}
+			}
+			return realizada;
+		}
+		public int contarPrestamosActivos(){
+			int cont = 0;
+
+			for(Prestamo p : prestamosTotales){
+				if(p.getFechaDevolucion() == null)
+					cont++;
+			}
+			return cont;
+		}
 		
-		for(Prestamo p : prestamosTotales){
-			if(p.getFechaDevolucion() == null)
-				cont++;
+		public void agregarTrabajador(Trabajador t) {
+	        trabajadores.add(t);
+	    }
+		
+		public void agregarUsuarioAcreditado(UsuarioAcreditado u){
+			usuarios.add(u);
 		}
-		return cont;
+
+	    public void crearUsuarioAcreditado(String id, String nombre,int edad, String sexo) {
+	        usuarios.add(new UsuarioAcreditado(id, nombre, edad, sexo));
+	    }
+
+	    public void agregarLibro(Libro l) {
+	        libros.add(l);
+	    }
+
+	    public void agregarRevista(Revista r) {
+	        revistas.add(r);
+	    }
+
+	    public void agregarArticulo(Articulo a) {
+	        articulos.add(a);
+	    }
+
+	    public void agregarPrestamo(Prestamo p) {
+	        prestamosTotales.add(p);
+	    }
 	}
-}
