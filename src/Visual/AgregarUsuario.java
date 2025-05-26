@@ -41,6 +41,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.UIManager;
+import javax.swing.SpinnerNumberModel;
 
 public class AgregarUsuario extends JDialog {
 
@@ -135,15 +136,15 @@ public class AgregarUsuario extends JDialog {
 
 						if(nombre.isEmpty())
 							JOptionPane.showMessageDialog(null, "Error. Nombre vacío.");
-						if (edad < 10 || edad > 110){
-							JOptionPane.showMessageDialog(null, "Edad no admitida.");
+						else if (edad < 18|| edad > 110){
+							if(edad < 18)
+								JOptionPane.showMessageDialog(null, "Lectores menores de edad no pueden registrarse.");
+							else
+								JOptionPane.showMessageDialog(null, "Edad no admitida.");
 						}
 						else{
 							JOptionPane.showMessageDialog(null, "Usuario registrado con éxito");
 							Biblioteca.getInstancia().crearUsuarioAcreditado(id, nombre, edad, sexo);
-							for(UsuarioAcreditado u : Biblioteca.getInstancia().getUsuarios())
-								System.out.println(u.getNombreCompleto());
-							GestionUsuario.cargarTablaUsuarios();
 							dispose();
 						}
 					}
@@ -179,6 +180,7 @@ public class AgregarUsuario extends JDialog {
 	private JSpinner getSpinner() {
 		if (spinner == null) {
 			spinner = new JSpinner();
+			spinner.setModel(new SpinnerNumberModel(new Integer(18), null, null, new Integer(1)));
 			spinner.setBounds(103, 175, 49, 22);
 		}
 		return spinner;

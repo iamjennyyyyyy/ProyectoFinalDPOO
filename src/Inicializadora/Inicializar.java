@@ -3,14 +3,8 @@ package Inicializadora;
 import Logica.Biblioteca;
 import Logica.Articulo;
 import Logica.Libro;
-import Logica.Prestamo;
 import Logica.Trabajador;
-import Logica.UsuarioAcreditado;
 import Logica.Revista;
-import Visual.Login;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Inicializar {
@@ -22,8 +16,12 @@ public class Inicializar {
         Biblioteca.getInstancia().agregarTrabajador(new Trabajador("2","Jose Machado",28, "M", "Técnico Medio", "Auxiliar de Biblioteca"));
 
         // 2. Crear y agregar usuarios acreditados
-        Biblioteca.getInstancia().agregarUsuarioAcreditado(new UsuarioAcreditado("101","Lucia Guevara", 25, "F"));
-        Biblioteca.getInstancia().agregarUsuarioAcreditado(new UsuarioAcreditado("102","Pedro Gutierrez" , 30, "M"));
+        Biblioteca.getInstancia().crearUsuarioAcreditado("101","Lucia Guevara", 25, "F");
+        Biblioteca.getInstancia().crearUsuarioAcreditado("102","Pedro Gutierrez" , 30, "M");
+        Biblioteca.getInstancia().crearUsuarioAcreditado("103","Amara Batista", 19, "F");
+        Biblioteca.getInstancia().crearUsuarioAcreditado("104","Juan Lopez" , 20, "M");
+        Biblioteca.getInstancia().crearUsuarioAcreditado("105","Lorenzo Torres", 21, "M");
+        Biblioteca.getInstancia().crearUsuarioAcreditado("106","Liana Castillo" , 45, "F");
 
         // 3. Crear y agregar libros
         ArrayList<String> autores1 = new ArrayList<>();

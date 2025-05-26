@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import Visual.Login;
-import Inicializadora.Inicializar;
 
 public class Biblioteca {
 
@@ -266,10 +265,6 @@ public class Biblioteca {
 		public void agregarTrabajador(Trabajador t) {
 	        trabajadores.add(t);
 	    }
-		
-		public void agregarUsuarioAcreditado(UsuarioAcreditado u){
-			usuarios.add(u);
-		}
 
 	    public void crearUsuarioAcreditado(String id, String nombre,int edad, String sexo) {
 	        usuarios.add(new UsuarioAcreditado(id, nombre, edad, sexo));

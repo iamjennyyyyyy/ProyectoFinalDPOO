@@ -1,7 +1,4 @@
 package Logica;
-import java.time.LocalDate;
-
-
 
 public class Trabajador extends Persona {
 

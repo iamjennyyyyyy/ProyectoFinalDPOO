@@ -31,7 +31,7 @@ public class GestionUsuario extends JDialog {
 	private static JTable table;
 	private JScrollPane scrollPane_1;
 	private JButton btnNewButton;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,14 +59,15 @@ public class GestionUsuario extends JDialog {
 		contentPanel.add(getBtnNewButton());
 		cargarTablaUsuarios();
 	}
+
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setBackground(Color.WHITE);
+			table.setBackground(Colores.getColorbeige());
 			table.setForeground(new Color(0, 0, 0));
 			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			table.setGridColor(new Color(148, 0, 211));
+			table.setGridColor(Color.WHITE);
 			table.setRowHeight(20);
 		}
 		return table;
@@ -74,17 +75,15 @@ public class GestionUsuario extends JDialog {
 	
 	public static void cargarTablaUsuarios(){
 		
-		System.out.println("TABLA");
 		ArrayList<UsuarioAcreditado> usuarios = Biblioteca.getInstancia().getUsuarios();
 		UsuarioAcreditado[] tabla = new UsuarioAcreditado[usuarios.size()];
-		for(int i=0;i<tabla.length;i++){
-			
-			tabla[i] = usuarios.get(i);
-			System.out.println(tabla[i].getNombreCompleto());
-		}
 		
+		for(int i=0;i<tabla.length;i++){
+			tabla[i] = usuarios.get(i);
+		}
 		UsuarioTableModel modelo = new UsuarioTableModel(tabla);
 		table.setModel(modelo);
+		table.repaint();
 	}
 
 	private JScrollPane getScrollPane_1() {
@@ -97,11 +96,11 @@ public class GestionUsuario extends JDialog {
 	}
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
-			btnNewButton = new JButton("New button");
+			btnNewButton = new JButton("Agregar Usuario");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					AgregarUsuario u = new AgregarUsuario();
-					u.setVisible(true);
+					AgregarUsuario formulario = new AgregarUsuario();
+					formulario.setVisible(true);
 					cargarTablaUsuarios();
 				}
 			});
@@ -109,4 +108,6 @@ public class GestionUsuario extends JDialog {
 		}
 		return btnNewButton;
 	}
+	
+	
 }
