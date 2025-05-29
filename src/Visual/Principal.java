@@ -1,19 +1,14 @@
 package Visual;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JDialog;
 import javax.swing.JMenuBar;
-import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
+import javax.swing.UIManager;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -30,6 +25,10 @@ import java.awt.CardLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
+import javax.swing.JTextPane;
+import javax.swing.border.LineBorder;
+
+import com.formdev.flatlaf.FlatLightLaf;
 
 public class Principal extends JFrame {
 
@@ -44,7 +43,6 @@ public class Principal extends JFrame {
 	private JMenuItem mntmReporte_2;
 	private JMenuItem mntmReporte_3;
 	private Login l;
-	private AgregarPrestamo nuevo;
 	Biblioteca b = Biblioteca.getInstancia();
 	private JMenuItem mntmNosotros;
 	private JMenuItem mntmCentro;
@@ -54,6 +52,9 @@ public class Principal extends JFrame {
 	private JMenuItem mntmTrabajador;
 	private JMenuItem mntmPublicacion;
 	private JMenuItem mntmPrestamo;
+	private JLabel label;
+	private JLabel lblNewLabel;
+	private JTextPane txtpnSistemaDeGestin;
 
 	/**
 	 * Launch the application.
@@ -63,6 +64,12 @@ public class Principal extends JFrame {
 			public void run() {
 				try {
 					Inicializar.Inicio();
+					FlatLightLaf.setup();
+					UIManager.put( "Button.arc", 999 );
+					UIManager.put( "TabbedPane.showTabSeparators", true );
+					UIManager.put( "TextComponent.arc", 999 );
+					UIManager.put( "Component.arc", 999 );
+					UIManager.put( "ScrollBar.showButtons", true );
 					Principal frame = new Principal();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -75,32 +82,31 @@ public class Principal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	
+
 	public Principal() {
 
 		l = new Login(this);
 		l.setVisible(true);
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 1366, 768);
-		contentPane = new JPanel()
-		{
-			public void paintComponent(Graphics g){
-				Image img = Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/images/fondoS.jpg"));
-				g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
-			}
-		};
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setBounds(0, 0, 1382, 747);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(245, 245, 245));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.add(getMenuBar_1());
+		contentPane.add(getLblNewLabel());
+		contentPane.add(getTxtpnSistemaDeGestin());
+		contentPane.add(getLabel());
 	}
 
 	private JMenuBar getMenuBar_1() {
 		if (menuBar == null) {
 			menuBar = new JMenuBar();
+			menuBar.setBorder(new LineBorder(new Color(0, 0, 0)));
 			menuBar.setFont(new Font("SansSerif", Font.PLAIN, 14));
-			menuBar.setBackground(new Color(222, 184, 135));
+			menuBar.setBackground(new Color(255, 250, 250));
+			menuBar.setForeground(Colores.getColoroscuro());
 			menuBar.setBounds(0, 0, 1367, 65);
 			menuBar.add(getBotonSesion());
 			menuBar.add(getMnVer());
@@ -112,7 +118,7 @@ public class Principal extends JFrame {
 	private JMenu getBotonSesion() {
 		if (botonSesion == null) {
 			botonSesion = new JMenu("Cerrar Sesion");
-			botonSesion.setFont(new Font("SansSerif", Font.PLAIN, 17));
+			botonSesion.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
 			botonSesion.add(getMntmUsuario());
 			botonSesion.add(getMntmCerrar());
 		}
@@ -121,7 +127,7 @@ public class Principal extends JFrame {
 	private JMenu getBotonReportes() {
 		if (botonReportes == null) {
 			botonReportes = new JMenu("Reportes");
-			botonReportes.setFont(new Font("SansSerif", Font.PLAIN, 17));
+			botonReportes.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
 			botonReportes.add(getMntmReporte());
 			botonReportes.add(getMntmReporte_1());
 			botonReportes.add(getMntmReporte_2());
@@ -132,7 +138,7 @@ public class Principal extends JFrame {
 	private JMenu getBotonInfo() {
 		if (botonInfo == null) {
 			botonInfo = new JMenu("Acerca de");
-			botonInfo.setFont(new Font("SansSerif", Font.PLAIN, 17));
+			botonInfo.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
 			botonInfo.add(getMntmNosotros());
 			botonInfo.add(getMntmCentro());
 		}
@@ -152,7 +158,14 @@ public class Principal extends JFrame {
 	}
 	private JMenuItem getMntmReporte_1() {
 		if (mntmReporte_1 == null) {
-			mntmReporte_1 = new JMenuItem("Reporte 2");
+			mntmReporte_1 = new JMenuItem("Prestamos proximos a vencer");
+			mntmReporte_1.setBackground(new Color(245, 245, 245));
+			mntmReporte_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Reporte2PlazoDias r = new Reporte2PlazoDias();
+					r.setVisible(true);
+				}
+			});
 		}
 		return mntmReporte_1;
 	}
@@ -209,7 +222,7 @@ public class Principal extends JFrame {
 	private JMenu getMnVer() {
 		if (mnVer == null) {
 			mnVer = new JMenu("Gesti\u00F3n");
-			mnVer.setFont(new Font("SansSerif", Font.PLAIN, 17));
+			mnVer.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
 			mnVer.add(getMntmVerUsuario());
 			mnVer.add(getMntmTrabajador());
 			mnVer.add(getMntmPublicacion());
@@ -249,7 +262,42 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmPrestamo() {
 		if (mntmPrestamo == null) {
 			mntmPrestamo = new JMenuItem("Prestamo");
+			mntmPrestamo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GestionPrestamo p = new GestionPrestamo();
+					p.setVisible(true);
+				}
+			});
 		}
 		return mntmPrestamo;
+	}
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("");
+			label.setBorder(new LineBorder(new Color(0, 0, 0)));
+			label.setIcon(new ImageIcon("C:\\Users\\Jenny\\Desktop\\Eclipse\\ProyectoFinal\\src\\images\\principal.png"));
+			label.setBackground(Color.PINK);
+			label.setForeground(Colores.getColoroscuro());
+			label.setBounds(0, 63, 347, 640);
+		}
+		return label;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("Bienvenido");
+			lblNewLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 24));
+			lblNewLabel.setBounds(21, 122, 143, 27);
+		}
+		return lblNewLabel;
+	}
+	private JTextPane getTxtpnSistemaDeGestin() {
+		if (txtpnSistemaDeGestin == null) {
+			txtpnSistemaDeGestin = new JTextPane();
+			txtpnSistemaDeGestin.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			txtpnSistemaDeGestin.setBackground(Colores.getColorbotonclarologinexited());
+			txtpnSistemaDeGestin.setText("Sistema de Gesti\u00F3n de Biblioteca. En esta aplicaci\u00F3n podr\u00E1 administrar \r\nde manera eficiente y sencilla el flujo de pr\u00E9stamos y devoluciones de \r\npublicaciones.\r\n\r\nAdem\u00E1s, tendr\u00E1 acceso a herramientas, listados y reportes detallados\r\nque permitir\u00E1n un mejor control sobre el centro.\r\n\r\n- Pr\u00E9stamos\r\n- Edici\u00F3n y Registro de Usuarios\r\n- Edici\u00F3n y Registro de Publicaciones\r\n- Edici\u00F3n y Registro de Trabajadores\r\n- Eliminaci\u00F3n de estos\r\n- Secci\u00F3n de Reportes");
+			txtpnSistemaDeGestin.setBounds(21, 192, 298, 360);
+		}
+		return txtpnSistemaDeGestin;
 	}
 }

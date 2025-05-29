@@ -1,7 +1,11 @@
 package Logica;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import Visual.Login;
 
@@ -141,19 +145,6 @@ public class Biblioteca {
 
 	//Metodo para realizar o no el prestamo
 	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador){
-
-		if (pub == null) {
-			throw new IllegalArgumentException("Publicacion no encontrada");
-		}
-
-		if (user == null) {
-			throw new IllegalArgumentException("Usuario no encontrado.");
-		}
-		
-		if (trabajador == null) {
-			throw new IllegalArgumentException("Trabajador no encontrado.");
-		}
-
 		Prestamo prestamoNuevo;
 
 		for(Prestamo p : user.getPrestamos()){
@@ -165,18 +156,20 @@ public class Biblioteca {
 		if(pub.getCantEjemplares() > 2){
 			if(user.getPrestamos().size() < 3){
 				pub.disminuirStock();
-				LocalDateTime fechaActual = LocalDateTime.now();
+				LocalDate fechaActual = LocalDate.now();
 				int tiempo = pub.tiempoMaximoPrestamo();
-				LocalDateTime fechaDevolucion = fechaActual.plusDays(tiempo);
-				prestamoNuevo = new Prestamo(fechaActual,fechaDevolucion,pub,user,trabajador);
+				LocalDate fechaDevolucion = fechaActual.plusDays(tiempo);
+				prestamoNuevo = new Prestamo(fechaActual, fechaDevolucion, pub, user, trabajador);
 				user.getPrestamos().add(prestamoNuevo);
 				prestamosTotales.add(prestamoNuevo);
 			}
 			else
-				throw new IllegalArgumentException("El usuario tiene ya 3 prestamos.");
+				return null;
+			//throw new IllegalArgumentException("El usuario tiene ya 3 prestamos.");
 		}
 		else
-			throw new IllegalArgumentException("Publicacion no disponible.");
+			return null;
+			//throw new IllegalArgumentException("Publicacion no disponible.");
 
 		return prestamoNuevo;
 	}
@@ -196,9 +189,6 @@ public class Biblioteca {
 	public UsuarioAcreditado buscarUsuarioPorId(String id){
 		UsuarioAcreditado usuario = null;
 
-		if (usuarios == null) {
-			throw new IllegalStateException("Lista de usuarios no inicializada");
-		}
 		for (UsuarioAcreditado user : usuarios){
 			if(user != null && user.getId().equals(id))
 				usuario = user;
@@ -252,37 +242,70 @@ public class Biblioteca {
 			}
 			return realizada;
 		}
-		public int contarPrestamosActivos(){
-			int cont = 0;
+		public ArrayList<Prestamo> guardarPrestamosActivos(){
+			ArrayList<Prestamo> prestamosActivos = new ArrayList<Prestamo>();
 
 			for(Prestamo p : prestamosTotales){
 				if(p.getFechaDevolucion() == null)
-					cont++;
+					prestamosActivos.add(p);
 			}
-			return cont;
+			return prestamosActivos;
 		}
 		
-		public void agregarTrabajador(Trabajador t) {
-	        trabajadores.add(t);
+		public Prestamo[] guardarPrestProximosAVencerse(int cantDias){
+			
+			//Prestamo[] prest = new Prestamo[prestamosTotales.size()];
+			ArrayList<Prestamo> prest = new ArrayList<Prestamo>();
+			LocalDate hoyInicio = LocalDate.now();
+			LocalDate fechaFinalPeligro = hoyInicio.plusDays(cantDias);
+			for(Prestamo p : guardarPrestamosActivos()){
+				if(p.getFechaDevolucion() == null){ //si no has devuelto el libro
+					if(fechaFinalPeligro.isAfter(p.getFechaMax()) && hoyInicio.isBefore(p.getFechaMax())){
+						prest.add(p);
+					}
+				}
+			}
+			
+			Prestamo[] prestamosArray = new Prestamo[prest.size()];
+
+			for(int i=0;i<prestamosArray.length;i++){
+				prestamosArray[i] = prest.get(i);
+			}
+			
+			Arrays.sort(prestamosArray, new PrestamoComparador());
+			
+			return prestamosArray;
+		}
+		
+		
+		public void agregarTrabajador(String id,String nombreCompleto, int edad, String sexo, String nivelEscolar, String cargo) {
+	        trabajadores.add(new Trabajador(id, nombreCompleto, edad, sexo, nivelEscolar, cargo));
 	    }
 
 	    public void crearUsuarioAcreditado(String id, String nombre,int edad, String sexo) {
 	        usuarios.add(new UsuarioAcreditado(id, nombre, edad, sexo));
 	    }
 
-	    public void agregarLibro(Libro l) {
-	        libros.add(l);
+	    public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, String editorial) {
+	        libros.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autores, editorial));
 	    }
 
-	    public void agregarRevista(Revista r) {
-	        revistas.add(r);
+	    public void agregarRevista(String id, String titulo, String materia, int numPaginas,
+				int cantEjemplares, boolean estaPrestado) {
+	        revistas.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado));
 	    }
 
-	    public void agregarArticulo(Articulo a) {
-	        articulos.add(a);
+	    public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {
+	        articulos.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autores, arbitros));
 	    }
 
-	    public void agregarPrestamo(Prestamo p) {
-	        prestamosTotales.add(p);
+	    public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,
+				UsuarioAcreditado user, Trabajador trabPrestamo) {
+	        prestamosTotales.add(new Prestamo(fechaP, fechaMax, pub, user, trabPrestamo));
+	    }
+	    
+	    public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, LocalDate fechaDev, Publicacion pub,
+				UsuarioAcreditado user, Trabajador trabPrestamo) {
+	        prestamosTotales.add(new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo));
 	    }
 	}

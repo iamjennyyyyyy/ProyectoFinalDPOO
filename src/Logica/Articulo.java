@@ -14,18 +14,7 @@ public class Articulo extends Publicacion {
 		if (autores == null) {
 	        throw new IllegalArgumentException("La lista de autores no puede ser null");
 	    }
-
-	    ArrayList<String> autoresValidados = new ArrayList<String>(); // Lista temporal
-
-	    for (String a : autores) {
-	        String errores = Validacion.validarCadena(a, "nombre");
-	        if (!errores.isEmpty()) {
-	            throw new IllegalArgumentException(errores);
-	        }
-	        autoresValidados.add(a);
-	    }
-
-	    this.autores = autoresValidados;
+	    this.autores = autores;
 	}
 	
 	public ArrayList<String> getArbitros() {
@@ -36,18 +25,7 @@ public class Articulo extends Publicacion {
 		if (arbitros == null) {
 	        throw new IllegalArgumentException("La lista de arbitros no puede ser null");
 	    }
-
-	    ArrayList<String> arbitrosValidados = new ArrayList<String>(); // Lista temporal
-
-	    for (String a : arbitros) {
-	        String errores = Validacion.validarCadena(a, "nombre del arbitro");
-	        if (!errores.isEmpty()) {
-	            throw new IllegalArgumentException(errores);
-	        }
-	        arbitrosValidados.add(a);
-	    }
-
-	    this.arbitros = arbitrosValidados;
+	    this.arbitros = arbitros;
 	}
 	
 	public Articulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {

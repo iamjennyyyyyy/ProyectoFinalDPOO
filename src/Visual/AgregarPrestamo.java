@@ -20,17 +20,12 @@ import Logica.Publicacion;
 import Logica.Trabajador;
 import Logica.UsuarioAcreditado;
 import Utiles.Colores;
-import Utiles.PrestamoTableModel;
 
 import javax.swing.JLabel;
 
 import java.awt.Font;
-import java.util.ArrayList;
 
 import javax.swing.JTextField;
-import javax.swing.JTable;
-import javax.swing.JScrollBar;
-import javax.swing.JSlider;
 
 
 public class AgregarPrestamo extends JDialog {
@@ -42,14 +37,9 @@ public class AgregarPrestamo extends JDialog {
 	private JLabel lblIngreseElId;
 	private JTextField textFieldIdPub;
 	Prestamo prestamoRealizado;
-	Biblioteca b = Biblioteca.getInstancia();
 	UsuarioAcreditado u;
-	Trabajador t = b.getAdmin();
+	Trabajador t = Biblioteca.getInstancia().getAdmin();
 	Publicacion p;
-	private PrestamoTableModel tableModel = new PrestamoTableModel();
-	private JTable table_1;
-	private ArrayList<Prestamo> nuevosPrestamos = new ArrayList<Prestamo>();
-	private ArrayList<Prestamo> prestamosBiblioteca = b.getPrestamosTotales();
 
 	/**
 	 * Launch the application.
@@ -57,7 +47,7 @@ public class AgregarPrestamo extends JDialog {
 	public static void main(String[] args) {
 		try {
 			Biblioteca b = Biblioteca.getInstancia();
-			AgregarPrestamo dialog = new AgregarPrestamo(b);
+			AgregarPrestamo dialog = new AgregarPrestamo();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -68,14 +58,14 @@ public class AgregarPrestamo extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	
-	public AgregarPrestamo(final Biblioteca b) {
+
+	public AgregarPrestamo() {
 
 		this.setResizable(false);
-		setBounds(440, 130, 485, 447);
+		setBounds(440, 130, 485, 351);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPanel.setBackground(Colores.getcolorPaneles());
+		contentPanel.setBackground(Color.WHITE);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getLblNuevoPrstamo());
@@ -83,8 +73,6 @@ public class AgregarPrestamo extends JDialog {
 		contentPanel.add(getTextFieldIdUsuario());
 		contentPanel.add(getLblIngreseElId());
 		contentPanel.add(getTextFieldIdPub());
-		contentPanel.add(getTable_1());
-		mostrarPrestamos();
 		{
 			final JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -105,34 +93,43 @@ public class AgregarPrestamo extends JDialog {
 				buttonPane.add(okButton);
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						prestamoRealizado = crearPrestamo();					
-						if(prestamoRealizado != null){
-							b.agregarPrestamo(prestamoRealizado);
-							prestamosBiblioteca.add(prestamoRealizado);
-							JOptionPane.showMessageDialog(null, "El préstamo ha sido realizado con éxito!");
-						};
-						getRootPane().setDefaultButton(okButton);
-					}
-					{
-						JButton cancelButton = new JButton("Cancel");
-						cancelButton.setBackground(Colores.getcolorBotonClaro());
-						cancelButton.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent arg0) {
-								dispose();
-							}
-						});
-						cancelButton.setActionCommand("Cancel");
-						buttonPane.add(cancelButton);
 
+						Prestamo prest;
+
+						String idUsuario = textFieldIdUsuario.getText();
+						String idPublicacion = textFieldIdPub.getText();
+						
+						u = Biblioteca.getInstancia().buscarUsuarioPorId(idUsuario);
+						p = Biblioteca.getInstancia().buscarPublicacionPorId(idPublicacion);
+
+						if(u == null)
+							JOptionPane.showMessageDialog(null, "Usuario no encontrado.\nIntente de nuevo");
+						else if(p == null)
+							JOptionPane.showMessageDialog(null, "Publicación no encontrada.\nIntente de nuevo");
+						else{
+							Biblioteca.getInstancia().solicitarPrestamo(u, p, t);					
+							JOptionPane.showMessageDialog(null, "El prestamo ha sido realizado con éxito!");
+							dispose();
+						}
 					};
 				});
 			}
-		}
+			JButton cancelButton = new JButton("Cancel");
+			cancelButton.setBackground(Colores.getcolorBotonClaro());
+			cancelButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			cancelButton.setActionCommand("Cancel");
+			buttonPane.add(cancelButton);
 
+		}
 	}
+
 	private JLabel getLblNuevoPrstamo() {
 		if (lblNuevoPrstamo == null) {
-			lblNuevoPrstamo = new JLabel("Nuevo Pr\u00E9stamo");
+			lblNuevoPrstamo = new JLabel("Nuevo Préstamo");
 			lblNuevoPrstamo.setFont(new Font("SansSerif", Font.PLAIN, 20));
 			lblNuevoPrstamo.setBounds(168, 20, 155, 29);
 		}
@@ -156,7 +153,7 @@ public class AgregarPrestamo extends JDialog {
 	}
 	private JLabel getLblIngreseElId() {
 		if (lblIngreseElId == null) {
-			lblIngreseElId = new JLabel("Ingrese el id de la publicaci\u00F3n:");
+			lblIngreseElId = new JLabel("Ingrese el id de la publicación:");
 			lblIngreseElId.setFont(new Font("SansSerif", Font.PLAIN, 18));
 			lblIngreseElId.setBounds(31, 170, 252, 29);
 		}
@@ -169,60 +166,5 @@ public class AgregarPrestamo extends JDialog {
 			textFieldIdPub.setBounds(33, 210, 407, 29);
 		}
 		return textFieldIdPub;
-	}
-
-	public Prestamo crearPrestamo(){
-
-		String idUsuario = textFieldIdUsuario.getText();
-		String idPublicacion = textFieldIdPub.getText();
-		u = b.buscarUsuarioPorId(idUsuario);
-		p = b.buscarPublicacionPorId(idPublicacion);
-		if(u == null) {
-			JOptionPane.showMessageDialog(this, "Usuario no encontrado.\nIntente de nuevo");
-			return null;
-		}
-		if(p == null) {
-			JOptionPane.showMessageDialog(this, "Publicación no encontrada.\nIntente de nuevo");
-			return null;
-		}
-
-		return b.solicitarPrestamo(u, p, t);
-	}
-
-	private JTable getTable_1() {
-		if (table_1 == null) {
-			table_1 = new JTable();
-			table_1.setFont(new Font("SansSerif", Font.PLAIN, 14));
-			table_1.setToolTipText("Tabla ");
-			table_1.setForeground(Color.DARK_GRAY);
-			table_1.setBackground(Color.WHITE);
-			table_1.setBounds(33, 263, 407, 111);
-			setResizable(false);
-			table_1.setVisible(true);
-		}
-		return table_1;
-	}
-	public void mostrarPrestamos(){
-
-		tableModel = new PrestamoTableModel();
-		table_1.setModel(tableModel);
-		
-		//table_1.add(ColumnNames) tienes que importar ColumNames para agregarlo en la tabla
-		//como primer
-		//				for(Prestamo p : nuevosPrestamos){
-		//					((PrestamoTableModel)table_1.getModel()).adicionar(p.getUser().getId(), 
-		//							p.getPub().getId(), 
-		//							String.valueOf(p.getFechaP()), 
-		//							String.valueOf(p.getFechaMax()), 
-		//							String.valueOf(p.getFechaDevolucion()));
-		//}
-
-		for(Prestamo p : prestamosBiblioteca){
-			((PrestamoTableModel)table_1.getModel()).adicionar(p.getUser().getId(), 
-					p.getPub().getId(), 
-					String.valueOf(p.getFechaP()), 
-					String.valueOf(p.getFechaMax()), 
-					String.valueOf(p.getFechaDevolucion()));
-		}
 	}
 }

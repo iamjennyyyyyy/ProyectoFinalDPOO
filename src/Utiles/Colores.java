@@ -10,12 +10,12 @@ public class Colores {
  	private static final Color colorBeige = new Color(208, 186, 152);
  	private static final Color colorOscuro = new Color(35, 20, 12);
  	private static final Color colorBotonClaroLogin = new Color(255, 221, 189);
+	private static final Color colorBotonClaroLoginExited = new Color(240, 208, 178);
+ 	
  	public static Color getColorbotonclarologinexited() {
 		return colorBotonClaroLoginExited;
 	}
 
-	private static final Color colorBotonClaroLoginExited = new Color(240, 208, 178);
- 	
 	public static Color getColordarkred() {
 		return colorDarkRed;
 	}

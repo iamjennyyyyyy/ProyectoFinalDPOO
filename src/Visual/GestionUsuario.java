@@ -35,23 +35,24 @@ public class GestionUsuario extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			GestionUsuario dialog = new GestionUsuario();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			GestionUsuario dialog = new GestionUsuario();
+//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//			dialog.setVisible(true);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Create the dialog.
 	 */
 	public GestionUsuario() {
-		setBounds(100, 100, 820, 583);
+		setBounds(400, 100, 820, 583);
+		setUndecorated(true);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(255, 255, 255));
+		contentPanel.setBackground(new Color(245, 245, 245));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -89,7 +90,7 @@ public class GestionUsuario extends JDialog {
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(50, 46, 428, 451);
+			scrollPane_1.setBounds(50, 46, 493, 451);
 			scrollPane_1.setViewportView(getTable());
 		}
 		return scrollPane_1;

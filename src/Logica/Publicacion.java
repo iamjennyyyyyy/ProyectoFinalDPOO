@@ -24,13 +24,7 @@ public abstract class Publicacion {
 
 	//Comprueba que no contenga los errores declarados en  el metodo estatico validarCadena
 	public void setTitulo(String titulo) {
-
-		String errores = Validacion.validarCadena(titulo, "titulo");
-
-		if(errores.isEmpty())
-			this.titulo = titulo;
-		else throw new IllegalArgumentException(errores);
-
+		this.titulo = titulo;
 	}
 	public String getMateria() {
 		return materia;
@@ -38,13 +32,7 @@ public abstract class Publicacion {
 
 	//Comprueba que no contenga los errores declarados en  el metodo estatico validarCadena
 	public void setMateria(String materia) {
-
-		String errores = Validacion.validarCadena(materia, "materia");
-
-		if(errores.isEmpty())
-			this.materia = materia;
-		else throw new IllegalArgumentException(errores);
-
+		this.materia = materia;
 	}
 	public int getNumPaginas() {
 		return numPaginas;
@@ -52,10 +40,10 @@ public abstract class Publicacion {
 
 	//Comprueba que este en el rango especifiado
 	public void setNumPaginas(int numPaginas) {
-		if(numPaginas >= 1 && numPaginas <= 500)
+		if(numPaginas >= 1)
 			this.numPaginas = numPaginas;
 		else
-			throw new IllegalArgumentException("Error, el numero de paginas debe estar entre 1 y 500.\n");
+			throw new IllegalArgumentException("Error, el numero de paginas debe ser mayor que 1.\n");
 	}
 	public int getCantEjemplares() {
 		return cantEjemplares;
