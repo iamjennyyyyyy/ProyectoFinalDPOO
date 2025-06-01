@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import Logica.Biblioteca;
@@ -29,6 +30,9 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 public class Reporte2PlazoDias extends JDialog {
 
@@ -49,11 +53,12 @@ public class Reporte2PlazoDias extends JDialog {
 	 * Create the dialog.
 	 */
 	public Reporte2PlazoDias() {
-		setBounds(400, 100, 820, 583);
+		setBounds(500, 100, 820, 583);
 		setUndecorated(true);
-		setBackground(new Color(245, 245, 245));
+		setModal(true);
+		setBackground(Color.WHITE);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(245, 245, 245));
+		contentPanel.setBackground(Color.WHITE);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getScrollPane_1());
@@ -69,7 +74,7 @@ public class Reporte2PlazoDias extends JDialog {
 		if (table == null) {
 			table = new JTable();
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setBackground(Colores.getColorbotonclarologin());
+			table.setBackground(Colores.getColorbeige());
 			table.setForeground(Colores.getColoroscuro());
 			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			table.setGridColor(Color.WHITE);
@@ -134,7 +139,7 @@ public class Reporte2PlazoDias extends JDialog {
 					cargarTablaReporte2(cantDias);
 				}
 			});
-			btnMostrar.setBounds(590, 169, 89, 34);
+			btnMostrar.setBounds(621, 167, 135, 34);
 		}
 		return btnMostrar;
 	}
@@ -154,7 +159,7 @@ public class Reporte2PlazoDias extends JDialog {
 					dispose();
 				}
 			});
-			btnSalir.setBounds(700, 169, 89, 34);
+			btnSalir.setBounds(621, 230, 135, 34);
 		}
 		return btnSalir;
 	}

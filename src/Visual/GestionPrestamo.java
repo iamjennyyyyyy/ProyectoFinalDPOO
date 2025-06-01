@@ -29,6 +29,7 @@ public class GestionPrestamo extends JDialog {
 	private static JTable table;
 	private JScrollPane scrollPane_1;
 	private JButton btnAgregarPrestamo;
+	private JButton btnCerrar;
 	
 	/**
 	 * Launch the application.
@@ -38,23 +39,26 @@ public class GestionPrestamo extends JDialog {
 	 * Create the dialog.
 	 */
 	public GestionPrestamo() {
-		setBounds(400, 100, 820, 583);
+		setBounds(500, 100, 820, 583);
 		getContentPane().setLayout(new BorderLayout());
 		setUndecorated(true);
-		contentPanel.setBackground(new Color(245, 245, 245));
+		setModal(true);
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getScrollPane_1());
 		contentPanel.add(getBtnAgregarPrestamo());
+		contentPanel.add(getBtnCerrar());
 		cargarTablaPrestamos();
 	}
 
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
+			table.setEnabled(false);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setBackground(Colores.getColorbotonclarologinexited());
+			table.setBackground(Colores.getColorbeige());
 			table.setForeground(new Color(0, 0, 0));
 			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			table.setGridColor(Color.WHITE);
@@ -93,8 +97,20 @@ public class GestionPrestamo extends JDialog {
 					p.setVisible(true);
 				}
 			});
-			btnAgregarPrestamo.setBounds(643, 91, 128, 23);
+			btnAgregarPrestamo.setBounds(619, 93, 128, 29);
 		}
 		return btnAgregarPrestamo;
+	}
+	private JButton getBtnCerrar() {
+		if (btnCerrar == null) {
+			btnCerrar = new JButton("Cerrar");
+			btnCerrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			btnCerrar.setBounds(619, 154, 128, 29);
+		}
+		return btnCerrar;
 	}
 }

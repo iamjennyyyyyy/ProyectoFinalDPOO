@@ -1,11 +1,10 @@
 package Logica;
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import Visual.Login;
 
@@ -276,6 +275,37 @@ public class Biblioteca {
 			
 			return prestamosArray;
 		}
+		
+		public Prestamo[] rangoPrestamo (Date fechaInf,Date fechaSup)   {
+			
+			 
+			 LocalDateTime fechaMin = fechaInf.toInstant()  //convierto a ldt pa trabajar con .after
+	                 .atZone(ZoneId.systemDefault())
+	                 .toLocalDateTime();
+			 
+			 LocalDateTime fechaMax = fechaSup.toInstant()  
+	                 .atZone(ZoneId.systemDefault())
+	                 .toLocalDateTime();
+			 
+			LocalDate fechaMin2 = fechaMin.toLocalDate();
+			LocalDate fechaMax2 = fechaMax.toLocalDate();
+			
+			 
+			ArrayList<Prestamo> result = new ArrayList<Prestamo>();
+			
+		 for(int i = 0; i < prestamosTotales.size(); i++){
+			if (prestamosTotales.get(i).getFechaP().isAfter(fechaMin2) && prestamosTotales.get(i).getFechaP().isBefore(fechaMax2)){
+				result.add(prestamosTotales.get(i));
+			}    
+		 }
+		 
+		 Prestamo[] prestamosRango = new Prestamo[result.size()];
+		 
+		 for(int i=0;i<result.size();i++){
+			 prestamosRango[i] = result.get(i);
+		 }
+		 return prestamosRango;  
+	  }
 		
 		
 		public void agregarTrabajador(String id,String nombreCompleto, int edad, String sexo, String nivelEscolar, String cargo) {

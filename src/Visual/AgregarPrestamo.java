@@ -63,6 +63,7 @@ public class AgregarPrestamo extends JDialog {
 
 		this.setResizable(false);
 		setBounds(440, 130, 485, 351);
+		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setBackground(Color.WHITE);

@@ -7,7 +7,7 @@ public class Colores {
  	private static final Color colorBotonVerde = new Color(130,240,145);
  	private static final Color colorPaneles = new Color(222,201,144);
  	private static final Color colorDarkRed = new Color(145, 4, 12);
- 	private static final Color colorBeige = new Color(208, 186, 152);
+ 	private static final Color colorBeige = new Color(255, 243, 196);
  	private static final Color colorOscuro = new Color(35, 20, 12);
  	private static final Color colorBotonClaroLogin = new Color(255, 221, 189);
 	private static final Color colorBotonClaroLoginExited = new Color(240, 208, 178);

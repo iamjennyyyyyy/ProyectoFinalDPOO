@@ -1,8 +1,11 @@
 package Visual;
 
 import java.awt.EventQueue;
+import java.io.InputStream;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JDialog;
 import javax.swing.JMenuBar;
@@ -18,16 +21,23 @@ import javax.swing.ImageIcon;
 import Inicializadora.Inicializar;
 import Logica.Biblioteca;
 import Utiles.Colores;
+import Utiles.MiPersonalizacion;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
+import java.io.IOException;
+import java.util.Properties;
 
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.ColorUIResource;
 
+import sun.applet.Main;
+
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 public class Principal extends JFrame {
@@ -53,8 +63,6 @@ public class Principal extends JFrame {
 	private JMenuItem mntmPublicacion;
 	private JMenuItem mntmPrestamo;
 	private JLabel label;
-	private JLabel lblNewLabel;
-	private JTextPane txtpnSistemaDeGestin;
 
 	/**
 	 * Launch the application.
@@ -62,19 +70,10 @@ public class Principal extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					Inicializar.Inicio();
-					FlatLightLaf.setup();
-					UIManager.put( "Button.arc", 999 );
-					UIManager.put( "TabbedPane.showTabSeparators", true );
-					UIManager.put( "TextComponent.arc", 999 );
-					UIManager.put( "Component.arc", 999 );
-					UIManager.put( "ScrollBar.showButtons", true );
-					Principal frame = new Principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				MiPersonalizacion.aplicarTema();
+				Inicializar.Inicio();
+				Principal frame = new Principal();
+				frame.setVisible(true);
 			}
 		});
 	}
@@ -95,19 +94,17 @@ public class Principal extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.add(getMenuBar_1());
-		contentPane.add(getLblNewLabel());
-		contentPane.add(getTxtpnSistemaDeGestin());
 		contentPane.add(getLabel());
 	}
 
 	private JMenuBar getMenuBar_1() {
 		if (menuBar == null) {
 			menuBar = new JMenuBar();
-			menuBar.setBorder(new LineBorder(new Color(0, 0, 0)));
+			menuBar.setBorderPainted(false);
 			menuBar.setFont(new Font("SansSerif", Font.PLAIN, 14));
 			menuBar.setBackground(new Color(255, 250, 250));
 			menuBar.setForeground(Colores.getColoroscuro());
-			menuBar.setBounds(0, 0, 1367, 65);
+			menuBar.setBounds(0, 0, 1367, 61);
 			menuBar.add(getBotonSesion());
 			menuBar.add(getMnVer());
 			menuBar.add(getBotonReportes());
@@ -171,7 +168,13 @@ public class Principal extends JFrame {
 	}
 	private JMenuItem getMntmReporte_2() {
 		if (mntmReporte_2 == null) {
-			mntmReporte_2 = new JMenuItem("Reporte 3");
+			mntmReporte_2 = new JMenuItem("Prestamos en rango");
+			mntmReporte_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Reporte3PrestamoRango r = new Reporte3PrestamoRango();
+					r.setVisible(true);
+				}
+			});
 		}
 		return mntmReporte_2;
 	}
@@ -213,7 +216,26 @@ public class Principal extends JFrame {
 			mntmCerrar = new JMenuItem("Cerrar");
 			mntmCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
+					//					Object[] opciones = {"Salir", "Cancelar"};
+					//					int seleccion = JOptionPane.showOptionDialog(null, "¿Está seguro que desea salir?", "Menú salida", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+					//					switch(seleccion){
+					//					case 0:
+					//						dispose();
+					//						break;
+					//					case 1:
+					//						break;
+					//					}
+					int option = JOptionPane.showConfirmDialog(
+							null,
+							"¿Está seguro que desea salir?",
+							"Confirmación",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE
+							);
+
+					if (option == JOptionPane.YES_OPTION) {
+						dispose();
+					}
 				}
 			});
 		}
@@ -256,6 +278,12 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmPublicacion() {
 		if (mntmPublicacion == null) {
 			mntmPublicacion = new JMenuItem("Publicaci\u00F3n");
+			mntmPublicacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GestionPublicacion g = new GestionPublicacion();
+					g.setVisible(true);
+				}
+			});
 		}
 		return mntmPublicacion;
 	}
@@ -274,30 +302,9 @@ public class Principal extends JFrame {
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("");
-			label.setBorder(new LineBorder(new Color(0, 0, 0)));
-			label.setIcon(new ImageIcon("C:\\Users\\Jenny\\Desktop\\Eclipse\\ProyectoFinal\\src\\images\\principal.png"));
-			label.setBackground(Color.PINK);
-			label.setForeground(Colores.getColoroscuro());
-			label.setBounds(0, 63, 347, 640);
+			label.setIcon(new ImageIcon("src/images/Sin t\u00EDtulo.png"));
+			label.setBounds(0, 58, 1367, 639);
 		}
 		return label;
-	}
-	private JLabel getLblNewLabel() {
-		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("Bienvenido");
-			lblNewLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 24));
-			lblNewLabel.setBounds(21, 122, 143, 27);
-		}
-		return lblNewLabel;
-	}
-	private JTextPane getTxtpnSistemaDeGestin() {
-		if (txtpnSistemaDeGestin == null) {
-			txtpnSistemaDeGestin = new JTextPane();
-			txtpnSistemaDeGestin.setFont(new Font("SansSerif", Font.PLAIN, 14));
-			txtpnSistemaDeGestin.setBackground(Colores.getColorbotonclarologinexited());
-			txtpnSistemaDeGestin.setText("Sistema de Gesti\u00F3n de Biblioteca. En esta aplicaci\u00F3n podr\u00E1 administrar \r\nde manera eficiente y sencilla el flujo de pr\u00E9stamos y devoluciones de \r\npublicaciones.\r\n\r\nAdem\u00E1s, tendr\u00E1 acceso a herramientas, listados y reportes detallados\r\nque permitir\u00E1n un mejor control sobre el centro.\r\n\r\n- Pr\u00E9stamos\r\n- Edici\u00F3n y Registro de Usuarios\r\n- Edici\u00F3n y Registro de Publicaciones\r\n- Edici\u00F3n y Registro de Trabajadores\r\n- Eliminaci\u00F3n de estos\r\n- Secci\u00F3n de Reportes");
-			txtpnSistemaDeGestin.setBounds(21, 192, 298, 360);
-		}
-		return txtpnSistemaDeGestin;
 	}
 }

@@ -31,33 +31,27 @@ public class GestionUsuario extends JDialog {
 	private static JTable table;
 	private JScrollPane scrollPane_1;
 	private JButton btnNewButton;
+	private JButton btnSalir;
 	
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		try {
-//			GestionUsuario dialog = new GestionUsuario();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	/**
 	 * Create the dialog.
 	 */
 	public GestionUsuario() {
-		setBounds(400, 100, 820, 583);
+		setBounds(500, 100, 820, 583);
 		setUndecorated(true);
+		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(245, 245, 245));
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getScrollPane_1());
 		contentPanel.add(getBtnNewButton());
+		contentPanel.add(getBtnSalir());
 		cargarTablaUsuarios();
 	}
 
@@ -70,6 +64,7 @@ public class GestionUsuario extends JDialog {
 			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			table.setGridColor(Color.WHITE);
 			table.setRowHeight(20);
+			table.setEnabled(false);
 		}
 		return table;
 	}
@@ -105,10 +100,20 @@ public class GestionUsuario extends JDialog {
 					cargarTablaUsuarios();
 				}
 			});
-			btnNewButton.setBounds(575, 82, 89, 23);
+			btnNewButton.setBounds(631, 83, 138, 32);
 		}
 		return btnNewButton;
 	}
-	
-	
+	private JButton getBtnSalir() {
+		if (btnSalir == null) {
+			btnSalir = new JButton("Salir");
+			btnSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			btnSalir.setBounds(631, 153, 138, 32);
+		}
+		return btnSalir;
+	}
 }

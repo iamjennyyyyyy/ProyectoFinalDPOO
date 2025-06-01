@@ -50,7 +50,6 @@ public class Login extends JDialog {
 	private JButton btnSalir;
 	private JPasswordField passwordField;
 	private JLabel lblNewLabel_1;
-	private JLabel lblBibliotecaNacionalHabana;
 
 	/**
 	 * Launch the application.
@@ -79,7 +78,6 @@ public class Login extends JDialog {
 		contentPanel.add(getPasswordField());
 		contentPanel.add(getSeparator_1());
 		contentPanel.add(getLblNewLabel_1());
-		contentPanel.add(getLblBibliotecaNacionalHabana());
 	}
 
 	public static Trabajador obtenerAdmin(){
@@ -89,24 +87,24 @@ public class Login extends JDialog {
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
-			lblNewLabel.setBounds(850, 0, 516, 768);
-			lblNewLabel.setIcon(new ImageIcon("src/images/login3.jpg"));
+			lblNewLabel.setBounds(878, 0, 515, 768);
+			lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Jenny\\Desktop\\Eclipse\\ProyectoFinal\\src\\images\\nuevaaa.png"));
 		}
 		return lblNewLabel;
 	}
 	private JLabel getLblIniciarSesion() {
 		if (lblIniciarSesion == null) {
 			lblIniciarSesion = new JLabel("INICIAR SESION");
-			lblIniciarSesion.setBounds(76, 167, 571, 55);
+			lblIniciarSesion.setBounds(130, 123, 571, 55);
 			lblIniciarSesion.setHorizontalAlignment(SwingConstants.CENTER);
-			lblIniciarSesion.setFont(new Font("Britannic Bold", Font.PLAIN, 33));
+			lblIniciarSesion.setFont(new Font("Britannic Bold", Font.PLAIN, 35));
 		}
 		return lblIniciarSesion;
 	}
 	private JLabel getLblUsuario() {
 		if (lblUsuario == null) {
 			lblUsuario = new JLabel("Usuario:");
-			lblUsuario.setBounds(76, 242, 571, 55);
+			lblUsuario.setBounds(103, 242, 571, 55);
 			lblUsuario.setHorizontalAlignment(SwingConstants.LEFT);
 			lblUsuario.setFont(new Font("Britannic Bold", Font.PLAIN, 29));
 		}
@@ -117,7 +115,7 @@ public class Login extends JDialog {
 			lblContrasea = new JLabel("Contrase\u00F1a:");
 			lblContrasea.setHorizontalAlignment(SwingConstants.LEFT);
 			lblContrasea.setFont(new Font("Britannic Bold", Font.PLAIN, 29));
-			lblContrasea.setBounds(76, 434, 571, 55);
+			lblContrasea.setBounds(103, 434, 571, 55);
 		}
 		return lblContrasea;
 	}
@@ -142,7 +140,7 @@ public class Login extends JDialog {
 			txtIngreseUnNombre.setText("Ingrese su nombre de usuario");
 			txtIngreseUnNombre.setForeground(Color.LIGHT_GRAY);
 			txtIngreseUnNombre.setBorder(new CompoundBorder());
-			txtIngreseUnNombre.setBounds(76, 308, 576, 48);
+			txtIngreseUnNombre.setBounds(103, 308, 576, 48);
 			txtIngreseUnNombre.setColumns(10);
 		}
 		return txtIngreseUnNombre;
@@ -153,7 +151,7 @@ public class Login extends JDialog {
 			separator.setBorder(new LineBorder(new Color(0, 0, 0)));
 			separator.setForeground(Color.BLACK);
 			separator.setOpaque(true);
-			separator.setBounds(76, 308, 571, 49);
+			separator.setBounds(103, 308, 571, 49);
 		}
 		return separator;
 	}
@@ -163,7 +161,7 @@ public class Login extends JDialog {
 			separator_1.setOpaque(true);
 			separator_1.setForeground(Color.BLACK);
 			separator_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-			separator_1.setBounds(76, 517, 571, 49);
+			separator_1.setBounds(103, 517, 571, 49);
 		}
 		return separator_1;
 	}
@@ -181,9 +179,8 @@ public class Login extends JDialog {
 				}
 			});
 			btnIniciarSesion.setBackground(Colores.getColorbotonclarologin());
-			btnIniciarSesion.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 			btnIniciarSesion.setFont(new Font("SansSerif", Font.PLAIN, 22));
-			btnIniciarSesion.setBounds(157, 637, 138, 48);
+			btnIniciarSesion.setBounds(191, 637, 138, 48);
 		}
 		return btnIniciarSesion;
 	}
@@ -207,17 +204,17 @@ public class Login extends JDialog {
 					dispose();
 				}
 			});
-			btnSalir.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 			btnSalir.setFont(new Font("SansSerif", Font.PLAIN, 22));
-			btnSalir.setBounds(404, 637, 138, 48);
+			btnSalir.setBounds(438, 637, 138, 48);
 		}
 		return btnSalir;
 	}
 	private JPasswordField getPasswordField() {
 		if (passwordField == null) {
 			passwordField = new JPasswordField();
+			passwordField.setFont(new Font("Tahoma", Font.PLAIN, 19));
 			passwordField.setBorder(null);
-			passwordField.setBounds(76, 517, 571, 48);
+			passwordField.setBounds(103, 517, 571, 48);
 		}
 		return passwordField;
 	}
@@ -229,14 +226,5 @@ public class Login extends JDialog {
 			lblNewLabel_1.setBounds(76, 34, 108, 95);
 		}
 		return lblNewLabel_1;
-	}
-	private JLabel getLblBibliotecaNacionalHabana() {
-		if (lblBibliotecaNacionalHabana == null) {
-			lblBibliotecaNacionalHabana = new JLabel("Biblioteca de La Habana");
-			lblBibliotecaNacionalHabana.setHorizontalAlignment(SwingConstants.LEFT);
-			lblBibliotecaNacionalHabana.setFont(new Font("Britannic Bold", Font.PLAIN, 40));
-			lblBibliotecaNacionalHabana.setBounds(210, 48, 463, 55);
-		}
-		return lblBibliotecaNacionalHabana;
 	}
 }
