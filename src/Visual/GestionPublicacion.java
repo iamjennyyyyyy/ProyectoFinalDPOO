@@ -18,13 +18,18 @@ import Utiles.UsuarioTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class GestionPublicacion extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JButton btnNewButton;
 	private JButton btnSalir;
 	private JList<Libro> list;
+	private JComboBox comboBox;
+	private JLabel lblTipoDePublicacin;
 
 	/**
 	 * Launch the application.
@@ -35,31 +40,18 @@ public class GestionPublicacion extends JDialog {
 	 */
 	public GestionPublicacion() {
 
-		setBounds(400, 100, 820, 583);
+		setBounds(500, 100, 820, 583);
 		setUndecorated(true);
 		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(245, 245, 245));
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getBtnSalir());
-		contentPanel.add(getList());
-	}
-	
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("Agregar Usuario");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					AgregarUsuario formulario = new AgregarUsuario();
-					formulario.setVisible(true);
-				}
-			});
-			btnNewButton.setBounds(631, 83, 138, 32);
-		}
-		return btnNewButton;
+		contentPanel.add(getComboBox());
+		contentPanel.add(getLblTipoDePublicacin());
+//		contentPanel.add(getList());
 	}
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
@@ -69,26 +61,24 @@ public class GestionPublicacion extends JDialog {
 					dispose();
 				}
 			});
-			btnSalir.setBounds(631, 153, 138, 32);
+			btnSalir.setBounds(631, 167, 109, 32);
 		}
 		return btnSalir;
 	}
-	private JList<Libro> getList() {
-		if (list == null) {
-			list = new JList<>(Biblioteca.getInstancia().getLibros().toArray(new Libro[0]));
-			list.setCellRenderer(new DefaultListCellRenderer() {
-				@Override
-				public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, 
-						int index, boolean isSelected, boolean cellHasFocus) {
-					super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-					if (value instanceof Libro) {
-						setText(((Libro)value).getTitulo()); // Muestra el atributo nombre
-					}
-					return this;
-				}
-			});
-			list.setBounds(92, 83, 390, 381);
+	private JComboBox getComboBox() {
+		if (comboBox == null) {
+			comboBox = new JComboBox();
+			comboBox.setModel(new DefaultComboBoxModel(new String[] {"Libro", "Revista", "Articulo"}));
+			comboBox.setBounds(631, 121, 83, 20);
 		}
-		return list;
+		return comboBox;
+	}
+	private JLabel getLblTipoDePublicacin() {
+		if (lblTipoDePublicacin == null) {
+			lblTipoDePublicacin = new JLabel("Tipo de publicaci\u00F3n:");
+			lblTipoDePublicacin.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			lblTipoDePublicacin.setBounds(631, 74, 155, 32);
+		}
+		return lblTipoDePublicacin;
 	}
 }

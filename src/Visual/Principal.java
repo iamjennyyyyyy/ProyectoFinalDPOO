@@ -216,15 +216,7 @@ public class Principal extends JFrame {
 			mntmCerrar = new JMenuItem("Cerrar");
 			mntmCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					//					Object[] opciones = {"Salir", "Cancelar"};
-					//					int seleccion = JOptionPane.showOptionDialog(null, "¿Está seguro que desea salir?", "Menú salida", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
-					//					switch(seleccion){
-					//					case 0:
-					//						dispose();
-					//						break;
-					//					case 1:
-					//						break;
-					//					}
+					
 					int option = JOptionPane.showConfirmDialog(
 							null,
 							"¿Está seguro que desea salir?",

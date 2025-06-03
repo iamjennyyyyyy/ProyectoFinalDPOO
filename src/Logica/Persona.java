@@ -59,4 +59,10 @@ public class Persona {
 		LocalDate fecha = LocalDate.now();
 		setFecha(fecha);
 	}
+	
+	@Override
+	public String toString ()
+	{
+		return nombreCompleto;
+	}
 }

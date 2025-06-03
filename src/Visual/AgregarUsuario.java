@@ -57,7 +57,7 @@ public class AgregarUsuario extends JDialog {
 	private JLabel label;
 	private JLabel label_1;
 	private JLabel label_2;
-	private int idUsuario = 1000;
+	private int idUsuario = 15;
 	private JComboBox comboBox_Sexo;
 
 	/**
