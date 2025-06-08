@@ -87,15 +87,15 @@ public class Login extends JDialog {
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
-			lblNewLabel.setBounds(878, 0, 515, 768);
-			lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Jenny\\Desktop\\Eclipse\\ProyectoFinal\\src\\images\\nuevaaa.png"));
+			lblNewLabel.setBounds(0, 0, 540, 768);
+			lblNewLabel.setIcon(new ImageIcon("src/images/loginBien.png"));
 		}
 		return lblNewLabel;
 	}
 	private JLabel getLblIniciarSesion() {
 		if (lblIniciarSesion == null) {
 			lblIniciarSesion = new JLabel("INICIAR SESION");
-			lblIniciarSesion.setBounds(130, 123, 571, 55);
+			lblIniciarSesion.setBounds(683, 126, 571, 55);
 			lblIniciarSesion.setHorizontalAlignment(SwingConstants.CENTER);
 			lblIniciarSesion.setFont(new Font("Britannic Bold", Font.PLAIN, 35));
 		}
@@ -104,7 +104,7 @@ public class Login extends JDialog {
 	private JLabel getLblUsuario() {
 		if (lblUsuario == null) {
 			lblUsuario = new JLabel("Usuario:");
-			lblUsuario.setBounds(103, 242, 571, 55);
+			lblUsuario.setBounds(656, 245, 571, 55);
 			lblUsuario.setHorizontalAlignment(SwingConstants.LEFT);
 			lblUsuario.setFont(new Font("Britannic Bold", Font.PLAIN, 29));
 		}
@@ -115,32 +115,18 @@ public class Login extends JDialog {
 			lblContrasea = new JLabel("Contrase\u00F1a:");
 			lblContrasea.setHorizontalAlignment(SwingConstants.LEFT);
 			lblContrasea.setFont(new Font("Britannic Bold", Font.PLAIN, 29));
-			lblContrasea.setBounds(103, 434, 571, 55);
+			lblContrasea.setBounds(656, 437, 571, 55);
 		}
 		return lblContrasea;
 	}
 	private JTextField getTxtIngreseUnNombre() {
 		if (txtIngreseUnNombre == null) {
 			txtIngreseUnNombre = new JTextField();
-			txtIngreseUnNombre.setToolTipText("");
-			txtIngreseUnNombre.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					txtIngreseUnNombre.setText("");
-					txtIngreseUnNombre.setForeground(Color.BLACK);
-				}
-				public void mouseExited(MouseEvent arg0) {
-					if(txtIngreseUnNombre.getText().isEmpty()){
-						txtIngreseUnNombre.setForeground(Color.LIGHT_GRAY);
-						txtIngreseUnNombre.setText("Ingrese su nombre de usuario");
-					}
-				}
-			});
 			txtIngreseUnNombre.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			txtIngreseUnNombre.setText("Ingrese su nombre de usuario");
-			txtIngreseUnNombre.setForeground(Color.LIGHT_GRAY);
+			txtIngreseUnNombre.putClientProperty("JTextField.placeholderText", "Ingrese su nombre de usuario");
+			txtIngreseUnNombre.setForeground(Color.BLACK);
 			txtIngreseUnNombre.setBorder(new CompoundBorder());
-			txtIngreseUnNombre.setBounds(103, 308, 576, 48);
+			txtIngreseUnNombre.setBounds(656, 311, 576, 48);
 			txtIngreseUnNombre.setColumns(10);
 		}
 		return txtIngreseUnNombre;
@@ -151,7 +137,7 @@ public class Login extends JDialog {
 			separator.setBorder(new LineBorder(new Color(0, 0, 0)));
 			separator.setForeground(Color.BLACK);
 			separator.setOpaque(true);
-			separator.setBounds(103, 308, 571, 49);
+			separator.setBounds(656, 311, 571, 49);
 		}
 		return separator;
 	}
@@ -161,26 +147,28 @@ public class Login extends JDialog {
 			separator_1.setOpaque(true);
 			separator_1.setForeground(Color.BLACK);
 			separator_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-			separator_1.setBounds(103, 517, 571, 49);
+			separator_1.setBounds(656, 520, 571, 49);
 		}
 		return separator_1;
 	}
 	private JButton getBtnIniciarSesion() {
 		if (btnIniciarSesion == null) {
 			btnIniciarSesion = new JButton("Entrar");
-			btnIniciarSesion.setForeground(Color.BLACK);
-			btnIniciarSesion.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					btnIniciarSesion.setBackground(Colores.getColorbotonclarologinexited());
-				}
-				public void mouseExited(MouseEvent arg0) {
-					btnIniciarSesion.setBackground(Colores.getColorbotonclarologin());
+			btnIniciarSesion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
 				}
 			});
-			btnIniciarSesion.setBackground(Colores.getColorbotonclarologin());
+			btnIniciarSesion.setForeground(Color.BLACK);
+//			btnIniciarSesion.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseEntered(MouseEvent arg0) {
+//					btnIniciarSesion.setBackground(Colores.getColorbeige());
+//				}
+//			});
+			btnIniciarSesion.setBackground(Colores.getColorBotonLoginNuevo());
 			btnIniciarSesion.setFont(new Font("SansSerif", Font.PLAIN, 22));
-			btnIniciarSesion.setBounds(191, 637, 138, 48);
+			btnIniciarSesion.setBounds(744, 640, 138, 48);
 		}
 		return btnIniciarSesion;
 	}
@@ -188,24 +176,24 @@ public class Login extends JDialog {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Salir");
 			btnSalir.setForeground(Color.BLACK);
-			btnSalir.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					btnSalir.setBackground(Colores.getColorbotonclarologinexited());
-				}
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-					btnSalir.setBackground(Colores.getColorbotonclarologin());
-				}
-			});
-			btnSalir.setBackground(Colores.getColorbotonclarologin());
+//			btnSalir.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseEntered(MouseEvent arg0) {
+//					btnSalir.setBackground(Colores.getColorbotonclarologinexited());
+//				}
+//				@Override
+//				public void mouseExited(MouseEvent arg0) {
+//					btnSalir.setBackground(Colores.getColorbotonclarologin());
+//				}
+//			});
+			btnSalir.setBackground(Colores.getColorBotonLoginNuevo());
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 				}
 			});
 			btnSalir.setFont(new Font("SansSerif", Font.PLAIN, 22));
-			btnSalir.setBounds(438, 637, 138, 48);
+			btnSalir.setBounds(991, 640, 138, 48);
 		}
 		return btnSalir;
 	}
@@ -214,7 +202,7 @@ public class Login extends JDialog {
 			passwordField = new JPasswordField();
 			passwordField.setFont(new Font("Tahoma", Font.PLAIN, 19));
 			passwordField.setBorder(null);
-			passwordField.setBounds(103, 517, 571, 48);
+			passwordField.setBounds(656, 520, 571, 48);
 		}
 		return passwordField;
 	}
@@ -223,7 +211,7 @@ public class Login extends JDialog {
 			lblNewLabel_1 = new JLabel("");
 			lblNewLabel_1.setIcon(new ImageIcon("src/images/logochiquitito.jpg"));
 			lblNewLabel_1.setIgnoreRepaint(true);
-			lblNewLabel_1.setBounds(76, 34, 108, 95);
+			lblNewLabel_1.setBounds(629, 37, 108, 95);
 		}
 		return lblNewLabel_1;
 	}

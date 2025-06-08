@@ -144,7 +144,7 @@ public class Biblioteca {
 
 	//Metodo para realizar o no el prestamo
 	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador){
-		Prestamo prestamoNuevo;
+		Prestamo prestamoNuevo = null;
 
 		for(Prestamo p : user.getPrestamos()){
 			if(p.getPub().equals(pub) && p.getFechaDevolucion() != null && 
@@ -162,14 +162,7 @@ public class Biblioteca {
 				user.getPrestamos().add(prestamoNuevo);
 				prestamosTotales.add(prestamoNuevo);
 			}
-			else
-				return null;
-			//throw new IllegalArgumentException("El usuario tiene ya 3 prestamos.");
 		}
-		else
-			return null;
-			//throw new IllegalArgumentException("Publicacion no disponible.");
-
 		return prestamoNuevo;
 	}
 
@@ -185,6 +178,10 @@ public class Biblioteca {
 		}
 	}
 
+	public void eliminarUsuario(UsuarioAcreditado u){
+		usuarios.remove(u);
+	}
+	
 	public UsuarioAcreditado buscarUsuarioPorId(String id){
 		UsuarioAcreditado usuario = null;
 
@@ -251,7 +248,7 @@ public class Biblioteca {
 			return prestamosActivos;
 		}
 		
-		public Prestamo[] guardarPrestProximosAVencerse(int cantDias){
+		public Prestamo[] guardarPrestProximosAVencerse(int cantDias, String tipo){
 			
 			//Prestamo[] prest = new Prestamo[prestamosTotales.size()];
 			ArrayList<Prestamo> prest = new ArrayList<Prestamo>();
@@ -260,7 +257,24 @@ public class Biblioteca {
 			for(Prestamo p : guardarPrestamosActivos()){
 				if(p.getFechaDevolucion() == null){ //si no has devuelto el libro
 					if(fechaFinalPeligro.isAfter(p.getFechaMax()) && hoyInicio.isBefore(p.getFechaMax())){
-						prest.add(p);
+						if(tipo.equals("Todas")){
+							prest.add(p);
+						}
+						else if(tipo.equals("Libro")){
+							if(p.getPub() instanceof Libro){
+								prest.add(p);
+							}
+						}
+						else if(tipo.equals("Revista")){
+							if(p.getPub() instanceof Revista){
+								prest.add(p);
+							}
+						}
+						else if(tipo.equals("Articulo")){
+							if(p.getPub() instanceof Articulo){
+								prest.add(p);
+							}
+						}
 					}
 				}
 			}
@@ -312,8 +326,10 @@ public class Biblioteca {
 	        trabajadores.add(new Trabajador(id, nombreCompleto, edad, sexo, nivelEscolar, cargo));
 	    }
 
-	    public void crearUsuarioAcreditado(String id, String nombre,int edad, String sexo) {
+	    public UsuarioAcreditado crearUsuarioAcreditado(String id, String nombre,int edad, String sexo) {
+	    	UsuarioAcreditado u = new UsuarioAcreditado(id, nombre, edad, sexo);
 	        usuarios.add(new UsuarioAcreditado(id, nombre, edad, sexo));
+	        return u;
 	    }
 
 	    public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, String editorial) {

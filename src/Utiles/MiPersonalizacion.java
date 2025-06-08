@@ -40,9 +40,6 @@ public class MiPersonalizacion extends FlatLightLaf {
 		// Combobox
 		UIManager.put("ComboBox.buttonStyle", "button");
 
-		// Spinner
-		UIManager.put("Spinner.buttonSeparatorWidth", 1.3f);
-
 		// Campos de contraseña
 		UIManager.put("PasswordField.showCapsLock", true);
 		UIManager.put("PasswordField.showRevealButton", true);

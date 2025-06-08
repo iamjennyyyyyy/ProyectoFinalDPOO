@@ -71,6 +71,7 @@ public class Principal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				MiPersonalizacion.aplicarTema();
+				UIManager.put("Component.arc", 199);
 				Inicializar.Inicio();
 				Principal frame = new Principal();
 				frame.setVisible(true);
@@ -84,8 +85,8 @@ public class Principal extends JFrame {
 
 	public Principal() {
 
-		l = new Login(this);
-		l.setVisible(true);
+//		l = new Login(this);
+//		l.setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(0, 0, 1382, 747);
