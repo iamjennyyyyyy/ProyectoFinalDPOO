@@ -205,21 +205,21 @@ public class Inicializar {
 	private static void inicializarPublicaciones() {
 		// Libros (15 instancias)
 		String[][] libros = {
-				{"1001", "Cien años de soledad", "Novela", "432", "3", "Gabriel García Márquez", "Sudamericana"},
-				{"1002", "El nombre del viento", "Fantasía", "462", "4", "Patrick Rothfuss", "Plaza Janes"},
-				{"1003", "Rayuela", "Novela", "600", "2", "Julio Cortázar", "Alfaguara"},
-				{"1004", "1984", "Ciencia Ficción", "328", "5", "George Orwell", "Debolsillo"},
-				{"1005", "Crónica de una muerte anunciada", "Novela", "120", "3", "Gabriel García Márquez", "Sudamericana"},
-				{"1006", "El Hobbit", "Fantasía", "310", "4", "J.R.R. Tolkien", "Minotauro"},
-				{"1007", "Ficciones", "Cuentos", "180", "2", "Jorge Luis Borges", "Emecé"},
-				{"1008", "La sombra del viento", "Novela", "480", "3", "Carlos Ruiz Zafón", "Planeta"},
-				{"1009", "Los juegos del hambre", "Ciencia Ficción", "374", "5", "Suzanne Collins", "Molino"},
-				{"1010", "El amor en los tiempos del cólera", "Novela", "464", "3", "Gabriel García Márquez", "Sudamericana"},
-				{"1011", "El señor de los anillos", "Fantasía", "1200", "2", "J.R.R. Tolkien", "Minotauro"},
-				{"1012", "La ciudad y los perros", "Novela", "350", "4", "Mario Vargas Llosa", "Alfaguara"},
-				{"1013", "Rebelión en la granja", "Distopía", "140", "3", "George Orwell", "Debolsillo"},
-				{"1014", "Pedro Páramo", "Novela", "128", "2", "Juan Rulfo", "FCE"},
-				{"1015", "La casa de los espíritus", "Novela", "432", "3", "Isabel Allende", "Plaza & Janés"}
+				{"1001", "Cien años de soledad", "Literatura", "432", "3", "Gabriel García Márquez", "Sudamericana"},
+				{"1002", "El nombre del viento", "Literatura Fantástica", "462", "4", "Patrick Rothfuss", "Plaza Janes"},
+				{"1003", "Rayuela", "Literatura", "600", "2", "Julio Cortázar", "Alfaguara"},
+				{"1004", "1984", "Literatura Fantástica", "328", "5", "George Orwell", "Debolsillo"},
+				{"1005", "Crónica de una muerte anunciada", "Literatura", "120", "3", "Gabriel García Márquez", "Sudamericana"},
+				{"1006", "El Hobbit", "Literatura Fantástica", "310", "4", "J.R.R. Tolkien", "Minotauro"},
+				{"1007", "Ficciones", "Literatura", "180", "2", "Jorge Luis Borges", "Emecé"},
+				{"1008", "La sombra del viento", "Literatura", "480", "3", "Carlos Ruiz Zafón", "Planeta"},
+				{"1009", "Los juegos del hambre", "Literatura Fantástica", "374", "5", "Suzanne Collins", "Molino"},
+				{"1010", "El amor en los tiempos del cólera", "Literatura", "464", "3", "Gabriel García Márquez", "Sudamericana"},
+				{"1011", "El señor de los anillos", "Literatura Fantástica", "1200", "2", "J.R.R. Tolkien", "Minotauro"},
+				{"1012", "La ciudad y los perros", "Literatura", "350", "4", "Mario Vargas Llosa", "Alfaguara"},
+				{"1013", "Rebelión en la granja", "Literatura Fantástica", "140", "3", "George Orwell", "Debolsillo"},
+				{"1014", "Pedro Páramo", "Literatura", "128", "2", "Juan Rulfo", "FCE"},
+				{"1015", "La casa de los espíritus", "Literatura", "432", "3", "Isabel Allende", "Plaza & Janés"}
 		};
 
 		for(String[] datos : libros) {
@@ -235,21 +235,21 @@ public class Inicializar {
 
 		// Revistas (15 instancias)
 		String[][] revistas = {
-				{"2001", "National Geographic", "Ciencia", "100", "10"},
-				{"2002", "Muy Interesante", "Divulgación", "80", "8"},
-				{"2003", "Science", "Científica", "120", "5"},
-				{"2004", "Nature", "Científica", "150", "7"},
+				{"2001", "National Geographic", "Ciencias Naturales", "100", "10"},
+				{"2002", "Muy Interesante", "Divulgación Científica", "80", "8"},
+				{"2003", "Science", "Ciencias Exactas", "120", "5"},
+				{"2004", "Nature", "Ciencias Exactas", "150", "7"},
 				{"2005", "Time", "Actualidad", "60", "12"},
 				{"2006", "The Economist", "Economía", "90", "6"},
-				{"2007", "Scientific American", "Ciencia", "110", "4"},
-				{"2008", "New Scientist", "Ciencia", "95", "9"},
-				{"2009", "Discover", "Ciencia", "85", "3"},
+				{"2007", "Scientific American", "Divulgación Científica", "110", "4"},
+				{"2008", "New Scientist", "Divulgación Científica", "95", "9"},
+				{"2009", "Discover", "Divulgación Científica", "85", "3"},
 				{"2010", "Popular Science", "Tecnología", "75", "11"},
 				{"2011", "Wired", "Tecnología", "65", "8"},
 				{"2012", "National Geographic History", "Historia", "100", "6"},
-				{"2013", "Psychology Today", "Psicología", "90", "7"},
+				{"2013", "Psychology Today", "Ciencias Sociales", "90", "7"},
 				{"2014", "MIT Technology Review", "Tecnología", "110", "5"},
-				{"2015", "Archaeology", "Arqueología", "95", "4"}
+				{"2015", "Archaeology", "Historia", "95", "4"}
 		};
 
 		for(String[] datos : revistas) {
@@ -262,20 +262,20 @@ public class Inicializar {
 		// Artículos (15 instancias)
 		String[][] articulos = {
 				{"3001", "Machine Learning aplicado a diagnóstico médico", "Tecnología", "15", "2", "Dr. Alan Turing", "Dr. John McCarthy"},
-				{"3002", "Impacto del cambio climático en ecosistemas marinos", "Ecología", "20", "3", "Dra. Sylvia Earle", "Dr. James Hansen"},
-				{"3003", "Avances en superconductividad a temperatura ambiente", "Física", "25", "1", "Dr. Miguel José Yacamán", "Dr. Carlos Frenk"},
-				{"3004", "Nuevos enfoques en la enseñanza de matemáticas", "Educación", "18", "2", "Dra. María Montessori", "Dr. Howard Gardner"},
+				{"3002", "Impacto del cambio climático en ecosistemas marinos", "Ciencias Naturales", "20", "3", "Dra. Sylvia Earle", "Dr. James Hansen"},
+				{"3003", "Avances en superconductividad a temperatura ambiente", "Ciencias Exactas", "25", "1", "Dr. Miguel José Yacamán", "Dr. Carlos Frenk"},
+				{"3004", "Nuevos enfoques en la enseñanza de matemáticas", "Ciencias Sociales", "18", "2", "Dra. María Montessori", "Dr. Howard Gardner"},
 				{"3005", "Nanotecnología aplicada a la medicina", "Tecnología", "22", "3", "Dr. Eric Drexler", "Dr. Richard Smalley"},
-				{"3006", "Teoría de cuerdas y la unificación de fuerzas", "Física", "30", "1", "Dr. Edward Witten", "Dr. Brian Greene"},
+				{"3006", "Teoría de cuerdas y la unificación de fuerzas", "Ciencias Exactas", "30", "1", "Dr. Edward Witten", "Dr. Brian Greene"},
 				{"3007", "Inteligencia artificial en la creación artística", "Tecnología", "16", "2", "Dra. Fei-Fei Li", "Dr. Yoshua Bengio"},
-				{"3008", "Biodiversidad en la Amazonía", "Ecología", "24", "3", "Dra. Jane Goodall", "Dr. E.O. Wilson"},
-				{"3009", "Neuroplasticidad y aprendizaje", "Neurociencia", "19", "2", "Dr. Michael Merzenich", "Dr. Norman Doidge"},
-				{"3010", "Energías renovables en países en desarrollo", "Energía", "21", "3", "Dr. Daniel Kammen", "Dr. Jeffrey Sachs"},
-				{"3011", "CRISPR y edición genética", "Biología", "28", "1", "Dra. Jennifer Doudna", "Dr. Emmanuelle Charpentier"},
-				{"3012", "Arqueología subacuática en el Mediterráneo", "Arqueología", "17", "2", "Dr. George Bass", "Dr. Robert Ballard"},
-				{"3013", "Psicología de las redes sociales", "Psicología", "20", "3", "Dr. Sherry Turkle", "Dr. Mihaly Csikszentmihalyi"},
-				{"3014", "Materiales 2D y sus aplicaciones", "Ciencia de Materiales", "23", "2", "Dr. Andre Geim", "Dr. Konstantin Novoselov"},
-				{"3015", "Exoplanetas y la búsqueda de vida", "Astronomía", "26", "1", "Dr. Sara Seager", "Dr. Michel Mayor"}
+				{"3008", "Biodiversidad en la Amazonía", "Ciencias Naturales", "24", "3", "Dra. Jane Goodall", "Dr. E.O. Wilson"},
+				{"3009", "Neuroplasticidad y aprendizaje", "Ciencias Sociales", "19", "2", "Dr. Michael Merzenich", "Dr. Norman Doidge"},
+				{"3010", "Energías renovables en países en desarrollo", "Tecnología", "21", "3", "Dr. Daniel Kammen", "Dr. Jeffrey Sachs"},
+				{"3011", "CRISPR y edición genética", "Ciencias Naturales", "28", "1", "Dra. Jennifer Doudna", "Dr. Emmanuelle Charpentier"},
+				{"3012", "Arqueología subacuática en el Mediterráneo", "Historia", "17", "2", "Dr. George Bass", "Dr. Robert Ballard"},
+				{"3013", "Psicología de las redes sociales", "Ciencias Sociales", "20", "3", "Dr. Sherry Turkle", "Dr. Mihaly Csikszentmihalyi"},
+				{"3014", "Materiales 2D y sus aplicaciones", "Ciencias Exactas", "23", "2", "Dr. Andre Geim", "Dr. Konstantin Novoselov"},
+				{"3015", "Exoplanetas y la búsqueda de vida", "Ciencias Exactas", "26", "1", "Dr. Sara Seager", "Dr. Michel Mayor"}
 		};
 
 		for(String[] datos : articulos) {
@@ -291,64 +291,86 @@ public class Inicializar {
 					false, autores, arbitros
 					);
 		}
+
+		/*
+		    Literatura (9 libros)
+
+			Literatura Fantástica (6 libros)
+
+			Ciencias Naturales (3 revistas + 3 artículos)
+
+			Tecnología (2 revistas + 4 artículos)
+
+			Ciencias Exactas (2 revistas + 5 artículos)
+
+			Divulgación Científica (4 revistas)
+
+			Ciencias Sociales (1 revista + 3 artículos)
+
+			Historia (2 revistas + 1 artículo)
+
+			Economía (1 revista)
+
+			Actualidad (1 revista)
+		 */
 	}
 
 	private static void inicializarPrestamos() {
-	    // Asegurarse que hay un administrador
-	    Trabajador admin = Biblioteca.getInstancia().getAdmin();
-	    if(admin == null) {
-	        admin = Biblioteca.getInstancia().getTrabajadores().get(0);
-	    }
+		// Asegurarse que hay un administrador
+		Trabajador admin = Biblioteca.getInstancia().getAdmin();
+		if(admin == null) {
+			admin = Biblioteca.getInstancia().getTrabajadores().get(0);
+		}
 
-	    // Contador para préstamos próximos a vencer
-	    int prestamosProximosAVencer = 0;
-	    final int PRESTAMOS_PROXIMOS_OBJETIVO = 5;
-	    final int DIAS_PROXIMOS_A_VENCER = 10; // Próximos 3 días
+		// Contador para préstamos próximos a vencer
+		int prestamosProximosAVencer = 0;
+		final int PRESTAMOS_PROXIMOS_OBJETIVO = 5;
+		final int DIAS_PROXIMOS_A_VENCER = 10; // Próximos 3 días
 
-	    // Crear 15 préstamos con validación
-	    for(int i = 1; i <= 15; i++) {
-	        try {
-	            Publicacion pub = obtenerPublicacionAleatoriaValida();
-	            if(pub == null) continue;
+		// Crear 15 préstamos con validación
+		for(int i = 1; i <= 15; i++) {
+			try {
+				Publicacion pub = obtenerPublicacionAleatoriaValida();
+				if(pub == null) continue;
 
-	            UsuarioAcreditado user = obtenerUsuarioAleatorioValido();
-	            if(user == null) continue;
+				UsuarioAcreditado user = obtenerUsuarioAleatorioValido();
+				if(user == null) continue;
 
-	            LocalDate fPrest;
-	            LocalDate fMax;
-	            LocalDate fDev = null;
+				LocalDate fPrest;
+				LocalDate fMax;
+				LocalDate fDev = null;
 
-	            // Generar fechas especiales para los primeros 5 préstamos próximos a vencer
-	            if(prestamosProximosAVencer < PRESTAMOS_PROXIMOS_OBJETIVO) {
-	                // Crear préstamos que vencen pronto (1-3 días)
-	                fPrest = LocalDate.now().minusDays(pub.tiempoMaximoPrestamo() - (random.nextInt(DIAS_PROXIMOS_A_VENCER) + 1));
-	                fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
-	                prestamosProximosAVencer++;
-	            } else {
-	                // Fechas normales para otros préstamos
-	                fPrest = LocalDate.now().minusDays(random.nextInt(30));
-	                fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
-	                
-	                // 50% de probabilidad de tener fecha de devolución
-	                if(random.nextBoolean()) {
-	                    fDev = fPrest.plusDays(random.nextInt(pub.tiempoMaximoPrestamo()));
-	                }
-	            }
+				// Generar fechas especiales para los primeros 5 préstamos próximos a vencer
+				if(prestamosProximosAVencer < PRESTAMOS_PROXIMOS_OBJETIVO) {
+					// Crear préstamos que vencen pronto (1-3 días)
+					fPrest = LocalDate.now().minusDays(pub.tiempoMaximoPrestamo() - (random.nextInt(DIAS_PROXIMOS_A_VENCER) + 1));
+					fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
+					prestamosProximosAVencer++;
+				} else {
+					// Fechas normales para otros préstamos
+					fPrest = LocalDate.now().minusDays(random.nextInt(30));
+					fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
 
-	            // Registrar préstamo
-	            if(fDev != null) {
-	                Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, fDev, pub, user, admin);
-	            } else {
-	                Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, pub, user, admin);
-	            }
+					// 50% de probabilidad de tener fecha de devolución
+					if(random.nextBoolean()) {
+						fDev = fPrest.plusDays(random.nextInt(pub.tiempoMaximoPrestamo()));
+					}
+				}
 
-	        } catch(Exception e) {
-	            System.err.println("Error creando préstamo #" + i + ": " + e.getMessage());
-	        }
-	    }
+				// Registrar préstamo
+				if(fDev != null) {
+					Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, fDev, pub, user, admin);
+				} else {
+					Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, pub, user, admin);
+				}
 
-	    // Verificación (para debug)
-	    System.out.println("Préstamos próximos a vencer creados: " + prestamosProximosAVencer);
+			} catch(Exception e) {
+				System.err.println("Error creando préstamo #" + i + ": " + e.getMessage());
+			}
+		}
+
+		// Verificación (para debug)
+		System.out.println("Préstamos próximos a vencer creados: " + prestamosProximosAVencer);
 	}
 
 	// Métodos auxiliares

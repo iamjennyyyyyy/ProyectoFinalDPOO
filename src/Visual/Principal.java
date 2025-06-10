@@ -150,7 +150,13 @@ public class Principal extends JFrame {
 	}
 	private JMenuItem getMntmReporte() {
 		if (mntmReporte == null) {
-			mntmReporte = new JMenuItem("Reporte 1");
+			mntmReporte = new JMenuItem("Materias m\u00E1s solicitadas");
+			mntmReporte.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Reporte1GraficoMaterias r = new Reporte1GraficoMaterias();
+					r.setVisible(true);
+				}
+			});
 		}
 		return mntmReporte;
 	}
