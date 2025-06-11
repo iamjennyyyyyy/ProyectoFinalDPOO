@@ -1,31 +1,40 @@
 package Utiles;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Vector;
-
 import javax.swing.table.DefaultTableModel;
 
+import Logica.Prestamo;
+
 public class PrestamoTableModel extends DefaultTableModel {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	public PrestamoTableModel(){
-	
-	String[] columnNames = {"ID Usuario", "ID Publicacion", "Fecha Prestamo", "Fecha Maxima", "Fecha Devolucion"};
-	setColumnIdentifiers(columnNames);
-	this.setColumnIdentifiers(columnNames);
-	}
+	public PrestamoTableModel(Prestamo[] prestamos, boolean mostrarFechaDev){
 
-	public void adicionar(String idUsuario ,String idPublicacion, String
-			fechaPrestamo, String fechaMaxima, String fechaDevolucion){ 
-		boolean vacio = fechaDevolucion == null;
-		Object fechaDev;
-		if(vacio)
-			fechaDev = "-";
-		else
-			fechaDev = fechaDevolucion;
-			Object[] newRow = new Object[]{idUsuario , idPublicacion, fechaPrestamo, fechaMaxima,fechaDev};
-			addRow(newRow);
-	} 
+		if(mostrarFechaDev){
+			String[] columnNames = {"ID Usuario", "ID Publicacion", "Fecha Prestamo", "Fecha Devolucion", "Fecha Maxima"};
+			setColumnIdentifiers(columnNames);
+		}
+		else{
+			String[] columnNames = {"ID Usuario", "ID Publicacion", "Fecha Prestamo", "Fecha Maxima"};
+			setColumnIdentifiers(columnNames);
+		}
+
+		for (int i = 0; i < prestamos.length; i++) {
+
+			if(mostrarFechaDev){
+				if(prestamos[i].getFechaDevolucion() == null){
+				Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), " - ", prestamos[i].getFechaMax()};
+				addRow(newRow);
+				}
+				else{
+					Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), prestamos[i].getFechaDevolucion(), prestamos[i].getFechaMax()};
+					addRow(newRow);
+				}
+			}
+			else{
+				Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), prestamos[i].getFechaMax()};
+				addRow(newRow);
+			}
+		}
+	}
 }

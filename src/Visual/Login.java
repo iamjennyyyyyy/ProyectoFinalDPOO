@@ -28,128 +28,191 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import javax.swing.JSeparator;
+import javax.swing.border.LineBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.CompoundBorder;
 
 public class Login extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private JLabel lblNewLabel;
+	private JLabel lblIniciarSesion;
 	private JLabel lblUsuario;
-	private JTextField textField;
 	private JLabel lblContrasea;
-	private JLabel lblBienvenido;
+	private JTextField txtIngreseUnNombre;
+	private JSeparator separator;
+	private JSeparator separator_1;
+	private JButton btnIniciarSesion;
+	private JButton btnSalir;
 	private JPasswordField passwordField;
+	private JLabel lblNewLabel_1;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-		
-			Principal p = new Principal();
-			Login dialog = new Login(p);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
 	 */
 	public Login(Principal p) {
 		super(p,"Inicio Sesion", true);
-		setBounds(500, 200, 361, 410);
+		setBounds(0, 0, 1366, 768);
+		setUndecorated(true);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(210, 180, 140));
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBackground(Color.WHITE);
+		contentPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		contentPanel.add(getLblNewLabel());
+		contentPanel.add(getLblIniciarSesion());
 		contentPanel.add(getLblUsuario());
-		contentPanel.add(getTextField());
 		contentPanel.add(getLblContrasea());
-		contentPanel.add(getLblBienvenido());
+		contentPanel.add(getTxtIngreseUnNombre());
+		contentPanel.add(getSeparator());
+		contentPanel.add(getBtnIniciarSesion());
+		contentPanel.add(getBtnSalir());
 		contentPanel.add(getPasswordField());
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				final JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						dispose();
-					}
-				});
-				okButton.setBackground(Colores.getcolorBotonClaro());
-				okButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent arg0) {
-						okButton.setBackground(Colores.getcolorBotonVerde());
-					}
-					@Override
-					public void mouseExited(MouseEvent arg0) {
-						okButton.setBackground(Colores.getcolorBotonClaro());
-					}
-				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						dispose();
-					}
-				});
-				cancelButton.setBackground(Colores.getcolorBotonClaro());
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
+		contentPanel.add(getSeparator_1());
+		contentPanel.add(getLblNewLabel_1());
 	}
-	private JLabel getLblUsuario() {
-		if (lblUsuario == null) {
-			lblUsuario = new JLabel("Usuario");
-			lblUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 19));
-			lblUsuario.setBounds(57, 83, 116, 24);
-		}
-		return lblUsuario;
-	}
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setBounds(54, 118, 218, 24);
-			textField.setColumns(10);
-		}
-		return textField;
-	}
-	private JLabel getLblContrasea() {
-		if (lblContrasea == null) {
-			lblContrasea = new JLabel("Contrase\u00F1a");
-			lblContrasea.setFont(new Font("Segoe UI", Font.PLAIN, 19));
-			lblContrasea.setBounds(57, 185, 116, 24);
-		}
-		return lblContrasea;
-	}
-	private JLabel getLblBienvenido() {
-		if (lblBienvenido == null) {
-			lblBienvenido = new JLabel("Bienvenido!");
-			lblBienvenido.setFont(new Font("Segoe UI", Font.PLAIN, 19));
-			lblBienvenido.setBounds(119, 11, 116, 24);
-		}
-		return lblBienvenido;
-	}
-	
+
 	public static Trabajador obtenerAdmin(){
 		Trabajador t = new Trabajador("3", "Amelia Ramos", 35, "F", "Universitario", "Bibliotecario Jefe");
 		return t;
 	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("");
+			lblNewLabel.setBounds(0, 0, 540, 768);
+			lblNewLabel.setIcon(new ImageIcon("src/images/loginBien.png"));
+		}
+		return lblNewLabel;
+	}
+	private JLabel getLblIniciarSesion() {
+		if (lblIniciarSesion == null) {
+			lblIniciarSesion = new JLabel("INICIAR SESION");
+			lblIniciarSesion.setBounds(683, 126, 571, 55);
+			lblIniciarSesion.setHorizontalAlignment(SwingConstants.CENTER);
+			lblIniciarSesion.setFont(new Font("Britannic Bold", Font.PLAIN, 35));
+		}
+		return lblIniciarSesion;
+	}
+	private JLabel getLblUsuario() {
+		if (lblUsuario == null) {
+			lblUsuario = new JLabel("Usuario:");
+			lblUsuario.setBounds(656, 245, 571, 55);
+			lblUsuario.setHorizontalAlignment(SwingConstants.LEFT);
+			lblUsuario.setFont(new Font("Britannic Bold", Font.PLAIN, 29));
+		}
+		return lblUsuario;
+	}
+	private JLabel getLblContrasea() {
+		if (lblContrasea == null) {
+			lblContrasea = new JLabel("Contrase\u00F1a:");
+			lblContrasea.setHorizontalAlignment(SwingConstants.LEFT);
+			lblContrasea.setFont(new Font("Britannic Bold", Font.PLAIN, 29));
+			lblContrasea.setBounds(656, 437, 571, 55);
+		}
+		return lblContrasea;
+	}
+	private JTextField getTxtIngreseUnNombre() {
+		if (txtIngreseUnNombre == null) {
+			txtIngreseUnNombre = new JTextField();
+			txtIngreseUnNombre.setFont(new Font("SansSerif", Font.PLAIN, 19));
+			txtIngreseUnNombre.putClientProperty("JTextField.placeholderText", "Ingrese su nombre de usuario");
+			txtIngreseUnNombre.setForeground(Color.BLACK);
+			txtIngreseUnNombre.setBorder(new CompoundBorder());
+			txtIngreseUnNombre.setBounds(656, 311, 576, 48);
+			txtIngreseUnNombre.setColumns(10);
+		}
+		return txtIngreseUnNombre;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+			separator.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator.setForeground(Color.BLACK);
+			separator.setOpaque(true);
+			separator.setBounds(656, 311, 571, 49);
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+			separator_1.setOpaque(true);
+			separator_1.setForeground(Color.BLACK);
+			separator_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator_1.setBounds(656, 520, 571, 49);
+		}
+		return separator_1;
+	}
+	private JButton getBtnIniciarSesion() {
+		if (btnIniciarSesion == null) {
+			btnIniciarSesion = new JButton("Entrar");
+			btnIniciarSesion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			btnIniciarSesion.setForeground(Color.BLACK);
+//			btnIniciarSesion.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseEntered(MouseEvent arg0) {
+//					btnIniciarSesion.setBackground(Colores.getColorbeige());
+//				}
+//			});
+			btnIniciarSesion.setBackground(Colores.getColorBotonLoginNuevo());
+			btnIniciarSesion.setFont(new Font("SansSerif", Font.PLAIN, 22));
+			btnIniciarSesion.setBounds(744, 640, 138, 48);
+		}
+		return btnIniciarSesion;
+	}
+	private JButton getBtnSalir() {
+		if (btnSalir == null) {
+			btnSalir = new JButton("Salir");
+			btnSalir.setForeground(Color.BLACK);
+//			btnSalir.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseEntered(MouseEvent arg0) {
+//					btnSalir.setBackground(Colores.getColorbotonclarologinexited());
+//				}
+//				@Override
+//				public void mouseExited(MouseEvent arg0) {
+//					btnSalir.setBackground(Colores.getColorbotonclarologin());
+//				}
+//			});
+			btnSalir.setBackground(Colores.getColorBotonLoginNuevo());
+			btnSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			btnSalir.setFont(new Font("SansSerif", Font.PLAIN, 22));
+			btnSalir.setBounds(991, 640, 138, 48);
+		}
+		return btnSalir;
+	}
 	private JPasswordField getPasswordField() {
 		if (passwordField == null) {
 			passwordField = new JPasswordField();
-			passwordField.setBounds(57, 232, 215, 24);
+			passwordField.setFont(new Font("Tahoma", Font.PLAIN, 19));
+			passwordField.setBorder(null);
+			passwordField.setBounds(656, 520, 571, 48);
 		}
 		return passwordField;
+	}
+	private JLabel getLblNewLabel_1() {
+		if (lblNewLabel_1 == null) {
+			lblNewLabel_1 = new JLabel("");
+			lblNewLabel_1.setIcon(new ImageIcon("src/images/logochiquitito.jpg"));
+			lblNewLabel_1.setIgnoreRepaint(true);
+			lblNewLabel_1.setBounds(629, 37, 108, 95);
+		}
+		return lblNewLabel_1;
 	}
 }

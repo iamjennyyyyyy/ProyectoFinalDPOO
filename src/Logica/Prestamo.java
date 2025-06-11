@@ -1,26 +1,26 @@
 package Logica;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Comparator;
 
 public class Prestamo {
 
-	private LocalDateTime fechaP;
-	private LocalDateTime fechaMax;
+	private LocalDate fechaP;
+	private LocalDate fechaMax;
 	private LocalDate fechaDevolucion = null;
 	private Publicacion pub;
 	private UsuarioAcreditado user;
 	private Trabajador trabPrestamo;
 	
-	public LocalDateTime getFechaP() {
+	public LocalDate getFechaP() {
 		return fechaP;
 	}
-	public void setFechaP(LocalDateTime fechaP) {
+	public void setFechaP(LocalDate fechaP) {
 		this.fechaP = fechaP;
 	}
-	public LocalDateTime getFechaMax() {
+	public LocalDate getFechaMax() {
 		return fechaMax;
 	}
-	public void setFechaMax(LocalDateTime fechaMax) {
+	public void setFechaMax(LocalDate fechaMax) {
 		this.fechaMax = fechaMax;
 	}
 	public Publicacion getPub() {
@@ -48,11 +48,22 @@ public class Prestamo {
 		this.fechaDevolucion = fechaDevolucion;
 	}
 	
-	public Prestamo(LocalDateTime fechaP, LocalDateTime fechaMax, Publicacion pub,
+	public Prestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
 		
 		setFechaP(fechaP);
 		setFechaMax(fechaMax);
+		setPub(pub);
+		setUser(user);
+		setTrabPrestamo(trabPrestamo);
+	}
+	
+	public Prestamo(LocalDate fechaP, LocalDate fechaMax, LocalDate fechaDev, Publicacion pub,
+			UsuarioAcreditado user, Trabajador trabPrestamo) {
+		
+		setFechaP(fechaP);
+		setFechaMax(fechaMax);
+		setFechaDevolucion(fechaDev);
 		setPub(pub);
 		setUser(user);
 		setTrabPrestamo(trabPrestamo);
@@ -87,5 +98,4 @@ public class Prestamo {
 		
 		return mensaje;
 	}
-	
 }

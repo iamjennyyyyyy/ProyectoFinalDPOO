@@ -16,30 +16,14 @@ public class Libro extends Publicacion {
 		if (autores == null) {
 	        throw new IllegalArgumentException("La lista de autores no puede ser null");
 	    }
-
-	    ArrayList<String> autoresValidados = new ArrayList<String>(); // Lista temporal
-
-	    for (String a : autores) {
-	        String errores = Validacion.validarCadena(a, "nombre");
-	        if (!errores.isEmpty()) {
-	            throw new IllegalArgumentException(errores);
-	        }
-	        autoresValidados.add(a);
-	    }
-
-	    this.autores = autoresValidados;
+	    this.autores = autores;
 	}
 	
 	public String getEditorial() {
 		return editorial;
 	}
 	public void setEditorial(String editorial) {
-
-		String errores = Validacion.validarCadena(editorial, "editorial");
-
-		if(errores.isEmpty())
 			this.editorial = editorial;
-		else throw new IllegalArgumentException(errores);
 	}
 
 	public Libro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, String editorial){

@@ -6,7 +6,34 @@ public class Colores {
 	private static final Color colorBotonClaro = new Color(204,235,224);
  	private static final Color colorBotonVerde = new Color(130,240,145);
  	private static final Color colorPaneles = new Color(222,201,144);
+ 	private static final Color colorDarkRed = new Color(145, 4, 12);
+ 	private static final Color colorBeige = new Color(255, 243, 196);
+ 	private static final Color colorOscuro = new Color(35, 20, 12);
+ 	private static final Color colorBotonClaroLogin = new Color(255, 221, 189);
+	private static final Color colorBotonClaroLoginExited = new Color(240, 208, 178);
+	private static final Color colorBotonLoginNuevo = new Color(232, 222, 198);
+
+ 	
+	public static Color getColorBotonLoginNuevo() {
+		return colorBotonLoginNuevo;
+	}
 	
+ 	public static Color getColorbotonclarologinexited() {
+		return colorBotonClaroLoginExited;
+	}
+
+	public static Color getColordarkred() {
+		return colorDarkRed;
+	}
+
+	public static Color getColorbeige() {
+		return colorBeige;
+	}
+
+	public static Color getColoroscuro() {
+		return colorOscuro;
+	}
+
 	public static Color getcolorBotonClaro() {
 		return colorBotonClaro;
 	}
@@ -17,5 +44,9 @@ public class Colores {
 	
 	public static Color getcolorPaneles() {
 		return colorPaneles;
+	}
+
+	public static Color getColorbotonclarologin() {
+		return colorBotonClaroLogin;
 	}
 }
