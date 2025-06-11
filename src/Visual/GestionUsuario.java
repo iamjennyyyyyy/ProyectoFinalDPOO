@@ -438,7 +438,6 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			list.setFont(new Font("SansSerif", Font.PLAIN, 17));
-			list.setEnabled(false);
 			list.setModel(modelo);
 			scrollPane.setViewportView(list);
 		}
