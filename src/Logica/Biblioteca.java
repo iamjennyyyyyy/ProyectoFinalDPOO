@@ -121,7 +121,7 @@ public class Biblioteca {
 	public ArrayList<Prestamo> getPrestamosTotales() {
 		return prestamosTotales;
 	}
-	
+
 	public ArrayList<Publicacion> getPublicaciones() {
 		return publicaciones;
 	}
@@ -131,7 +131,7 @@ public class Biblioteca {
 	}
 
 	//Metodo para realizar o no el prestamo
-	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador){
+	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador) throws IllegalArgumentException {
 		Prestamo prestamoNuevo = null;
 
 		for(Prestamo p : user.getPrestamos()){
@@ -140,7 +140,7 @@ public class Biblioteca {
 				throw new IllegalArgumentException("No han transcurrido dos semanas desde la última devolucion.");
 			}
 		}
-		if(pub.getCantEjemplares() > 2){
+		if(pub.getCantEjemplares() >= 3){
 			if(user.getPrestamos().size() < 3){
 				pub.disminuirStock();
 				LocalDate fechaActual = LocalDate.now();
@@ -150,11 +150,14 @@ public class Biblioteca {
 				user.getPrestamos().add(prestamoNuevo);
 				prestamosTotales.add(prestamoNuevo);
 			}
+			else 
+				throw new IllegalArgumentException("Usuario ya tiene más de 3 préstamos actualmente");
 		}
+		else 
+			throw new IllegalArgumentException("La cantidad de ejemplares es mínima");
+		
 		return prestamoNuevo;
 	}
-
-
 
 	public void devolverPublicacion(String id, Publicacion pub){
 
@@ -213,15 +216,15 @@ public class Biblioteca {
 		ArrayList<MateriaConCantidadSolicitudes> materias = new ArrayList<MateriaConCantidadSolicitudes>(); // materia y cant
 
 		String[] materiasNombres = {"Literatura",
-									"Literatura Fantástica",
-									"Ciencias Naturales",
-									"Tecnología",
-									"Ciencias Exactas",
-									"Divulgación Científica",
-									"Ciencias Sociales",
-									"Historia",
-									"Economía",
-									"Actualidad",};
+				"Literatura Fantástica",
+				"Ciencias Naturales",
+				"Tecnología",
+				"Ciencias Exactas",
+				"Divulgación Científica",
+				"Ciencias Sociales",
+				"Historia",
+				"Economía",
+				"Actualidad",};
 
 		int[] contadores = {0,0,0,0,0,0,0,0,0,0};
 
@@ -261,7 +264,7 @@ public class Biblioteca {
 			materias.add(new MateriaConCantidadSolicitudes(materiasNombres[i], contadores[i]++));
 		}
 		Collections.sort(materias);
-		
+
 		return materias;
 	}
 

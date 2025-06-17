@@ -38,7 +38,7 @@ import javax.swing.JTextPane;
 public class GestionPrestamo extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	
+
 	private static JTable table;
 	private JScrollPane scrollPane_1;
 	private JButton btnAgregarPrestamo;
@@ -54,8 +54,11 @@ public class GestionPrestamo extends JDialog {
 	private ArrayList<Publicacion> publicaciones = Biblioteca.getInstancia().getPublicaciones();
 	private ArrayList<UsuarioAcreditado> usuarios = Biblioteca.getInstancia().getUsuarios();
 	private JTextPane txtpnRealizarPrstamo;
+	private JButton btnInfo;
+	private JComboBox comboBoxUsuario;
+	private JComboBox comboBoxPub;
 
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -76,14 +79,15 @@ public class GestionPrestamo extends JDialog {
 		contentPanel.add(getBtnCancelar());
 		contentPanel.add(getScrollPane_1());
 		contentPanel.add(getBtnAgregarPrestamo());
-		contentPanel.add(getComboBox());
-		contentPanel.add(getLblUsuario());
 		contentPanel.add(getLblPublicacin());
-		contentPanel.add(getComboBox_1());
 		contentPanel.add(getButton());
 		contentPanel.add(getBtnDevolver());
 		contentPanel.add(getBtnConfirmar());
+		contentPanel.add(getBtnInfo());
+		contentPanel.add(getComboBoxUsuario());
 		contentPanel.add(getLabel());
+		contentPanel.add(getComboBoxPub());
+		contentPanel.add(getLblUsuario());
 		cargarTablaPrestamos();
 	}
 
@@ -100,12 +104,12 @@ public class GestionPrestamo extends JDialog {
 		}
 		return table;
 	}
-	
+
 	public static void cargarTablaPrestamos(){
-		
+
 		ArrayList<Prestamo> prestamos = Biblioteca.getInstancia().getPrestamosTotales();
 		Prestamo[] tabla = new Prestamo[prestamos.size()];
-		
+
 		for(int i=0;i<tabla.length;i++){
 			tabla[i] = prestamos.get(i);
 		}
@@ -127,38 +131,24 @@ public class GestionPrestamo extends JDialog {
 			btnAgregarPrestamo = new JButton("Registrar");
 			btnAgregarPrestamo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					comboBox.setEnabled(true);
-					comboBox_1.setEnabled(true);
+					comboBoxPub.setEnabled(true);
+					comboBoxUsuario.setEnabled(true);
 					btnConfirmar.setVisible(true);
 					btnCancelar.setVisible(true);
 					btnAgregarPrestamo.setVisible(false);
 					btnDevolver.setVisible(false);
 				}
 			});
-			btnAgregarPrestamo.setBounds(585, 419, 85, 29);
+			btnAgregarPrestamo.setBounds(591, 466, 85, 29);
 		}
 		return btnAgregarPrestamo;
 	}
-	private JComboBox getComboBox() {
-		
-		String[] nombresPub = new String[publicaciones.size()];
-		
-		for(int i = 0; i < publicaciones.size(); i++){
-			nombresPub[i] = publicaciones.get(i).getTitulo();
-		}
-		if (comboBox == null) {
-			comboBox = new JComboBox();
-			comboBox.setModel(new DefaultComboBoxModel(nombresPub));
-			comboBox.setBounds(608, 261, 149, 25);
-			comboBox.setEnabled(false);
-		}
-		return comboBox;
-	}
+
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("");
 			label.setBorder(new LineBorder(new Color(0, 0, 0)));
-			label.setBounds(576, 89, 219, 292);
+			label.setBounds(575, 110, 219, 318);
 		}
 		return label;
 	}
@@ -166,7 +156,7 @@ public class GestionPrestamo extends JDialog {
 		if (lblUsuario == null) {
 			lblUsuario = new JLabel("Usuario:");
 			lblUsuario.setFont(new Font("SansSerif", Font.PLAIN, 17));
-			lblUsuario.setBounds(608, 136, 79, 20);
+			lblUsuario.setBounds(607, 183, 79, 20);
 		}
 		return lblUsuario;
 	}
@@ -174,26 +164,11 @@ public class GestionPrestamo extends JDialog {
 		if (lblPublicacin == null) {
 			lblPublicacin = new JLabel("Publicaci\u00F3n:");
 			lblPublicacin.setFont(new Font("SansSerif", Font.PLAIN, 17));
-			lblPublicacin.setBounds(608, 223, 112, 20);
+			lblPublicacin.setBounds(607, 270, 112, 20);
 		}
 		return lblPublicacin;
 	}
-	private JComboBox getComboBox_1() {
-		
-		String[] nombresUsuarios = new String[usuarios.size()];
-		
-		for(int i = 0; i < usuarios.size(); i++){
-			nombresUsuarios[i] = usuarios.get(i).getNombreCompleto();
-		}
-		
-		if (comboBox_1 == null) {
-			comboBox_1 = new JComboBox();
-			comboBox_1.setBounds(608, 175, 149, 25);
-			comboBox_1.setModel(new DefaultComboBoxModel(nombresUsuarios));
-			comboBox_1.setEnabled(false);
-		}
-		return comboBox_1;
-	}
+
 	private JButton getButton() {
 		if (button == null) {
 			button = new JButton("");
@@ -216,7 +191,7 @@ public class GestionPrestamo extends JDialog {
 	private JButton getBtnDevolver() {
 		if (btnDevolver == null) {
 			btnDevolver = new JButton("Devolver");
-			btnDevolver.setBounds(697, 419, 85, 29);
+			btnDevolver.setBounds(696, 466, 85, 29);
 		}
 		return btnDevolver;
 	}
@@ -225,29 +200,41 @@ public class GestionPrestamo extends JDialog {
 			btnConfirmar = new JButton("Confirmar");
 			btnConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					int idIndexUsuario = comboBox_1.getSelectedIndex();
-					int idIndexPub = comboBox.getSelectedIndex();
-					
+					int idIndexUsuario = comboBoxUsuario.getSelectedIndex();
+					int idIndexPub = comboBoxPub.getSelectedIndex();
+
 					UsuarioAcreditado u = usuarios.get(idIndexUsuario);
 					Publicacion p = publicaciones.get(idIndexPub);
+
+					boolean prestamoRealizable = true;
 					
-					Biblioteca.getInstancia().solicitarPrestamo(u, p, Login.obtenerAdmin());
+					try{
+						Biblioteca.getInstancia().solicitarPrestamo(u, p, Login.obtenerAdmin());
+						System.out.println(p.getCantEjemplares() + "\n");
+					}
+					catch(IllegalArgumentException e){
+						
+						prestamoRealizable = false;
+						String mensaje = e.getMessage();
+						JOptionPane.showMessageDialog(null, mensaje, "Info", JOptionPane.INFORMATION_MESSAGE);
+					}
 					
-					JOptionPane.showMessageDialog(null, "Préstamo realizado con éxito", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
-					
-					cargarTablaPrestamos();
-					
-					comboBox.setSelectedIndex(0);
-					comboBox.setEnabled(false);
-					comboBox_1.setSelectedIndex(0);
-					comboBox_1.setEnabled(false);
+					if(prestamoRealizable){
+						JOptionPane.showMessageDialog(null, "Préstamo realizado con éxito", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+						cargarTablaPrestamos();
+					}
+
+					comboBoxPub.setSelectedIndex(0);
+					comboBoxPub.setEnabled(false);
+					comboBoxUsuario.setSelectedIndex(0);
+					comboBoxUsuario.setEnabled(false);
 					btnConfirmar.setVisible(false);
 					btnCancelar.setVisible(false);
 					btnAgregarPrestamo.setVisible(true);
 					btnDevolver.setVisible(true);
 				}
 			});
-			btnConfirmar.setBounds(608, 320, 105, 29);
+			btnConfirmar.setBounds(607, 367, 105, 29);
 			btnConfirmar.setVisible(false);
 		}
 		return btnConfirmar;
@@ -258,10 +245,10 @@ public class GestionPrestamo extends JDialog {
 			btnCancelar.setVisible(false);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					comboBox.setSelectedIndex(0);
-					comboBox.setEnabled(false);
-					comboBox_1.setSelectedIndex(0);
-					comboBox_1.setEnabled(false);
+					comboBoxPub.setSelectedIndex(0);
+					comboBoxPub.setEnabled(false);
+					comboBoxUsuario.setSelectedIndex(0);
+					comboBoxUsuario.setEnabled(false);
 					btnConfirmar.setVisible(false);
 					btnCancelar.setVisible(false);
 					btnAgregarPrestamo.setVisible(true);
@@ -272,7 +259,7 @@ public class GestionPrestamo extends JDialog {
 			btnCancelar.setBorder(null);
 			btnCancelar.setIcon(new ImageIcon("src/images/reiniciar30x30.png"));
 			btnCancelar.setBackground(Color.WHITE);
-			btnCancelar.setBounds(735, 320, 30, 30);
+			btnCancelar.setBounds(734, 367, 30, 30);
 		}
 		return btnCancelar;
 	}
@@ -281,8 +268,56 @@ public class GestionPrestamo extends JDialog {
 			txtpnRealizarPrstamo = new JTextPane();
 			txtpnRealizarPrstamo.setFont(new Font("SansSerif", Font.PLAIN, 18));
 			txtpnRealizarPrstamo.setText("Realizar pr\u00E9stamo");
-			txtpnRealizarPrstamo.setBounds(592, 74, 157, 29);
+			txtpnRealizarPrstamo.setBounds(591, 96, 157, 29);
 		}
 		return txtpnRealizarPrstamo;
+	}
+	private JButton getBtnInfo() {
+		if (btnInfo == null) {
+			btnInfo = new JButton("");
+			btnInfo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					InfoPrestamo i = new InfoPrestamo();
+					i.setVisible(true);
+				}
+			});
+			btnInfo.setIcon(new ImageIcon("src/images/iconoInfo40x40.png"));
+			btnInfo.setBounds(741, 123, 40, 40);
+			btnInfo.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnInfo.setForeground(Color.WHITE);
+			btnInfo.setBorder(null);
+			btnInfo.setBackground(Color.WHITE);
+			btnInfo.setAlignmentX(0.5f);
+		}
+		return btnInfo;
+	}
+	private JComboBox getComboBoxUsuario() {
+
+		String[] nombresUsuarios = new String[usuarios.size()];
+
+		for(int i = 0; i < usuarios.size(); i++){
+			nombresUsuarios[i] = usuarios.get(i).getNombreCompleto();
+		}
+		if (comboBoxUsuario == null) {
+			comboBoxUsuario = new JComboBox();
+			comboBoxUsuario.setBounds(607, 225, 141, 26);
+			comboBoxUsuario.setModel(new DefaultComboBoxModel(nombresUsuarios));
+			comboBoxUsuario.setEnabled(false);
+		}
+		return comboBoxUsuario;
+	}
+	private JComboBox getComboBoxPub() {
+		String[] nombresPub = new String[publicaciones.size()];
+
+		for(int i = 0; i < publicaciones.size(); i++){
+			nombresPub[i] = publicaciones.get(i).getTitulo();
+		}
+		if (comboBoxPub == null) {
+			comboBoxPub = new JComboBox();
+			comboBoxPub.setBounds(607, 309, 141, 26);
+			comboBoxPub.setModel(new DefaultComboBoxModel(nombresPub));
+			comboBoxPub.setEnabled(false);
+		}
+		return comboBoxPub;
 	}
 }
