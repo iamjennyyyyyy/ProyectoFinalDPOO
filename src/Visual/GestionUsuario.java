@@ -60,8 +60,6 @@ public class GestionUsuario extends JDialog {
 	private boolean agregar = false;
 	private boolean editar = false;
 	private JButton btnGuardar;
-	private JTextField textFieldEdad;
-	private JTextField textFieldSexo;
 	private JLabel label;
 	private JTextPane txtpnOperacion;
 	private JTextFieldMejorado textFieldNombreUsuario;
@@ -99,8 +97,6 @@ public class GestionUsuario extends JDialog {
 		contentPanel.add(getBtnEditar());
 		contentPanel.add(getBtnEliminar());
 		contentPanel.add(getBtnGuardar());
-		contentPanel.add(getTextFieldEdad());
-		contentPanel.add(getTextFieldSexo());
 		contentPanel.add(getTextFieldNombreUsuario());
 		contentPanel.add(getLabel());
 		contentPanel.add(getTextFieldId());
@@ -187,15 +183,15 @@ public class GestionUsuario extends JDialog {
 							txtpnOperacion.setText("");
 
 							agregar = false;
+							lblSexo.setText("Sexo: ");
+							lblEdad.setText("Edad: ");
 						}
 					}
 					else{
 						reiniciarComponentes();
 						lblNombre.setForeground(Color.BLACK);
 						lblCi.setForeground(Color.BLACK);
-						agregar = true;
 					}
-
 				}
 			});
 			btnConfirmar.setBounds(551, 479, 151, 32);
@@ -226,6 +222,9 @@ public class GestionUsuario extends JDialog {
 
 					textFieldNombreUsuario.setEnabled(false);
 					textFieldId.setEnabled(false);
+
+					lblSexo.setText("Sexo: ");
+					lblEdad.setText("Edad: ");
 				}
 			});
 			btnCancelar.setToolTipText("Reiniciar formulario");
@@ -265,6 +264,9 @@ public class GestionUsuario extends JDialog {
 
 					txtpnOperacion.setVisible(true);
 					txtpnOperacion.setText("Agregar");
+
+					lblSexo.setText("Sexo: ");
+					lblEdad.setText("Edad: ");
 				}
 			});
 			btnAgregar.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -325,27 +327,58 @@ public class GestionUsuario extends JDialog {
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if(editar){
-						boolean editado = false;
+						boolean editado = true;
 
-						while(!editado){
-							editado = editarUsuario();
+						int indice = list.getSelectedIndex();
+						UsuarioAcreditado u = list.getSelectedValue();
+
+						String nombre = textFieldNombreUsuario.getText();
+						String id = textFieldId.getText();
+
+						try{
+							lblNombre.setForeground(Color.BLACK);
+							u.setNombreCompleto(nombre);
+							textPaneError.setVisible(false);
+						}catch(IllegalArgumentException e){
+							lblNombre.setForeground(Color.RED);
+							textPaneError.setVisible(true);
+							editado = false;
+							textFieldNombreUsuario.setText("");
 						}
-						//Esconder confirmacion
-						btnGuardar.setVisible(false);
-						btnCancelar.setVisible(false);
+						try{
+							textPaneError.setVisible(false);
+							lblCi.setForeground(Color.BLACK);
+							u.setId(id);
+						}catch(IllegalArgumentException e){
+							lblCi.setForeground(Color.RED);
+							textPaneError.setVisible(true);
+							textFieldId.setText("");
+							editado = false;
+						}
+						if(editado){
+							modelo.updateUsuario(indice, u);
+							JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							lblSexo.setText("Sexo: ");
+							lblEdad.setText("Edad: ");
+							editar = false;
 
-						//Aparecer CRUD
-						btnAgregar.setVisible(true);
-						btnEditar.setVisible(true);
-						btnEliminar.setVisible(true);
+							//Esconder confirmacion
+							btnGuardar.setVisible(false);
+							btnCancelar.setVisible(false);
 
-						//Reiniciar operacion
-						editar = false;
+							//Aparecer CRUD
+							btnAgregar.setVisible(true);
+							btnEditar.setVisible(true);
+							btnEliminar.setVisible(true);
 
-						txtpnOperacion.setText("");
-						txtpnOperacion.setVisible(false);
+							//Reiniciar operacion
+							editar = false;
 
-						reiniciarComponentes();
+							txtpnOperacion.setText("");
+							txtpnOperacion.setVisible(false);
+
+							reiniciarComponentes();
+						}
 					}
 				}
 			});
@@ -379,7 +412,7 @@ public class GestionUsuario extends JDialog {
 		if (lblEdad == null) {
 			lblEdad = new JLabel("Edad:");
 			lblEdad.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblEdad.setBounds(525, 335, 54, 27);
+			lblEdad.setBounds(525, 335, 114, 27);
 		}
 		return lblEdad;
 	}
@@ -397,37 +430,9 @@ public class GestionUsuario extends JDialog {
 		if (lblSexo == null) {
 			lblSexo = new JLabel("Sexo:");
 			lblSexo.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblSexo.setBounds(525, 396, 54, 27);
+			lblSexo.setBounds(525, 396, 114, 27);
 		}
 		return lblSexo;
-	}
-
-	private JTextField getTextFieldEdad() {
-		if (textFieldEdad == null) {
-			textFieldEdad = new JTextField();
-			textFieldEdad.setEditable(false);
-			textFieldEdad.setEnabled(false);
-			textFieldEdad.setHorizontalAlignment(SwingConstants.CENTER);
-			textFieldEdad.setBounds(602, 338, 30, 24);
-			textFieldEdad.setColumns(10);
-			//			textFieldEdad.setEditable(false);
-			textFieldEdad.setText("18");
-
-		}
-		return textFieldEdad;
-	}
-	private JTextField getTextFieldSexo() {
-		if (textFieldSexo == null) {
-			textFieldSexo = new JTextField();
-			textFieldSexo.setEditable(false);
-			textFieldSexo.setEnabled(false);
-			textFieldSexo.setHorizontalAlignment(SwingConstants.CENTER);
-			textFieldSexo.setColumns(10);
-			textFieldSexo.setBounds(602, 399, 30, 24);
-			//			textFieldSexo.setEditable(false);
-			textFieldSexo.setText("M");
-		}
-		return textFieldSexo;
 	}
 
 	private JList getList() {
@@ -455,8 +460,8 @@ public class GestionUsuario extends JDialog {
 						UsuarioAcreditado u = modelo.getUsuarioAt(indice);
 
 						textFieldNombreUsuario.setText(u.getNombreCompleto());
-						textFieldEdad.setText("" + u.getEdad());
-						textFieldSexo.setText(u.getSexo());
+						lblEdad.setText("Edad: " + u.getEdad());
+						lblSexo.setText("Sexo: " + u.getSexo());
 						textFieldId.setText(u.getId());
 					}
 				}
@@ -469,155 +474,84 @@ public class GestionUsuario extends JDialog {
 		return scrollPane;
 	}
 
-	//METODOS CRUD
-//	public boolean registrarUsuario() {
+	public void eliminarUsuario() {
 
-		//		boolean agregado = true;
-		//
-		//		String nombre = textFieldNombreUsuario.getText();
-		//		String idUsuario = textFieldId.getText();
-		//
-		//		UsuarioAcreditado u = new UsuarioAcreditado();
-		//
-		//		try{
-		//			lblNombre.setForeground(Color.BLACK);
-		//			u.setNombreCompleto(nombre);
-		//			textPaneError.setVisible(false);
-		//		}catch(IllegalArgumentException e){
-		//			lblNombre.setForeground(Color.RED);
-		//			textPaneError.setVisible(true);
-		//			agregado = false;
-		//			textFieldNombreUsuario.setText("");
-		//		}
-		//		try{
-		//			textPaneError.setVisible(false);
-		//			lblCi.setForeground(Color.BLACK);
-		//			u.setId(idUsuario);
-		//		}catch(IllegalArgumentException e){
-		//			lblCi.setForeground(Color.RED);
-		//			textPaneError.setVisible(true);
-		//			textFieldId.setText("");
-		//			agregado = false;
-		//		}
-		//		if(agregado){
-		//			list.clearSelection();
-		//				modelo.addUsuario(u);
-		//		}
-		//
-		//		return agregado;
-		//	}
+		if(!list.isSelectionEmpty()){
 
-		public boolean editarUsuario() {
+			int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar al usuario?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-			boolean editado = false;
+			if (option == JOptionPane.YES_OPTION) {
 
-			if (list.isSelectionEmpty()) {
-				JOptionPane.showMessageDialog(null, "Seleccione un usuario a modificar", "Error", JOptionPane.ERROR_MESSAGE);
-			}
-			else{
-
-				int indice = list.getSelectedIndex();
 				UsuarioAcreditado u = list.getSelectedValue();
+				int indice = list.getSelectedIndex();
 
-				if (textFieldNombreUsuario.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Introduzca un nombre", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				if(textFieldId.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Introduzca un carnet", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				else{
-					u.setNombreCompleto(textFieldNombreUsuario.getText());
-					u.setId(textFieldId.getText());
+				Biblioteca.getInstancia().eliminarUsuario(u);
+				modelo.removeUsuario(indice);
 
-					modelo.updateUsuario(indice, u);
-					JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-					editado = true;
-				}
+				JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
 			}
-			return editado;
-		}
-
-		public void eliminarUsuario() {
-
-			if(!list.isSelectionEmpty()){
-
-				int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar al usuario?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-				if (option == JOptionPane.YES_OPTION) {
-
-					UsuarioAcreditado u = list.getSelectedValue();
-					int indice = list.getSelectedIndex();
-
-					Biblioteca.getInstancia().eliminarUsuario(u);
-					modelo.removeUsuario(indice);
-
-					JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-				}
-			}
-		}
-
-		public void reiniciarComponentes(){
-
-			textFieldNombreUsuario.setText("");
-			textFieldId.setText("");
-			textFieldEdad.setText("18");
-			textFieldSexo.setText("M");
-
-			agregar = false;
-			editar = false;		
-		}
-
-		private JLabel getLabel() {
-			if (label == null) {
-				label = new JLabel("");
-				label.setBounds(479, 100, 336, 451);
-				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			}
-			return label;
-		}
-		private JTextPane getTxtpnOperacion() {
-			if (txtpnOperacion == null) {
-				txtpnOperacion = new JTextPane();
-				txtpnOperacion.setDisabledTextColor(Color.BLACK);
-				txtpnOperacion.setFont(new Font("SansSerif", Font.PLAIN, 18));
-				//			txtpnOperacion.setEditable(false);
-				txtpnOperacion.setDisabledTextColor(Color.BLACK);
-				txtpnOperacion.setEnabled(false);
-				txtpnOperacion.setBackground(Color.WHITE);
-				txtpnOperacion.setVisible(false);
-				txtpnOperacion.setBounds(505, 85, 85, 32);
-			}
-			return txtpnOperacion;
-		}
-		private JTextFieldMejorado getTextFieldNombreUsuario() {
-			if (textFieldNombreUsuario == null) {
-				textFieldNombreUsuario = new JTextFieldMejorado();
-				textFieldNombreUsuario.setBounds(525, 178, 203, 30);
-				textFieldNombreUsuario.putClientProperty("JTextField.placeholderText", "Ingrese su nombre");
-				textFieldNombreUsuario.setEnabled(false);
-			}
-			return textFieldNombreUsuario;
-		}
-		private JTextFieldCarnet getTextFieldId() {
-			if (textFieldId == null) {
-				textFieldId = new JTextFieldCarnet();
-				textFieldId.setEnabled(false);
-				textFieldId.setBounds(525, 273, 203, 30);
-				textFieldId.setLimite(11);
-				textFieldId.putClientProperty("JTextField.placeholderText", "Ingrese su carnet");
-			}
-			return textFieldId;
-		}
-		private JTextPane getTextPaneError() {
-			if (textPaneError == null) {
-				textPaneError = new JTextPane();
-				textPaneError.setVisible(false);
-				textPaneError.setForeground(Color.RED);
-				textPaneError.setFont(new Font("SansSerif", Font.PLAIN, 18));
-				textPaneError.setText("Datos inv\u00E1lidos");
-				textPaneError.setBounds(649, 534, 145, 34);
-			}
-			return textPaneError;
 		}
 	}
+
+	public void reiniciarComponentes(){
+
+		textFieldNombreUsuario.setText("");
+		textFieldId.setText("");
+
+		agregar = false;
+		editar = false;		
+	}
+
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("");
+			label.setBounds(479, 100, 336, 451);
+			label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		}
+		return label;
+	}
+	private JTextPane getTxtpnOperacion() {
+		if (txtpnOperacion == null) {
+			txtpnOperacion = new JTextPane();
+			txtpnOperacion.setDisabledTextColor(Color.BLACK);
+			txtpnOperacion.setFont(new Font("SansSerif", Font.PLAIN, 18));
+			txtpnOperacion.setDisabledTextColor(Color.BLACK);
+			txtpnOperacion.setEnabled(false);
+			txtpnOperacion.setBackground(Color.WHITE);
+			txtpnOperacion.setVisible(false);
+			txtpnOperacion.setBounds(505, 85, 85, 32);
+		}
+		return txtpnOperacion;
+	}
+	private JTextFieldMejorado getTextFieldNombreUsuario() {
+		if (textFieldNombreUsuario == null) {
+			textFieldNombreUsuario = new JTextFieldMejorado();
+			textFieldNombreUsuario.setBounds(525, 178, 203, 30);
+			textFieldNombreUsuario.putClientProperty("JTextField.placeholderText", "Ingrese su nombre");
+			textFieldNombreUsuario.setEnabled(false);
+		}
+		return textFieldNombreUsuario;
+	}
+	private JTextFieldCarnet getTextFieldId() {
+		if (textFieldId == null) {
+			textFieldId = new JTextFieldCarnet();
+			textFieldId.setEnabled(false);
+			textFieldId.setBounds(525, 273, 203, 30);
+			textFieldId.setLimite(11);
+			textFieldId.putClientProperty("JTextField.placeholderText", "Ingrese su carnet");
+		}
+		return textFieldId;
+	}
+	private JTextPane getTextPaneError() {
+		if (textPaneError == null) {
+			textPaneError = new JTextPane();
+			textPaneError.setVisible(false);
+			textPaneError.setForeground(Color.RED);
+			textPaneError.setFont(new Font("SansSerif", Font.PLAIN, 18));
+			textPaneError.setText("Datos inv\u00E1lidos");
+			textPaneError.setBounds(649, 534, 145, 34);
+		}
+		return textPaneError;
+	}
+}
