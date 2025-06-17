@@ -22,6 +22,10 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
@@ -31,12 +35,16 @@ import javax.swing.JTextField;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.Period;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextPane;
+
 import com.toedter.calendar.JTextFieldDateEditor;
+
 import Utiles.JTextFieldMejorado;
 import Utiles.JTextFieldCarnet;
 
@@ -57,8 +65,6 @@ public class GestionUsuario extends JDialog {
 	private JButton btnAgregar;
 	private JButton btnEditar;
 	private JButton btnEliminar;
-	private boolean agregar = false;
-	private boolean editar = false;
 	private JButton btnGuardar;
 	private JLabel label;
 	private JTextPane txtpnOperacion;
@@ -98,8 +104,8 @@ public class GestionUsuario extends JDialog {
 		contentPanel.add(getBtnEliminar());
 		contentPanel.add(getBtnGuardar());
 		contentPanel.add(getTextFieldNombreUsuario());
-		contentPanel.add(getLabel());
 		contentPanel.add(getTextFieldId());
+		contentPanel.add(getLabel());
 		modelo.setlstUsuarios(Biblioteca.getInstancia().getUsuarios());
 	}
 
@@ -132,65 +138,39 @@ public class GestionUsuario extends JDialog {
 			btnConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 
-					if(agregar){
-						boolean agregado = true;
+					UsuarioAcreditado u = agregarUsuario();
 
-						String nombre = textFieldNombreUsuario.getText();
-						String idUsuario = textFieldId.getText();
+					if(u != null){
+						list.clearSelection();
+						modelo.addUsuario(u);
+						JOptionPane.showMessageDialog(null, "Usuario registrado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-						UsuarioAcreditado u = new UsuarioAcreditado();
+						btnGuardar.setVisible(false);
+						btnConfirmar.setVisible(false);
+						btnCancelar.setVisible(false);
 
-						try{
-							lblNombre.setForeground(Color.BLACK);
-							u.setNombreCompleto(nombre);
-							textPaneError.setVisible(false);
-						}catch(IllegalArgumentException e){
-							lblNombre.setForeground(Color.RED);
-							textPaneError.setVisible(true);
-							agregado = false;
-							textFieldNombreUsuario.setText("");
-						}
-						try{
-							textPaneError.setVisible(false);
-							lblCi.setForeground(Color.BLACK);
-							u.setId(idUsuario);
-						}catch(IllegalArgumentException e){
-							lblCi.setForeground(Color.RED);
-							textPaneError.setVisible(true);
-							textFieldId.setText("");
-							agregado = false;
-						}
-						if(agregado){
-							list.clearSelection();
-							modelo.addUsuario(u);
-							JOptionPane.showMessageDialog(null, "Usuario registrado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+						//Aparecer CRUD
+						btnAgregar.setVisible(true);
+						btnEditar.setVisible(true);
+						btnEliminar.setVisible(true);
 
-							btnGuardar.setVisible(false);
-							btnConfirmar.setVisible(false);
-							btnCancelar.setVisible(false);
+						textFieldNombreUsuario.setEnabled(false);
+						textFieldId.setEnabled(false);
+						list.setEnabled(true);
+						reiniciarComponentes();
 
-							//Aparecer CRUD
-							btnAgregar.setVisible(true);
-							btnEditar.setVisible(true);
-							btnEliminar.setVisible(true);
+						txtpnOperacion.setVisible(false);
+						txtpnOperacion.setText("");
 
-							textFieldNombreUsuario.setEnabled(false);
-							textFieldId.setEnabled(false);
-							list.setEnabled(true);
-							reiniciarComponentes();
+						lblSexo.setText("Sexo: ");
+						lblEdad.setText("Edad: ");
 
-							txtpnOperacion.setVisible(false);
-							txtpnOperacion.setText("");
-
-							agregar = false;
-							lblSexo.setText("Sexo: ");
-							lblEdad.setText("Edad: ");
-						}
-					}
-					else{
 						reiniciarComponentes();
 						lblNombre.setForeground(Color.BLACK);
 						lblCi.setForeground(Color.BLACK);
+
+						textFieldNombreUsuario.setEnabled(false);
+						textFieldId.setEnabled(false);
 					}
 				}
 			});
@@ -208,6 +188,7 @@ public class GestionUsuario extends JDialog {
 
 					btnAgregar.setVisible(true);
 					btnEditar.setVisible(true);
+					btnEliminar.setVisible(true);
 
 					btnConfirmar.setVisible(false);
 					btnCancelar.setVisible(false);
@@ -256,9 +237,6 @@ public class GestionUsuario extends JDialog {
 					btnConfirmar.setVisible(true);
 					btnCancelar.setVisible(true);
 
-					//Activar booleano
-					agregar = true;
-
 					//Desactivar lista
 					list.setEnabled(false);
 
@@ -290,17 +268,13 @@ public class GestionUsuario extends JDialog {
 					btnConfirmar.setVisible(false);
 					btnCancelar.setVisible(true);
 
-					//Activar booleano
-					editar = true;
-
-					//Activar lista
-					list.setEnabled(true);
-
 					textFieldNombreUsuario.setEnabled(true);
 					textFieldId.setEnabled(true);
 
 					txtpnOperacion.setVisible(true);
 					txtpnOperacion.setText("Editar");
+
+					list.setEnabled(false);
 				}
 			});
 			btnEditar.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -326,59 +300,31 @@ public class GestionUsuario extends JDialog {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(editar){
-						boolean editado = true;
 
-						int indice = list.getSelectedIndex();
-						UsuarioAcreditado u = list.getSelectedValue();
+					UsuarioAcreditado u = editarUsuario();
+					int indice = list.getSelectedIndex();
+					if(u != null){
+						modelo.updateUsuario(indice, u);
+						JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+						lblSexo.setText("Sexo: ");
+						lblEdad.setText("Edad: ");
 
-						String nombre = textFieldNombreUsuario.getText();
-						String id = textFieldId.getText();
+						//Esconder confirmacion
+						btnGuardar.setVisible(false);
+						btnCancelar.setVisible(false);
 
-						try{
-							lblNombre.setForeground(Color.BLACK);
-							u.setNombreCompleto(nombre);
-							textPaneError.setVisible(false);
-						}catch(IllegalArgumentException e){
-							lblNombre.setForeground(Color.RED);
-							textPaneError.setVisible(true);
-							editado = false;
-							textFieldNombreUsuario.setText("");
-						}
-						try{
-							textPaneError.setVisible(false);
-							lblCi.setForeground(Color.BLACK);
-							u.setId(id);
-						}catch(IllegalArgumentException e){
-							lblCi.setForeground(Color.RED);
-							textPaneError.setVisible(true);
-							textFieldId.setText("");
-							editado = false;
-						}
-						if(editado){
-							modelo.updateUsuario(indice, u);
-							JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-							lblSexo.setText("Sexo: ");
-							lblEdad.setText("Edad: ");
-							editar = false;
+						//Aparecer CRUD
+						btnAgregar.setVisible(true);
+						btnEditar.setVisible(true);
+						btnEliminar.setVisible(true);
 
-							//Esconder confirmacion
-							btnGuardar.setVisible(false);
-							btnCancelar.setVisible(false);
+						txtpnOperacion.setText("");
+						txtpnOperacion.setVisible(false);
 
-							//Aparecer CRUD
-							btnAgregar.setVisible(true);
-							btnEditar.setVisible(true);
-							btnEliminar.setVisible(true);
+						reiniciarComponentes();
 
-							//Reiniciar operacion
-							editar = false;
-
-							txtpnOperacion.setText("");
-							txtpnOperacion.setVisible(false);
-
-							reiniciarComponentes();
-						}
+						textFieldNombreUsuario.setEnabled(false);
+						textFieldId.setEnabled(false);
 					}
 				}
 			});
@@ -489,7 +435,7 @@ public class GestionUsuario extends JDialog {
 				modelo.removeUsuario(indice);
 
 				JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
+				reiniciarComponentes();
 			}
 		}
 	}
@@ -497,10 +443,9 @@ public class GestionUsuario extends JDialog {
 	public void reiniciarComponentes(){
 
 		textFieldNombreUsuario.setText("");
-		textFieldId.setText("");
-
-		agregar = false;
-		editar = false;		
+		textFieldId.setText("");	
+		lblSexo.setText("Sexo: ");
+		lblEdad.setText("Edad: ");
 	}
 
 	private JLabel getLabel() {
@@ -536,6 +481,42 @@ public class GestionUsuario extends JDialog {
 	private JTextFieldCarnet getTextFieldId() {
 		if (textFieldId == null) {
 			textFieldId = new JTextFieldCarnet();
+			textFieldId.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					handleTextChange();
+				}
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					handleTextChange();
+				}
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					// Vacío porque no lo uso
+				}
+				private void handleTextChange() {
+					char[] cadena = textFieldId.getText().toCharArray();
+
+					if(textFieldId.getText().length() >= 7){
+						LocalDate fecha = obtenerFechaNacimiento(cadena);
+						LocalDate hoy = LocalDate.now();
+						int edad = Period.between(fecha, hoy).getYears();
+						lblEdad.setText("Edad: " + edad);
+						if(edad < 18 || edad > 110)
+							lblEdad.setForeground(Color.RED);
+						else
+							lblEdad.setForeground(Color.BLACK);
+					}
+					if(textFieldId.getText().length() >= 10){
+						boolean esHombre = esHombre(cadena);
+						if(esHombre){
+							lblSexo.setText("Sexo: M");
+						}
+						else
+							lblSexo.setText("Sexo: F");
+					}
+				}
+			});
 			textFieldId.setEnabled(false);
 			textFieldId.setBounds(525, 273, 203, 30);
 			textFieldId.setLimite(11);
@@ -553,5 +534,134 @@ public class GestionUsuario extends JDialog {
 			textPaneError.setBounds(649, 534, 145, 34);
 		}
 		return textPaneError;
+	}
+
+	//Métodos CRUD
+	public UsuarioAcreditado agregarUsuario(){
+		boolean agregado = true;
+
+		list.setEnabled(false);
+		String nombre = textFieldNombreUsuario.getText();
+		String idUsuario = textFieldId.getText();
+
+		UsuarioAcreditado u = new UsuarioAcreditado();
+
+		try{
+			lblNombre.setForeground(Color.BLACK);
+			u.setNombreCompleto(nombre);
+			textPaneError.setVisible(false);
+		}catch(IllegalArgumentException e){
+			lblNombre.setForeground(Color.RED);
+			textPaneError.setVisible(true);
+			agregado = false;
+			textFieldNombreUsuario.setText("");
+		}
+		try{
+			textPaneError.setVisible(false);
+			lblCi.setForeground(Color.BLACK);
+			u.setId(idUsuario);
+		}catch(IllegalArgumentException e){
+			lblCi.setForeground(Color.RED);
+			textPaneError.setVisible(true);
+			textFieldId.setText("");
+			agregado = false;
+		}
+		if(!agregado){
+			u = null;
+		}
+		return u;
+	}
+	public UsuarioAcreditado editarUsuario(){
+
+		boolean editado = true;
+		UsuarioAcreditado u = list.getSelectedValue();
+		list.setEnabled(false);
+
+		String nombre = textFieldNombreUsuario.getText();
+		String id = textFieldId.getText();
+
+		try{
+			lblNombre.setForeground(Color.BLACK);
+			u.setNombreCompleto(nombre);
+			textPaneError.setVisible(false);
+		}catch(IllegalArgumentException e){
+			lblNombre.setForeground(Color.RED);
+			textPaneError.setVisible(true);
+			editado = false;
+			textFieldNombreUsuario.setText("");
+		}
+		try{
+			textPaneError.setVisible(false);
+			lblCi.setForeground(Color.BLACK);
+			u.setId(id);
+		}catch(IllegalArgumentException e){
+			lblCi.setForeground(Color.RED);
+			textPaneError.setVisible(true);
+			textFieldId.setText("");
+			editado = false;
+		}
+		if(!editado){
+			u = null;
+		}
+		return u;
+	}
+
+	public LocalDate obtenerFechaNacimiento(char[] cadena){
+
+		boolean esCorrecta = true;
+		// Extraer componentes de fecha
+		int anio = (cadena[0] - '0') * 10 + (cadena[1] - '0'); 
+		int mes = (cadena[2] - '0') * 10 + (cadena[3] - '0');
+		int dia = (cadena[4] - '0') * 10 + (cadena[5] - '0');
+
+		// Validar dígito del siglo (7mo dígito)
+		int sigloDigito = cadena[6] - '0';
+		if (sigloDigito < 0 || sigloDigito > 9) {
+			esCorrecta = false;
+		}
+
+		// Ajustar año según siglo
+		if (sigloDigito == 9) {
+			anio += 1800; // Siglo XIX
+		} else if (sigloDigito <= 5) {
+			anio += 1900; // Siglo XX
+		} else {
+			anio += 2000; // Siglo XXI
+		}
+
+		// Validar rango de fecha (sin try-catch)
+		if (mes < 1 || mes > 12) {
+			esCorrecta = false;
+		}
+		if (dia < 1 || dia > 31) {
+			esCorrecta = false;
+		}
+		if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+			esCorrecta = false;
+		}
+		if (mes == 2) {
+			boolean esBisiesto = (anio % 4 == 0 && (anio % 100 != 0 || anio % 400 == 0));
+			if (dia > (esBisiesto ? 29 : 28)) {
+				esCorrecta = false;
+			}
+		}
+		LocalDate fechaNacimiento = null;
+
+		if(esCorrecta)
+			fechaNacimiento = LocalDate.of(anio, mes, dia);
+
+		return fechaNacimiento;
+	}
+
+	public boolean esHombre(char[] cadena){
+
+		boolean esHombre = false;
+
+		int digitoSexo = cadena[9] - '0';
+
+		if(digitoSexo % 2 == 0)
+			esHombre = true;
+
+		return esHombre;
 	}
 }
