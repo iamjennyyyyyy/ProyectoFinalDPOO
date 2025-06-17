@@ -1,5 +1,7 @@
 package Logica;
+import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
 
 public class Persona {
@@ -13,112 +15,108 @@ public class Persona {
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
-//		// Variables necesarias
-//		int anioReal = 0;
-//		int mes = 0;
-//		int dia = 0;
-//		int anioMinimo = 0;
-//		int anioMaximo = 0;
-//		int anioNacimiento = 0;
-//		String siglo;
-//		boolean valido = true;
-//
-//		// Definir estas constantes según tus necesidades
-//		final int EDAD_MAX = 25;
-//		final int EDAD_MIN = 20;
-//
-//		// Validación básica de entrada
-//		if (id == null || id.isEmpty() || id.charAt(0) == ' ') {
-//			valido = false;
-//		} else {
-//			// Obtener fecha actual
-//			Calendar calendar = Calendar.getInstance();
-//			anioReal = calendar.get(Calendar.YEAR);
-//			anioMinimo = anioReal - EDAD_MAX;
-//			anioMaximo = anioReal - EDAD_MIN;
-//
-//			siglo = id.charAt(6);
-//			String digitosAnio = id.substring(0, 2);
-//			anioNacimiento = Integer.parseInt(digitosAnio);
-//
-//			// Determinar siglo
-//			if (siglo >= '0' && siglo <= '5') {
-//				anioNacimiento += 1900;
-//			} else if (siglo >= '6' && siglo <= '8') {
-//				anioNacimiento += 2000;
-//			} else {
-//				valido = false;
-//			}
-//
-//			// Validar rango de años
-//			if (valido && (anioNacimiento > anioMaximo || anioNacimiento < anioMinimo)) {
-//				valido = false;
-//			}
-//
-//			// Validar mes
-//			if (valido) {
-//				String digitosMes = id.substring(2, 4);
-//				mes = Integer.parseInt(digitosMes);
-//
-//				if (mes < 1 || mes > 12) {
-//					valido = false;
-//				}
-//			}
-//
-//			// Validar día
-//			if (valido) {
-//				String digitosDia = id.substring(4, 6);
-//				dia = Integer.parseInt(digitosDia);
-//
-//				if (dia == 0) {
-//					valido = false;
-//				} else {
-//					// Validar días según mes
-//					if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
-//						valido = false;
-//					} else if ((mes == 1 || mes == 3 || mes == 5 || mes == 7 || 
-//							mes == 8 || mes == 10 || mes == 12) && dia > 31) {
-//						valido = false;
-//					} else if (mes == 2) {
-//						boolean esBisiesto = (anioNacimiento % 4 == 0);
-//						if ((esBisiesto && dia > 29) || (!esBisiesto && dia > 28)) {
-//							valido = false;
-//						}
-//					}
-//				}
-//			}
-//		}
-//		if(!valido){
-//			throw new IllegalArgumentException("Carnet incorrecto. Verifique por favor");
-//		}
-//		else{
-			this.id = id;
-//		}
+
+	public void setId(String numId) throws IllegalArgumentException {
+	    // Validación básica de entrada
+	    if (numId == null || numId.trim().isEmpty()) {
+	        throw new IllegalArgumentException("El carnet no puede estar vacío");
+	    }
+
+	    // Validar formato numérico y longitud
+	    if (!numId.matches("\\d{11}")) {
+	        throw new IllegalArgumentException("El carnet debe tener exactamente 11 dígitos numéricos");
+	    }
+
+	    // Convertir a array de caracteres
+	    char[] cadena = numId.toCharArray();
+
+	    // Extraer componentes de fecha
+	    int anio = (cadena[0] - '0') * 10 + (cadena[1] - '0'); 
+	    int mes = (cadena[2] - '0') * 10 + (cadena[3] - '0');
+	    int dia = (cadena[4] - '0') * 10 + (cadena[5] - '0');
+
+	    // Validar dígito del siglo (7mo dígito)
+	    int sigloDigito = cadena[6] - '0';
+	    if (sigloDigito < 0 || sigloDigito > 9) {
+	        throw new IllegalArgumentException("Dígito de siglo inválido (debe ser 0-9)");
+	    }
+
+	    // Ajustar año según siglo
+	    if (sigloDigito == 9) {
+	        anio += 1800; // Siglo XIX
+	    } else if (sigloDigito <= 5) {
+	        anio += 1900; // Siglo XX
+	    } else {
+	        anio += 2000; // Siglo XXI
+	    }
+
+	    // Validar rango de fecha (sin try-catch)
+	    if (mes < 1 || mes > 12) {
+	        throw new IllegalArgumentException("Mes de nacimiento inválido");
+	    }
+	    if (dia < 1 || dia > 31) {
+	        throw new IllegalArgumentException("Día de nacimiento inválido");
+	    }
+	    if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+	        throw new IllegalArgumentException("Día inválido para este mes");
+	    }
+	    if (mes == 2) {
+	        boolean esBisiesto = (anio % 4 == 0 && (anio % 100 != 0 || anio % 400 == 0));
+	        if (dia > (esBisiesto ? 29 : 28)) {
+	            throw new IllegalArgumentException("Día inválido para febrero");
+	        }
+	    }
+
+	    LocalDate fechaNacimiento = LocalDate.of(anio, mes, dia);
+	    LocalDate hoy = LocalDate.now();
+
+	    // Validar mayoría de edad (18 años)
+	    if (fechaNacimiento.plusYears(18).isAfter(hoy)) {
+	        throw new IllegalArgumentException("El carnet indica que es menor de 18 años");
+	    }
+
+	    // Validar dígito de sexo (10mo dígito)
+	    int digitoSexo = cadena[9] - '0';
+	    if (digitoSexo < 0 || digitoSexo > 9) {
+	        throw new IllegalArgumentException("Dígito de sexo inválido");
+	    }
+
+	    // Asignar valores derivados
+	    setEdad(Period.between(fechaNacimiento, hoy).getYears());
+	    setSexo((digitoSexo % 2 == 0) ? "M" : "F");
+
+	    // Si todo está correcto, asignar el ID
+	    this.id = numId;
 	}
+
 
 	public String getNombreCompleto() {
 		return nombreCompleto;
 	}
 
-	public void setNombreCompleto(String nombreCompleto) {
-		this.nombreCompleto = nombreCompleto;
+	public void setNombreCompleto(String nombre) {
+		if (!(nombre.replaceAll(" ", "").equalsIgnoreCase("")) && !nombre.matches(".*\\d.*")) 
+		{
+			nombreCompleto = nombre;
+		}
+		else throw new IllegalArgumentException("El nombre no es válido.");
 	}
 
 	public int getEdad() {
 		return edad;
 	}
 
-	public void setEdad(int edad) {
-		if(edad > 6 && edad < 110)
+	private void setEdad(int edad) {
+		if(edad >= 18 && edad < 110)
 			this.edad = edad;
+		else throw new IllegalArgumentException("Edad incorrecta");
 	}
 
 	public String getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(String sexo) {
+	private void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
 
@@ -127,18 +125,18 @@ public class Persona {
 	}
 
 	public void setFecha(LocalDate fecha) {
-
 		this.fecha = fecha;
-
 	}
-	public Persona(String id,String nombreCompleto, int edad, String sexo) {
+	public Persona(String id,String nombreCompleto) {
 
 		setId(id);
 		setNombreCompleto(nombreCompleto);
-		setEdad(edad);
-		setSexo(sexo);
 		LocalDate fecha = LocalDate.now();
 		setFecha(fecha);
+	}
+	
+	public Persona(){
+		
 	}
 
 	@Override

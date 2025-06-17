@@ -10,7 +10,7 @@ public class Prestamo {
 	private Publicacion pub;
 	private UsuarioAcreditado user;
 	private Trabajador trabPrestamo;
-	
+
 	public LocalDate getFechaP() {
 		return fechaP;
 	}
@@ -27,19 +27,25 @@ public class Prestamo {
 		return pub;
 	}
 	public void setPub(Publicacion pub) {
-		this.pub = pub;
+		if(pub != null)
+			this.pub = pub;
+		else throw new IllegalArgumentException("Publicacion no válida");
 	}
 	public UsuarioAcreditado getUser() {
 		return user;
 	}
 	public void setUser(UsuarioAcreditado user) {
-		this.user = user;
+		if(user != null)
+			this.user = user;
+		else throw new IllegalArgumentException("Usuario no válido");
 	}
 	public Trabajador getTrabPrestamo() {
 		return trabPrestamo;
 	}
 	public void setTrabPrestamo(Trabajador trabPrestamo) {
-		this.trabPrestamo = trabPrestamo;
+		if(trabPrestamo != null)
+			this.trabPrestamo = trabPrestamo;
+		else throw new IllegalArgumentException("Trabajador no valida");
 	}
 	public LocalDate getFechaDevolucion() {
 		return fechaDevolucion;
@@ -47,20 +53,19 @@ public class Prestamo {
 	public void setFechaDevolucion(LocalDate fechaDevolucion) {
 		this.fechaDevolucion = fechaDevolucion;
 	}
-	
 	public Prestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
-		
+
 		setFechaP(fechaP);
 		setFechaMax(fechaMax);
 		setPub(pub);
 		setUser(user);
 		setTrabPrestamo(trabPrestamo);
 	}
-	
+
 	public Prestamo(LocalDate fechaP, LocalDate fechaMax, LocalDate fechaDev, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
-		
+
 		setFechaP(fechaP);
 		setFechaMax(fechaMax);
 		setFechaDevolucion(fechaDev);
@@ -68,14 +73,14 @@ public class Prestamo {
 		setUser(user);
 		setTrabPrestamo(trabPrestamo);
 	}
-	
+
 	public void concederProrroga(){
 		int tiempoMax = pub.tiempoMaximoPrestamo();
 		fechaMax.plusDays(tiempoMax);
 	}
 	@Override
 	public String toString() {
-		
+
 		String tipoPublicacion;
 		if(pub instanceof Libro)
 			tipoPublicacion = "Libro";
@@ -83,19 +88,19 @@ public class Prestamo {
 			tipoPublicacion = "Revista";
 		else
 			tipoPublicacion = "Articulo";
-		
+
 		String mensaje = tipoPublicacion + ": " + pub.getTitulo() + 
 				"\n" + "Usuario: " + user.getNombreCompleto() + 
 				"\n" + "Gestor: " + trabPrestamo.getNombreCompleto() + 
 				"\n" + "Fecha prestamo: " + fechaP + 
 				"\n" + "Fecha maxima: " + fechaMax + 
 				"\n";
-		
+
 		if(fechaDevolucion != null)
 			mensaje += "Devuelta en la fecha " + fechaDevolucion;
 		else
 			mensaje += "Aun no devuelto ";
-		
+
 		return mensaje;
 	}
 }

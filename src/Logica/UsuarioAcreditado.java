@@ -22,9 +22,11 @@ public class UsuarioAcreditado extends Persona {
 		numUsuario++;
 	}
 
-
-	public UsuarioAcreditado(String id, String nombreCompleto, int edad, String sexo) {
-		super(id, nombreCompleto, edad, sexo);
+	public UsuarioAcreditado(){
+		super();
+	}
+	public UsuarioAcreditado(String id, String nombreCompleto) {
+		super(id, nombreCompleto);
 		setNumUsuario();
 		prestamos = new ArrayList<Prestamo>();
 	}

@@ -85,7 +85,7 @@ public class Principal extends JFrame {
 
 	public Principal() {
 
-//		l = new Login(this);
+//		l = new Login(this, true);
 //		l.setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -224,13 +224,7 @@ public class Principal extends JFrame {
 			mntmCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					
-					int option = JOptionPane.showConfirmDialog(
-							null,
-							"¿Está seguro que desea salir?",
-							"Confirmación",
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE
-							);
+					int option = JOptionPane.showConfirmDialog(null,"¿Está seguro que desea salir?","Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 					if (option == JOptionPane.YES_OPTION) {
 						dispose();

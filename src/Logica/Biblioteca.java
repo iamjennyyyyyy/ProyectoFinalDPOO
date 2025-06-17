@@ -24,6 +24,7 @@ public class Biblioteca {
 	private ArrayList<Libro> libros;
 	private ArrayList<Revista> revistas;
 	private ArrayList<Articulo> articulos;
+	private ArrayList<Publicacion> publicaciones;
 	private static ArrayList<Prestamo> prestamosTotales;
 
 
@@ -42,6 +43,7 @@ public class Biblioteca {
 		libros = new ArrayList<Libro>();
 		revistas = new ArrayList<Revista>();
 		articulos = new ArrayList<Articulo>();
+		publicaciones = new ArrayList<Publicacion>();
 		prestamosTotales = new ArrayList<Prestamo>();
 	}
 
@@ -50,8 +52,8 @@ public class Biblioteca {
 			unicaInstancia = new Biblioteca(
 					1,
 					"Biblioteca Municipal Central",
-					"Barcelona",
-					"Barcelona",
+					"La Habana",
+					"La Habana",
 					"09:00-21:00 L-V, 10:00-14:00 S",
 					Login.obtenerAdmin(),
 					5
@@ -99,25 +101,6 @@ public class Biblioteca {
 	public void setAnnosEnCargo(int annosEnCargo) {
 		this.annosEnCargo = annosEnCargo;
 	}
-	public ArrayList<Libro> getLibros() {
-		return libros;
-	}
-	public void setLibros(ArrayList<Libro> libros) {
-		this.libros = libros;
-	}
-	public ArrayList<Revista> getRevistas() {
-		return revistas;
-	}
-	public void setRevistas(ArrayList<Revista> revistas) {
-		this.revistas = revistas;
-	}
-	public ArrayList<Articulo> getArticulos() {
-		return articulos;
-	}
-
-	public void setArticulos(ArrayList<Articulo> articulos) {
-		this.articulos = articulos;
-	}
 
 	public ArrayList<Trabajador> getTrabajadores() {
 		return trabajadores;
@@ -137,6 +120,10 @@ public class Biblioteca {
 
 	public ArrayList<Prestamo> getPrestamosTotales() {
 		return prestamosTotales;
+	}
+	
+	public ArrayList<Publicacion> getPublicaciones() {
+		return publicaciones;
 	}
 
 	public void setPrestamosTotales(ArrayList<Prestamo> prestamosTotales) {
@@ -384,27 +371,27 @@ public class Biblioteca {
 	}
 
 
-	public void agregarTrabajador(String id,String nombreCompleto, int edad, String sexo, String nivelEscolar, String cargo) {
-		trabajadores.add(new Trabajador(id, nombreCompleto, edad, sexo, nivelEscolar, cargo));
+	public void agregarTrabajador(String id,String nombreCompleto,String nivelEscolar, String cargo) {
+		trabajadores.add(new Trabajador(id, nombreCompleto,nivelEscolar, cargo));
 	}
 
-	public UsuarioAcreditado crearUsuarioAcreditado(String id, String nombre,int edad, String sexo) {
-		UsuarioAcreditado u = new UsuarioAcreditado(id, nombre, edad, sexo);
-		usuarios.add(new UsuarioAcreditado(id, nombre, edad, sexo));
+	public UsuarioAcreditado crearUsuarioAcreditado(String id, String nombre) {
+		UsuarioAcreditado u = new UsuarioAcreditado(id, nombre);
+		usuarios.add(new UsuarioAcreditado(id, nombre));
 		return u;
 	}
 
-	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, String editorial) {
-		libros.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autores, editorial));
+	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String editorial) {
+		publicaciones.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, editorial));
 	}
 
 	public void agregarRevista(String id, String titulo, String materia, int numPaginas,
 			int cantEjemplares, boolean estaPrestado) {
-		revistas.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado));
+		publicaciones.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado));
 	}
 
-	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {
-		articulos.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autores, arbitros));
+	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String arbitro) {
+		publicaciones.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, arbitro));
 	}
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,

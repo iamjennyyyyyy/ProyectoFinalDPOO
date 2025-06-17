@@ -3,38 +3,38 @@ import java.util.ArrayList;
 
 public class Articulo extends Publicacion {
 
-	private ArrayList<String> autores;
-	private ArrayList<String> arbitros;
-	
+	private ArrayList<String> autores = new ArrayList<String>();
+	private ArrayList<String> arbitros = new ArrayList<String>();
+
 	public ArrayList<String> getAutores() {
 		return autores;
 	}
-	public void setAutores(ArrayList<String> autores) {
-
-		if (autores == null) {
-	        throw new IllegalArgumentException("La lista de autores no puede ser null");
-	    }
-	    this.autores = autores;
+	public void agregarAutor(String nombre){
+		if (!(nombre.replaceAll(" ", "").equalsIgnoreCase("")) && !nombre.matches(".*\\d.*")) 
+		{
+			autores.add(nombre);
+		}
+		else throw new IllegalArgumentException("El nombre no es válido.");
 	}
-	
+
 	public ArrayList<String> getArbitros() {
 		return arbitros;
 	}
-	public void setArbitros(ArrayList<String> arbitros) {
+	public void agregarArbitro(String nombre){
+		if (!(nombre.replaceAll(" ", "").equalsIgnoreCase("")) && !nombre.matches(".*\\d.*")) 
+		{
+			arbitros.add(nombre);
+		}
+		else throw new IllegalArgumentException("El nombre no es válido.");
+	}
 
-		if (arbitros == null) {
-	        throw new IllegalArgumentException("La lista de arbitros no puede ser null");
-	    }
-	    this.arbitros = arbitros;
-	}
-	
-	public Articulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {
+	public Articulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String arbitro) {
 		super(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado);
-		
-		setAutores(autores);
-		setArbitros(arbitros);
+
+		agregarAutor(autor);
+		agregarArbitro(arbitro);
 	}
-	
+
 	@Override
 	public int tiempoMaximoPrestamo(){
 		return (numPaginas/30)+cantEjemplares;
