@@ -13,19 +13,27 @@ public abstract class Publicacion {
 	public String getId(){
 		return id;
 	}
-	//Comprueba que tenga exactamente 6 cifras
+
 	private void setId(String id) {
-			this.id = id;
+		this.id = id;
 	}
 
 	public String getTitulo() {
 		return titulo;
 	}
 
-	//Comprueba que no contenga los errores declarados en  el metodo estatico validarCadena
 	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+		
+		titulo = titulo.trim();
+		if (!titulo.isEmpty() && 
+		        titulo.length() >= 2 && 
+		        !titulo.matches("^[\\s\\d]+$")) {
+		        this.titulo = titulo;
+		} else {
+			throw new IllegalArgumentException("Título no válido");
+		}
 	}
+	
 	public String getMateria() {
 		return materia;
 	}
@@ -50,7 +58,7 @@ public abstract class Publicacion {
 	}
 	public void setCantEjemplares(int cantEjemplares) {
 
-		if(cantEjemplares >= 1 && cantEjemplares <= 100000)
+		if(cantEjemplares >= 1 && cantEjemplares <= 1000)
 			this.cantEjemplares = cantEjemplares;
 		else
 			throw new IllegalArgumentException("Error, no existe tal capacidad en la biblioteca.\n");
@@ -61,34 +69,34 @@ public abstract class Publicacion {
 	public void setEstaPrestado(boolean estaPrestado) {
 		this.estaPrestado = estaPrestado;
 	}
-	
+
 	public Publicacion(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado) {
 		super();
-		
+
 		setId(id);
 		setTitulo(titulo);
 		setMateria(materia);
 		setNumPaginas(numPaginas);
 		setCantEjemplares(cantEjemplares);
 		setEstaPrestado(estaPrestado);
-		
+
 	}
 	@Override
 	public String toString() {
-		
+
 		String mensaje = "Publicacion " + titulo + "\n Materia: " + materia + "\nNumero de paginas: " + numPaginas + "\nCantidad de ejemplares: " + cantEjemplares;
 		if(estaPrestado)
 			mensaje += " y no esta disponible.\n";
 		else
 			mensaje += " y esta disponible.\n";
-		
+
 		return mensaje;
 	}
-	
+
 	public void disminuirStock(){
 		cantEjemplares--;
 	}
-	
+
 	public abstract int tiempoMaximoPrestamo();
-	
+
 }

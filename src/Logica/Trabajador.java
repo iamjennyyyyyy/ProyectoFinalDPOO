@@ -9,20 +9,26 @@ public class Trabajador extends Persona {
 		return nivelEscolar;
 	}
 	public void setNivelEscolar(String nivelEscolar) {
-		this.nivelEscolar = nivelEscolar;
+		if (!(nivelEscolar.replaceAll(" ", "").equalsIgnoreCase("")) && !nivelEscolar.matches(".*\\d.*")) 
+		{
+			this.nivelEscolar = nivelEscolar;
+		}
+		else throw new IllegalArgumentException("El nivel escolar no es válido.");
 	}
 	public String getCargo() {
 		return cargo;
 	}
 	public void setCargo(String cargo) {
-		this.cargo = cargo;
+		if (!(cargo.replaceAll(" ", "").equalsIgnoreCase("")) && !cargo.matches(".*\\d.*")) 
+		{
+			this.cargo = cargo;
+		}
+		else throw new IllegalArgumentException("El cargo no es válido.");
 	}
 	
-	public Trabajador(String id,String nombreCompleto, int edad, String sexo, String nivelEscolar, String cargo) {
-		super(id,nombreCompleto, edad, sexo);
+	public Trabajador(String id,String nombreCompleto, String nivelEscolar, String cargo) {
+		super(id,nombreCompleto);
 		setNivelEscolar(nivelEscolar);
 		setNivelEscolar(cargo);
 	}
-	
-	
 }

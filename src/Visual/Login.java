@@ -27,6 +27,10 @@ import Utiles.Colores;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
+import java.util.Arrays;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
@@ -50,6 +54,7 @@ public class Login extends JDialog {
 	private JButton btnSalir;
 	private JPasswordField passwordField;
 	private JLabel lblNewLabel_1;
+	private JFrame parentFrame;
 
 	/**
 	 * Launch the application.
@@ -58,10 +63,14 @@ public class Login extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Login(Principal p) {
-		super(p,"Inicio Sesion", true);
-		setBounds(0, 0, 1366, 768);
+	public Login(JFrame p, boolean modal) {
+		super(p, modal);
+		this.parentFrame = p;
+		setBackground(Color.WHITE);
+		setAlwaysOnTop(true);
 		setUndecorated(true);
+		setTitle("Inicio Sesi\u00F3n");
+		setBounds(0, 0, 1366, 768);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -81,7 +90,7 @@ public class Login extends JDialog {
 	}
 
 	public static Trabajador obtenerAdmin(){
-		Trabajador t = new Trabajador("3", "Amelia Ramos", 35, "F", "Universitario", "Bibliotecario Jefe");
+		Trabajador t = new Trabajador("06071267912", "Jennifer Ramírez", "Universitario", "Bibliotecario Jefe");
 		return t;
 	}
 	private JLabel getLblNewLabel() {
@@ -156,16 +165,25 @@ public class Login extends JDialog {
 			btnIniciarSesion = new JButton("Entrar");
 			btnIniciarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
+					char[] contraseña = passwordField.getPassword();
+					char[] contraseñaValida = "jenn006".toCharArray();
+					try {
+						if(Arrays.equals(contraseña, contraseñaValida) && 
+								txtIngreseUnNombre.getText().equals("06071267912"))
+						dispose();
+						
+						else {
+							JOptionPane.showMessageDialog(Login.this,"Credenciales incorrectas", "Error",JOptionPane.ERROR_MESSAGE);
+						}
+					} finally {
+						// Limpiar contraseñas de memoria
+						Arrays.fill(contraseña, '\0');
+						Arrays.fill(contraseñaValida, '\0');
+						passwordField.setText("");
+					}
 				}
 			});
 			btnIniciarSesion.setForeground(Color.BLACK);
-//			btnIniciarSesion.addMouseListener(new MouseAdapter() {
-//				@Override
-//				public void mouseEntered(MouseEvent arg0) {
-//					btnIniciarSesion.setBackground(Colores.getColorbeige());
-//				}
-//			});
 			btnIniciarSesion.setBackground(Colores.getColorBotonLoginNuevo());
 			btnIniciarSesion.setFont(new Font("SansSerif", Font.PLAIN, 22));
 			btnIniciarSesion.setBounds(744, 640, 138, 48);
@@ -176,19 +194,10 @@ public class Login extends JDialog {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Salir");
 			btnSalir.setForeground(Color.BLACK);
-//			btnSalir.addMouseListener(new MouseAdapter() {
-//				@Override
-//				public void mouseEntered(MouseEvent arg0) {
-//					btnSalir.setBackground(Colores.getColorbotonclarologinexited());
-//				}
-//				@Override
-//				public void mouseExited(MouseEvent arg0) {
-//					btnSalir.setBackground(Colores.getColorbotonclarologin());
-//				}
-//			});
 			btnSalir.setBackground(Colores.getColorBotonLoginNuevo());
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					parentFrame.dispose();
 					dispose();
 				}
 			});

@@ -1,122 +1,3 @@
-//package Inicializadora;
-//
-//import Logica.Biblioteca;
-//import Logica.Articulo;
-//import Logica.Libro;
-//import Logica.Prestamo;
-//import Logica.Publicacion;
-//import Logica.Trabajador;
-//import Logica.Revista;
-//import Logica.UsuarioAcreditado;
-//
-//import java.time.LocalDate;
-//import java.util.ArrayList;
-//
-//public class Inicializar {
-//
-//    public static void Inicio() {
-//
-//    	
-//        Biblioteca.getInstancia().agregarTrabajador("1","Alejandra Lima", 35, "F", "Universitario", "Bibliotecario Jefe");
-//        Biblioteca.getInstancia().agregarTrabajador("2","Jose Machado",28, "M", "Técnico Medio", "Auxiliar de Biblioteca");
-//
-//        // 2. Crear y agregar usuarios acreditados
-//        Biblioteca.getInstancia().crearUsuarioAcreditado("101","Lucia Guevara", 25, "F");
-//        Biblioteca.getInstancia().crearUsuarioAcreditado("102","Pedro Gutierrez" , 30, "M");
-//        Biblioteca.getInstancia().crearUsuarioAcreditado("103","Amara Batista", 19, "F");
-//        Biblioteca.getInstancia().crearUsuarioAcreditado("104","Juan Lopez" , 20, "M");
-//        Biblioteca.getInstancia().crearUsuarioAcreditado("105","Lorenzo Torres", 21, "M");
-//        Biblioteca.getInstancia().crearUsuarioAcreditado("106","Liana Castillo" , 45, "F");
-//
-//        // 3. Crear y agregar libros
-//        ArrayList<String> autores1 = new ArrayList<>();
-//        autores1.add("Gabriel García Márquez");
-//        Biblioteca.getInstancia().agregarLibro("1001", "Cien años de soledad", "Novela", 432, 3, false, autores1, "Sudamericana");
-//
-//        ArrayList<String> autores2 = new ArrayList<>();
-//        autores2.add("Patrick Rothfuss");
-//        Biblioteca.getInstancia().agregarLibro("1002", "El nombre del viento", "Fantasía", 462, 4, false, autores2, "Plaza Janes");
-//
-//        // 4. Crear y agregar revistas
-//        Biblioteca.getInstancia().agregarRevista("2001", "National Geographic", "Ciencia", 100, 10, false);
-//        Biblioteca.getInstancia().agregarRevista("2002", "Muy Interesante", "Divulgación", 80, 8, false);
-//
-//        // 5. Crear y agregar artículos
-//        ArrayList<String> autoresArt1 = new ArrayList<>();
-//        autoresArt1.add("Dr. Alan Turing");
-//        ArrayList<String> arbitros1 = new ArrayList<>();
-//        arbitros1.add("Dr. John McCarthy");
-//        Biblioteca.getInstancia().agregarArticulo("3001", "Machine Learning aplicado a diagnóstico médico", "Tecnología", 15, 2, false, autoresArt1, arbitros1);
-//
-//        ArrayList<String> autoresArt2 = new ArrayList<>();
-//        autoresArt2.add("Dra. Sylvia Earle");
-//        ArrayList<String> arbitros2 = new ArrayList<>();
-//        arbitros2.add("Dr. James Hansen");
-//        Biblioteca.getInstancia().agregarArticulo("3002", "Impacto del cambio climático en ecosistemas marinos", "Ecología", 20, 3, false, autoresArt2, arbitros2);
-//        
-//        //6. Crear Prestamos
-//        Publicacion pub = Biblioteca.getInstancia().buscarPublicacionPorId("1001");
-//        UsuarioAcreditado user = Biblioteca.getInstancia().buscarUsuarioPorId("101");
-//        LocalDate fPrest = LocalDate.of(2025, 5, 10);
-//        LocalDate fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
-//        LocalDate fDev = LocalDate.of(2025, 05, 22);
-//        Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, fDev, pub, user, Biblioteca.getInstancia().getAdmin());
-//        //2025-05-24
-//        
-//        
-//        Publicacion pub2 = Biblioteca.getInstancia().buscarPublicacionPorId("1002");
-//        UsuarioAcreditado user2 = Biblioteca.getInstancia().buscarUsuarioPorId("102");
-//        LocalDate fPrest2 = LocalDate.of(2025, 5, 26);
-//        LocalDate fMax2 = fPrest.plusDays(pub2.tiempoMaximoPrestamo());
-//        LocalDate fDev2 = LocalDate.of(2025, 05, 27);
-//        Biblioteca.getInstancia().agregarPrestamo(fPrest2, fMax2, fDev2, pub2, user2, Biblioteca.getInstancia().getAdmin());
-//        //2025-05-27
-//        
-//        
-//        Publicacion pub3 = Biblioteca.getInstancia().buscarPublicacionPorId("2001");
-//        UsuarioAcreditado user3 = Biblioteca.getInstancia().buscarUsuarioPorId("103");
-//        LocalDate fPrest3 = LocalDate.of(2025, 5, 23);
-//        LocalDate fMax3 = fPrest.plusDays(pub3.tiempoMaximoPrestamo());
-//        Biblioteca.getInstancia().agregarPrestamo(fPrest3, fMax3, pub3, user3, Biblioteca.getInstancia().getAdmin());
-//        //2025-05-30
-//        
-//        
-//        Publicacion pub4 = Biblioteca.getInstancia().buscarPublicacionPorId("2002");
-//        UsuarioAcreditado user4 = Biblioteca.getInstancia().buscarUsuarioPorId("104");
-//        LocalDate fPrest4 = LocalDate.of(2025, 5, 19);
-//        LocalDate fMax4 = fPrest.plusDays(pub4.tiempoMaximoPrestamo());
-//        LocalDate fDev4 = LocalDate.of(2025, 05, 24);
-//        Biblioteca.getInstancia().agregarPrestamo(fPrest4, fMax4, fDev4, pub4, user4, Biblioteca.getInstancia().getAdmin());
-//        //2025-05-26
-//        
-//        
-//        Publicacion pub5 = Biblioteca.getInstancia().buscarPublicacionPorId("3001");
-//        UsuarioAcreditado user5 = Biblioteca.getInstancia().buscarUsuarioPorId("105");
-//        LocalDate fPrest5 = LocalDate.of(2025, 5, 27);
-//        LocalDate fMax5 = fPrest5.plusDays(pub5.tiempoMaximoPrestamo());
-//        Biblioteca.getInstancia().agregarPrestamo(fPrest5, fMax5, pub5, user5, Biblioteca.getInstancia().getAdmin());
-//        //2025-05-29
-//        
-//        
-//        Publicacion pub6 = Biblioteca.getInstancia().buscarPublicacionPorId("3002");
-//        UsuarioAcreditado user6 = Biblioteca.getInstancia().buscarUsuarioPorId("106");
-//        LocalDate fPrest6 = LocalDate.of(2025, 5, 21);
-//        LocalDate fDev6 = LocalDate.of(2025, 05, 22);
-//        LocalDate fMax6 = fPrest6.plusDays(pub6.tiempoMaximoPrestamo());
-//        Biblioteca.getInstancia().agregarPrestamo(fPrest6, fMax6, fDev6, pub6, user6, Biblioteca.getInstancia().getAdmin());
-//        //2025-05-24
-//        
-//        for(Prestamo p : Biblioteca.getInstancia().getPrestamosTotales()){
-//        	System.out.println("Prestamos activos: " + p.getUser().getId() + " " + p.getFechaMax());
-//        }
-////        
-////        
-////        for(Prestamo pOrdenado : Biblioteca.getInstancia().guardarPrestProximosAVencerse(4)){
-////        	System.out.println("Prestamos que vencen en 4 dias: " + pOrdenado.getUser().getId() + " " + pOrdenado.getFechaMax());
-////        }
-//    }
-//}
-
 package Inicializadora;
 
 import Logica.Biblioteca;
@@ -151,55 +32,50 @@ public class Inicializar {
 
 	private static void inicializarTrabajadores() {
 		String[][] trabajadores = {
-				{"1","Alejandra Lima", "35", "F", "Universitario", "Bibliotecario Jefe"},
-				{"2","Jose Machado", "28", "M", "Técnico Medio", "Auxiliar de Biblioteca"},
-				{"3","María Rodríguez", "42", "F", "Master", "Jefa de Adquisiciones"},
-				{"4","Carlos Sánchez", "31", "M", "Universitario", "Catalogador"},
-				{"5","Laura Méndez", "29", "F", "Técnico Superior", "Asistente de Referencia"},
-				{"6","Roberto Jiménez", "45", "M", "Doctorado", "Director Técnico"},
-				{"7","Ana Contreras", "38", "F", "Universitario", "Archivista"},
-				{"8","Pedro Vargas", "33", "M", "Técnico Medio", "Digitador"},
-				{"9","Sofía Castro", "27", "F", "Universitario", "Asistente de Circulación"},
-				{"10","Miguel Ángel Díaz", "50", "M", "Master", "Jefe de Sistemas"},
-				{"11","Elena Ruiz", "39", "F", "Universitario", "Conservadora"},
-				{"12","Fernando Morales", "44", "M", "Técnico Superior", "Restaurador"},
-				{"13","Patricia Núñez", "36", "F", "Universitario", "Bibliotecaria Infantil"},
-				{"14","Ricardo Soto", "41", "M", "Master", "Coordinador de Servicios"},
-				{"15","Diana Paredes", "30", "F", "Universitario", "Referencista"}
+				{"65101251234","Alejandra Lima", "Universitario", "Bibliotecario Jefe"},
+				{"82071522345","Jose Machado", "Técnico Medio", "Auxiliar de Biblioteca"},
+				{"93022833456","María Rodríguez", "Master", "Jefa de Adquisiciones"},
+				{"75030944567","Carlos Sánchez", "Universitario", "Catalogador"},
+				{"88052155678","Laura Méndez", "Técnico Superior", "Asistente de Referencia"},
+				{"69110406789","Roberto Jiménez", "Doctorado", "Director Técnico"},
+				{"95061717890","Ana Contreras", "Universitario", "Archivista"},
+				{"72082028901","Pedro Vargas", "Técnico Medio", "Digitador"},
+				{"83090339012","Sofía Castro", "Universitario", "Asistente de Circulación"},
+				{"91112640123","Miguel Ángel Díaz", "Master", "Jefe de Sistemas"},
+				{"78040951234","Elena Ruiz", "Universitario", "Conservadora"},
+				{"85052222345","Fernando Morales", "Técnico Superior", "Restaurador"},
+				{"99030533456","Patricia Núñez", "Universitario", "Bibliotecaria Infantil"},
+				{"71061824567","Ricardo Soto", "Master", "Coordinador de Servicios"},
+				{"86072115678","Diana Paredes", "Universitario", "Referencista"}
 		};
 
 		for(String[] datos : trabajadores) {
-			Biblioteca.getInstancia().agregarTrabajador(
-					datos[0], datos[1], Integer.parseInt(datos[2]), 
-					datos[3], datos[4], datos[5]
-					);
+			Biblioteca.getInstancia().agregarTrabajador(datos[0], datos[1], datos[2], datos[3]);
 		}
 	}
 
 	private static void inicializarUsuarios() {
 		String[][] usuarios = {
-				{"101","Lucia Guevara", "25", "F"},
-				{"102","Pedro Gutierrez", "30", "M"},
-				{"103","Amara Batista", "19", "F"},
-				{"104","Juan Lopez", "20", "M"},
-				{"105","Lorenzo Torres", "21", "M"},
-				{"106","Liana Castillo", "45", "F"},
-				{"107","Mario Benedetti", "22", "M"},
-				{"108","Silvia Plath", "28", "F"},
-				{"109","Ernesto Sábato", "35", "M"},
-				{"110","Isabel Allende", "40", "F"},
-				{"111","Julio Cortázar", "29", "M"},
-				{"112","Gabriela Mistral", "33", "F"},
-				{"113","Pablo Neruda", "27", "M"},
-				{"114","Clarice Lispector", "31", "F"},
-				{"115","Jorge Luis Borges", "50", "M"}
+				{"94021406789","Lucia Guevara"},
+				{"77052717890","Pedro Gutierrez"},
+				{"89063028901","Amara Batista"},
+				{"92081339012","Juan Lopez"},
+				{"80091640123","Lorenzo Torres"},
+				{"97022851234","Liana Castillo"},
+				{"74031212345","Mario Benedetti"},
+				{"98102523456","Silvia Plath"},
+				{"73040834567","Ernesto Sábato"},
+				{"84051125678","Isabel Allende"},
+				{"90062416789","Julio Cortázar"},
+				{"79070717890","Gabriela Mistral"},
+				{"85081048901","Pablo Neruda"},
+				{"91091339012","Clarice Lispector"},
+				{"78010640123","Jorge Luis Borges"}
 		};
 
 		for(String[] datos : usuarios) {
-			Biblioteca.getInstancia().crearUsuarioAcreditado(
-					datos[0], datos[1], Integer.parseInt(datos[2]), datos[3]
-					);
-		}
+			Biblioteca.getInstancia().crearUsuarioAcreditado(datos[0], datos[1]);
+			}
 	}
 
 	private static void inicializarPublicaciones() {
@@ -208,7 +84,7 @@ public class Inicializar {
 				{"1001", "Cien años de soledad", "Literatura", "432", "3", "Gabriel García Márquez", "Sudamericana"},
 				{"1002", "El nombre del viento", "Literatura Fantástica", "462", "4", "Patrick Rothfuss", "Plaza Janes"},
 				{"1003", "Rayuela", "Literatura", "600", "2", "Julio Cortázar", "Alfaguara"},
-				{"1004", "1984", "Literatura Fantástica", "328", "5", "George Orwell", "Debolsillo"},
+				{"1004", "The 1984", "Literatura Fantástica", "328", "5", "George Orwell", "Debolsillo"},
 				{"1005", "Crónica de una muerte anunciada", "Literatura", "120", "3", "Gabriel García Márquez", "Sudamericana"},
 				{"1006", "El Hobbit", "Literatura Fantástica", "310", "4", "J.R.R. Tolkien", "Minotauro"},
 				{"1007", "Ficciones", "Literatura", "180", "2", "Jorge Luis Borges", "Emecé"},
@@ -229,7 +105,7 @@ public class Inicializar {
 			Biblioteca.getInstancia().agregarLibro(
 					datos[0], datos[1], datos[2], 
 					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), 
-					false, autores, datos[6]
+					false, datos[5], datos[6]
 					);
 		}
 
@@ -288,8 +164,7 @@ public class Inicializar {
 			Biblioteca.getInstancia().agregarArticulo(
 					datos[0], datos[1], datos[2], 
 					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), 
-					false, autores, arbitros
-					);
+					false, datos[5], datos[6]);
 		}
 
 		/*
@@ -375,11 +250,7 @@ public class Inicializar {
 
 	// Métodos auxiliares
 	private static Publicacion obtenerPublicacionAleatoriaValida() {
-		ArrayList<Publicacion> publicaciones = new ArrayList<>();
-		publicaciones.addAll(Biblioteca.getInstancia().getLibros());
-		publicaciones.addAll(Biblioteca.getInstancia().getRevistas());
-		publicaciones.addAll(Biblioteca.getInstancia().getArticulos());
-
+		ArrayList<Publicacion> publicaciones = Biblioteca.getInstancia().getPublicaciones();
 		return publicaciones.isEmpty() ? null : 
 			publicaciones.get(random.nextInt(publicaciones.size()));
 	}

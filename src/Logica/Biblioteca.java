@@ -21,9 +21,7 @@ public class Biblioteca {
 	private int annosEnCargo;
 	private ArrayList<Trabajador> trabajadores;
 	private ArrayList<UsuarioAcreditado> usuarios;
-	private ArrayList<Libro> libros;
-	private ArrayList<Revista> revistas;
-	private ArrayList<Articulo> articulos;
+	private ArrayList<Publicacion> publicaciones;
 	private static ArrayList<Prestamo> prestamosTotales;
 
 
@@ -39,9 +37,7 @@ public class Biblioteca {
 		this.annosEnCargo = annosEnCargo;
 		trabajadores = new ArrayList<Trabajador>();
 		usuarios = new ArrayList<UsuarioAcreditado>();
-		libros = new ArrayList<Libro>();
-		revistas = new ArrayList<Revista>();
-		articulos = new ArrayList<Articulo>();
+		publicaciones = new ArrayList<Publicacion>();
 		prestamosTotales = new ArrayList<Prestamo>();
 	}
 
@@ -50,8 +46,8 @@ public class Biblioteca {
 			unicaInstancia = new Biblioteca(
 					1,
 					"Biblioteca Municipal Central",
-					"Barcelona",
-					"Barcelona",
+					"La Habana",
+					"La Habana",
 					"09:00-21:00 L-V, 10:00-14:00 S",
 					Login.obtenerAdmin(),
 					5
@@ -99,25 +95,6 @@ public class Biblioteca {
 	public void setAnnosEnCargo(int annosEnCargo) {
 		this.annosEnCargo = annosEnCargo;
 	}
-	public ArrayList<Libro> getLibros() {
-		return libros;
-	}
-	public void setLibros(ArrayList<Libro> libros) {
-		this.libros = libros;
-	}
-	public ArrayList<Revista> getRevistas() {
-		return revistas;
-	}
-	public void setRevistas(ArrayList<Revista> revistas) {
-		this.revistas = revistas;
-	}
-	public ArrayList<Articulo> getArticulos() {
-		return articulos;
-	}
-
-	public void setArticulos(ArrayList<Articulo> articulos) {
-		this.articulos = articulos;
-	}
 
 	public ArrayList<Trabajador> getTrabajadores() {
 		return trabajadores;
@@ -139,35 +116,55 @@ public class Biblioteca {
 		return prestamosTotales;
 	}
 
+	public ArrayList<Publicacion> getPublicaciones() {
+		return publicaciones;
+	}
+
 	public void setPrestamosTotales(ArrayList<Prestamo> prestamosTotales) {
 		this.prestamosTotales = prestamosTotales;
 	}
 
 	//Metodo para realizar o no el prestamo
-	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador){
+	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador) throws IllegalArgumentException {
+
 		Prestamo prestamoNuevo = null;
 
-		for(Prestamo p : user.getPrestamos()){
-			if(p.getPub().equals(pub) && p.getFechaDevolucion() != null && 
-					p.getFechaDevolucion().plusDays(14).isAfter(LocalDate.now())){
-				throw new IllegalArgumentException("No han transcurrido dos semanas desde la última devolucion.");
-			}
+
+		if(pub.getCantEjemplares() < 3){
+			throw new IllegalArgumentException("La publicación no tiene suficientes ejemplares disponibles (mínimo 3 requeridos)");
 		}
-		if(pub.getCantEjemplares() > 2){
-			if(user.getPrestamos().size() < 3){
-				pub.disminuirStock();
-				LocalDate fechaActual = LocalDate.now();
-				int tiempo = pub.tiempoMaximoPrestamo();
-				LocalDate fechaDevolucion = fechaActual.plusDays(tiempo);
-				prestamoNuevo = new Prestamo(fechaActual, fechaDevolucion, pub, user, trabajador);
-				user.getPrestamos().add(prestamoNuevo);
-				prestamosTotales.add(prestamoNuevo);
+
+		synchronized(user) {
+
+			if(user.getPrestamos().size() >= 3){
+				throw new IllegalArgumentException("Usuario ya tiene más de 3 préstamos actualmente");
 			}
+
+			for(Prestamo p : prestamosTotales){
+
+				if(p.getPub().equals(pub)){
+					if(p.getFechaDevolucion() == null){
+						throw new IllegalArgumentException("El usuario ya tiene un préstamo activo de esta publicación.");
+					}
+					if (p.getFechaDevolucion().plusWeeks(2).isAfter(LocalDate.now())) {
+						throw new IllegalArgumentException("No han transcurrido 2 semanas desde la última devolución de esta publicación");
+					}
+				}
+			}
+
+			pub.disminuirStock();
+
+			int tiempo = pub.tiempoMaximoPrestamo();
+
+			LocalDate fechaActual = LocalDate.now();
+			LocalDate fechaDevolucion = fechaActual.plusDays(tiempo);
+
+			prestamoNuevo = new Prestamo(fechaActual, fechaDevolucion, pub, user, trabajador);
+			user.agregarPrestamo(prestamoNuevo);
+			prestamosTotales.add(prestamoNuevo);
 		}
 		return prestamoNuevo;
 	}
-
-
 
 	public void devolverPublicacion(String id, Publicacion pub){
 
@@ -199,26 +196,46 @@ public class Biblioteca {
 
 		Publicacion pub = null;
 
-		if (libros == null)
-			throw new IllegalStateException("Lista de libros no inicializada");
-		else if (revistas == null)
-			throw new IllegalStateException("Lista de revistas no inicializada");
-		else if (articulos == null)
-			throw new IllegalStateException("Lista de articulos no inicializada");
+		if (publicaciones == null)
+			throw new IllegalStateException("Lista de publicaciones no inicializada");
 
-		for (Libro l : libros){
+		for (Libro l : obtenerLibros()){
 			if(l != null && l.getId().equals(id))
 				pub = l;
 		}
-		for (Revista r : revistas){
+		for (Revista r : obtenerRevistas()){
 			if(r != null && r.getId().equals(id))
 				pub = r;
 		}
-		for (Articulo a : articulos){
+		for (Articulo a : obtenerArticulos()){
 			if(a != null && a.getId().equals(id))
 				pub = a;
 		}
 		return pub;
+	}
+
+	public ArrayList<Libro> obtenerLibros(){
+		ArrayList<Libro> libros = new ArrayList<Libro>();
+		for(Publicacion p : publicaciones)
+			if(p instanceof Libro)
+				libros.add((Libro)p);
+		return libros;
+	}
+
+	public ArrayList<Revista> obtenerRevistas(){
+		ArrayList<Revista> revistas = new ArrayList<Revista>();
+		for(Publicacion p : publicaciones)
+			if(p instanceof Revista)
+				revistas.add((Revista)p);
+		return revistas;
+	}
+
+	public ArrayList<Articulo> obtenerArticulos(){
+		ArrayList<Articulo> articulos = new ArrayList<Articulo>();
+		for(Publicacion p : publicaciones)
+			if(p instanceof Articulo)
+				articulos.add((Articulo)p);
+		return articulos;
 	}
 
 	public ArrayList<MateriaConCantidadSolicitudes> guardarMateriasMasSolicitadas(){
@@ -226,15 +243,15 @@ public class Biblioteca {
 		ArrayList<MateriaConCantidadSolicitudes> materias = new ArrayList<MateriaConCantidadSolicitudes>(); // materia y cant
 
 		String[] materiasNombres = {"Literatura",
-									"Literatura Fantástica",
-									"Ciencias Naturales",
-									"Tecnología",
-									"Ciencias Exactas",
-									"Divulgación Científica",
-									"Ciencias Sociales",
-									"Historia",
-									"Economía",
-									"Actualidad",};
+				"Literatura Fantástica",
+				"Ciencias Naturales",
+				"Tecnología",
+				"Ciencias Exactas",
+				"Divulgación Científica",
+				"Ciencias Sociales",
+				"Historia",
+				"Economía",
+				"Actualidad",};
 
 		int[] contadores = {0,0,0,0,0,0,0,0,0,0};
 
@@ -274,7 +291,7 @@ public class Biblioteca {
 			materias.add(new MateriaConCantidadSolicitudes(materiasNombres[i], contadores[i]++));
 		}
 		Collections.sort(materias);
-		
+
 		return materias;
 	}
 
@@ -291,15 +308,14 @@ public class Biblioteca {
 
 		boolean realizada = false;
 		UsuarioAcreditado user = buscarUsuarioPorId(id);
-		if(user != null){
-			Prestamo p = buscarPrestamoPorPublicacion(user, pub);
-			if(p != null){
-				p.concederProrroga();
-				realizada = true;
-			}
+		Prestamo p = buscarPrestamoPorPublicacion(user, pub);
+		if(p != null){
+			p.concederProrroga();
+			realizada = true;
 		}
 		return realizada;
 	}
+
 	public ArrayList<Prestamo> guardarPrestamosActivos(){
 		ArrayList<Prestamo> prestamosActivos = new ArrayList<Prestamo>();
 
@@ -384,36 +400,86 @@ public class Biblioteca {
 	}
 
 
-	public void agregarTrabajador(String id,String nombreCompleto, int edad, String sexo, String nivelEscolar, String cargo) {
-		trabajadores.add(new Trabajador(id, nombreCompleto, edad, sexo, nivelEscolar, cargo));
+	public void agregarTrabajador(String id,String nombreCompleto,String nivelEscolar, String cargo) {
+		trabajadores.add(new Trabajador(id, nombreCompleto,nivelEscolar, cargo));
 	}
 
-	public UsuarioAcreditado crearUsuarioAcreditado(String id, String nombre,int edad, String sexo) {
-		UsuarioAcreditado u = new UsuarioAcreditado(id, nombre, edad, sexo);
-		usuarios.add(new UsuarioAcreditado(id, nombre, edad, sexo));
+	public UsuarioAcreditado crearUsuarioAcreditado(String id, String nombre) {
+		UsuarioAcreditado u = new UsuarioAcreditado(id, nombre);
+		usuarios.add(new UsuarioAcreditado(id, nombre));
 		return u;
 	}
 
-	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, String editorial) {
-		libros.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autores, editorial));
+	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String editorial) {
+		publicaciones.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, editorial));
 	}
 
 	public void agregarRevista(String id, String titulo, String materia, int numPaginas,
 			int cantEjemplares, boolean estaPrestado) {
-		revistas.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado));
+		publicaciones.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado));
 	}
 
-	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, ArrayList<String> autores, ArrayList<String> arbitros) {
-		articulos.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autores, arbitros));
+	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String arbitro) {
+		publicaciones.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, arbitro));
 	}
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
+		Prestamo p = new Prestamo(fechaP, fechaMax, pub, user, trabPrestamo);
+		user.agregarPrestamo(p);
 		prestamosTotales.add(new Prestamo(fechaP, fechaMax, pub, user, trabPrestamo));
 	}
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, LocalDate fechaDev, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
 		prestamosTotales.add(new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo));
+		Prestamo p = new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo);
+		user.agregarPrestamo(p);
+	}
+	
+	public int posicionUsuario(UsuarioAcreditado u){
+		int posicion = -1;
+		boolean encontrado = false;
+		
+		for(int i = 0; i < usuarios.size() && !encontrado; i++){
+			if(usuarios.get(i).equals(u)){
+				posicion = i;
+				encontrado = true;
+			}
+		}
+		return posicion;
+	}
+	public int posicionPublicacion(Publicacion p){
+		
+		int posicion = -1;
+		boolean encontrado = false;
+		
+		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
+			if(publicaciones.get(i).equals(p)){
+				posicion = i;
+				encontrado = true;
+			}
+		}
+		return posicion;
+	}
+	
+	public UsuarioAcreditado buscarUsuarioPorNombre(String nombre){
+		UsuarioAcreditado u = null;
+		
+		for(UsuarioAcreditado user : usuarios){
+			if(user.getNombreCompleto().equals(nombre))
+				u = user;
+		}
+		return u;
+	}
+	
+	public Publicacion buscarPublicacionPorNombre(String nombre){
+		Publicacion u = null;
+		
+		for(Publicacion p : publicaciones){
+			if(p.getTitulo().equals(nombre))
+				u = p;
+		}
+		return u;
 	}
 }

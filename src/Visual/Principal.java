@@ -39,6 +39,7 @@ import sun.applet.Main;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.SystemColor;
 
 public class Principal extends JFrame {
 
@@ -85,7 +86,7 @@ public class Principal extends JFrame {
 
 	public Principal() {
 
-//		l = new Login(this);
+//		l = new Login(this, true);
 //		l.setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -116,6 +117,7 @@ public class Principal extends JFrame {
 	private JMenu getBotonSesion() {
 		if (botonSesion == null) {
 			botonSesion = new JMenu("Cerrar Sesion");
+			botonSesion.setBackground(SystemColor.menu);
 			botonSesion.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
 			botonSesion.add(getMntmUsuario());
 			botonSesion.add(getMntmCerrar());
@@ -197,9 +199,9 @@ public class Principal extends JFrame {
 			mntmNosotros = new JMenuItem("Nosotros");
 			mntmNosotros.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					AcercaDeNosotros.setAcercaDeNosotros(true); // true para mostrar panel sobre nosotros
-					AcercaDeNosotros panel = AcercaDeNosotros.getInstancia();
-					panel.setVisible(true);
+//					AcercaDeNosotros.setAcercaDeNosotros(true); // true para mostrar panel sobre nosotros
+//					AcercaDeNosotros panel = AcercaDeNosotros.getInstancia();
+//					panel.setVisible(true);
 				}
 			});
 		}
@@ -210,9 +212,9 @@ public class Principal extends JFrame {
 			mntmCentro = new JMenuItem("Centro");
 			mntmCentro.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					AcercaDeNosotros.setAcercaDeNosotros(false); // false para mostrar panel sobre el centro	
-					AcercaDeNosotros panel = AcercaDeNosotros.getInstancia();
-					panel.setVisible(true);
+//					AcercaDeNosotros.setAcercaDeNosotros(false); // false para mostrar panel sobre el centro	
+//					AcercaDeNosotros panel = AcercaDeNosotros.getInstancia();
+//					panel.setVisible(true);
 				}
 			});
 		}
@@ -224,13 +226,7 @@ public class Principal extends JFrame {
 			mntmCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					
-					int option = JOptionPane.showConfirmDialog(
-							null,
-							"¿Está seguro que desea salir?",
-							"Confirmación",
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE
-							);
+					int option = JOptionPane.showConfirmDialog(null,"¿Está seguro que desea salir?","Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 					if (option == JOptionPane.YES_OPTION) {
 						dispose();
