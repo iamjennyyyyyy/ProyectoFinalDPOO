@@ -21,9 +21,6 @@ public class Biblioteca {
 	private int annosEnCargo;
 	private ArrayList<Trabajador> trabajadores;
 	private ArrayList<UsuarioAcreditado> usuarios;
-	private ArrayList<Libro> libros;
-	private ArrayList<Revista> revistas;
-	private ArrayList<Articulo> articulos;
 	private ArrayList<Publicacion> publicaciones;
 	private static ArrayList<Prestamo> prestamosTotales;
 
@@ -40,9 +37,6 @@ public class Biblioteca {
 		this.annosEnCargo = annosEnCargo;
 		trabajadores = new ArrayList<Trabajador>();
 		usuarios = new ArrayList<UsuarioAcreditado>();
-		libros = new ArrayList<Libro>();
-		revistas = new ArrayList<Revista>();
-		articulos = new ArrayList<Articulo>();
 		publicaciones = new ArrayList<Publicacion>();
 		prestamosTotales = new ArrayList<Prestamo>();
 	}
@@ -132,30 +126,43 @@ public class Biblioteca {
 
 	//Metodo para realizar o no el prestamo
 	public Prestamo solicitarPrestamo(UsuarioAcreditado user, Publicacion pub, Trabajador trabajador) throws IllegalArgumentException {
+
 		Prestamo prestamoNuevo = null;
 
-		for(Prestamo p : user.getPrestamos()){
-			if(p.getPub().equals(pub) && p.getFechaDevolucion() != null && 
-					p.getFechaDevolucion().plusDays(14).isAfter(LocalDate.now())){
-				throw new IllegalArgumentException("No han transcurrido dos semanas desde la última devolucion.");
-			}
+
+		if(pub.getCantEjemplares() < 3){
+			throw new IllegalArgumentException("La publicación no tiene suficientes ejemplares disponibles (mínimo 3 requeridos)");
 		}
-		if(pub.getCantEjemplares() >= 3){
-			if(user.getPrestamos().size() < 3){
-				pub.disminuirStock();
-				LocalDate fechaActual = LocalDate.now();
-				int tiempo = pub.tiempoMaximoPrestamo();
-				LocalDate fechaDevolucion = fechaActual.plusDays(tiempo);
-				prestamoNuevo = new Prestamo(fechaActual, fechaDevolucion, pub, user, trabajador);
-				user.getPrestamos().add(prestamoNuevo);
-				prestamosTotales.add(prestamoNuevo);
-			}
-			else 
+
+		synchronized(user) {
+
+			if(user.getPrestamos().size() >= 3){
 				throw new IllegalArgumentException("Usuario ya tiene más de 3 préstamos actualmente");
+			}
+
+			for(Prestamo p : prestamosTotales){
+
+				if(p.getPub().equals(pub)){
+					if(p.getFechaDevolucion() == null){
+						throw new IllegalArgumentException("El usuario ya tiene un préstamo activo de esta publicación.");
+					}
+					if (p.getFechaDevolucion().plusWeeks(2).isAfter(LocalDate.now())) {
+						throw new IllegalArgumentException("No han transcurrido 2 semanas desde la última devolución de esta publicación");
+					}
+				}
+			}
+
+			pub.disminuirStock();
+
+			int tiempo = pub.tiempoMaximoPrestamo();
+
+			LocalDate fechaActual = LocalDate.now();
+			LocalDate fechaDevolucion = fechaActual.plusDays(tiempo);
+
+			prestamoNuevo = new Prestamo(fechaActual, fechaDevolucion, pub, user, trabajador);
+			user.agregarPrestamo(prestamoNuevo);
+			prestamosTotales.add(prestamoNuevo);
 		}
-		else 
-			throw new IllegalArgumentException("La cantidad de ejemplares es mínima");
-		
 		return prestamoNuevo;
 	}
 
@@ -189,26 +196,46 @@ public class Biblioteca {
 
 		Publicacion pub = null;
 
-		if (libros == null)
-			throw new IllegalStateException("Lista de libros no inicializada");
-		else if (revistas == null)
-			throw new IllegalStateException("Lista de revistas no inicializada");
-		else if (articulos == null)
-			throw new IllegalStateException("Lista de articulos no inicializada");
+		if (publicaciones == null)
+			throw new IllegalStateException("Lista de publicaciones no inicializada");
 
-		for (Libro l : libros){
+		for (Libro l : obtenerLibros()){
 			if(l != null && l.getId().equals(id))
 				pub = l;
 		}
-		for (Revista r : revistas){
+		for (Revista r : obtenerRevistas()){
 			if(r != null && r.getId().equals(id))
 				pub = r;
 		}
-		for (Articulo a : articulos){
+		for (Articulo a : obtenerArticulos()){
 			if(a != null && a.getId().equals(id))
 				pub = a;
 		}
 		return pub;
+	}
+
+	public ArrayList<Libro> obtenerLibros(){
+		ArrayList<Libro> libros = new ArrayList<Libro>();
+		for(Publicacion p : publicaciones)
+			if(p instanceof Libro)
+				libros.add((Libro)p);
+		return libros;
+	}
+
+	public ArrayList<Revista> obtenerRevistas(){
+		ArrayList<Revista> revistas = new ArrayList<Revista>();
+		for(Publicacion p : publicaciones)
+			if(p instanceof Revista)
+				revistas.add((Revista)p);
+		return revistas;
+	}
+
+	public ArrayList<Articulo> obtenerArticulos(){
+		ArrayList<Articulo> articulos = new ArrayList<Articulo>();
+		for(Publicacion p : publicaciones)
+			if(p instanceof Articulo)
+				articulos.add((Articulo)p);
+		return articulos;
 	}
 
 	public ArrayList<MateriaConCantidadSolicitudes> guardarMateriasMasSolicitadas(){
@@ -281,15 +308,14 @@ public class Biblioteca {
 
 		boolean realizada = false;
 		UsuarioAcreditado user = buscarUsuarioPorId(id);
-		if(user != null){
-			Prestamo p = buscarPrestamoPorPublicacion(user, pub);
-			if(p != null){
-				p.concederProrroga();
-				realizada = true;
-			}
+		Prestamo p = buscarPrestamoPorPublicacion(user, pub);
+		if(p != null){
+			p.concederProrroga();
+			realizada = true;
 		}
 		return realizada;
 	}
+
 	public ArrayList<Prestamo> guardarPrestamosActivos(){
 		ArrayList<Prestamo> prestamosActivos = new ArrayList<Prestamo>();
 
@@ -399,11 +425,61 @@ public class Biblioteca {
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
+		Prestamo p = new Prestamo(fechaP, fechaMax, pub, user, trabPrestamo);
+		user.agregarPrestamo(p);
 		prestamosTotales.add(new Prestamo(fechaP, fechaMax, pub, user, trabPrestamo));
 	}
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, LocalDate fechaDev, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
 		prestamosTotales.add(new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo));
+		Prestamo p = new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo);
+		user.agregarPrestamo(p);
+	}
+	
+	public int posicionUsuario(UsuarioAcreditado u){
+		int posicion = -1;
+		boolean encontrado = false;
+		
+		for(int i = 0; i < usuarios.size() && !encontrado; i++){
+			if(usuarios.get(i).equals(u)){
+				posicion = i;
+				encontrado = true;
+			}
+		}
+		return posicion;
+	}
+	public int posicionPublicacion(Publicacion p){
+		
+		int posicion = -1;
+		boolean encontrado = false;
+		
+		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
+			if(publicaciones.get(i).equals(p)){
+				posicion = i;
+				encontrado = true;
+			}
+		}
+		return posicion;
+	}
+	
+	public UsuarioAcreditado buscarUsuarioPorNombre(String nombre){
+		UsuarioAcreditado u = null;
+		
+		for(UsuarioAcreditado user : usuarios){
+			if(user.getNombreCompleto().equals(nombre))
+				u = user;
+		}
+		return u;
+	}
+	
+	public Publicacion buscarPublicacionPorNombre(String nombre){
+		Publicacion u = null;
+		
+		for(Publicacion p : publicaciones){
+			if(p.getTitulo().equals(nombre))
+				u = p;
+		}
+		return u;
 	}
 }

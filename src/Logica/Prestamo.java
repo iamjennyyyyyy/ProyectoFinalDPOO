@@ -76,7 +76,7 @@ public class Prestamo {
 
 	public void concederProrroga(){
 		int tiempoMax = pub.tiempoMaximoPrestamo();
-		fechaMax.plusDays(tiempoMax);
+		fechaMax.plusDays(tiempoMax/2);
 	}
 	@Override
 	public String toString() {

@@ -21,6 +21,10 @@ public class UsuarioAcreditado extends Persona {
 	public static void setNumUsuario() {
 		numUsuario++;
 	}
+	
+	public void agregarPrestamo(Prestamo p){
+		prestamos.add(p);
+	}
 
 	public UsuarioAcreditado(){
 		super();
