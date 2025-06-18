@@ -47,6 +47,8 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 import Utiles.JTextFieldMejorado;
 import Utiles.JTextFieldCarnet;
+import javax.swing.JSeparator;
+import java.awt.SystemColor;
 
 public class GestionUsuario extends JDialog {
 
@@ -71,6 +73,8 @@ public class GestionUsuario extends JDialog {
 	private JTextFieldMejorado textFieldNombreUsuario;
 	private JTextFieldCarnet textFieldId;
 	private JTextPane textPaneError;
+	private JSeparator separator;
+	private JSeparator separator_1;
 
 	/**
 	 * Launch the application.
@@ -105,6 +109,8 @@ public class GestionUsuario extends JDialog {
 		contentPanel.add(getBtnGuardar());
 		contentPanel.add(getTextFieldNombreUsuario());
 		contentPanel.add(getTextFieldId());
+		contentPanel.add(getSeparator());
+		contentPanel.add(getSeparator_1());
 		contentPanel.add(getLabel());
 		modelo.setlstUsuarios(Biblioteca.getInstancia().getUsuarios());
 	}
@@ -206,6 +212,9 @@ public class GestionUsuario extends JDialog {
 
 					lblSexo.setText("Sexo: ");
 					lblEdad.setText("Edad: ");
+					
+					lblSexo.setForeground(Color.BLACK);
+					lblEdad.setForeground(Color.BLACK);
 				}
 			});
 			btnCancelar.setToolTipText("Reiniciar formulario");
@@ -325,6 +334,10 @@ public class GestionUsuario extends JDialog {
 
 						textFieldNombreUsuario.setEnabled(false);
 						textFieldId.setEnabled(false);
+						
+						lblSexo.setForeground(Color.BLACK);
+						lblEdad.setForeground(Color.BLACK);
+						
 					}
 				}
 			});
@@ -349,7 +362,7 @@ public class GestionUsuario extends JDialog {
 		if (lblNombre == null) {
 			lblNombre = new JLabel("Nombre:");
 			lblNombre.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblNombre.setBounds(525, 140, 114, 27);
+			lblNombre.setBounds(505, 176, 85, 27);
 		}
 		return lblNombre;
 	}
@@ -358,7 +371,7 @@ public class GestionUsuario extends JDialog {
 		if (lblEdad == null) {
 			lblEdad = new JLabel("Edad:");
 			lblEdad.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblEdad.setBounds(525, 335, 114, 27);
+			lblEdad.setBounds(525, 329, 114, 27);
 		}
 		return lblEdad;
 	}
@@ -367,7 +380,7 @@ public class GestionUsuario extends JDialog {
 		if (lblCi == null) {
 			lblCi = new JLabel("CI:");
 			lblCi.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblCi.setBounds(525, 235, 101, 27);
+			lblCi.setBounds(551, 254, 40, 27);
 		}
 		return lblCi;
 	}
@@ -376,7 +389,7 @@ public class GestionUsuario extends JDialog {
 		if (lblSexo == null) {
 			lblSexo = new JLabel("Sexo:");
 			lblSexo.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblSexo.setBounds(525, 396, 114, 27);
+			lblSexo.setBounds(525, 392, 114, 27);
 		}
 		return lblSexo;
 	}
@@ -472,7 +485,9 @@ public class GestionUsuario extends JDialog {
 	private JTextFieldMejorado getTextFieldNombreUsuario() {
 		if (textFieldNombreUsuario == null) {
 			textFieldNombreUsuario = new JTextFieldMejorado();
-			textFieldNombreUsuario.setBounds(525, 178, 203, 30);
+			textFieldNombreUsuario.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			textFieldNombreUsuario.setBorder(null);
+			textFieldNombreUsuario.setBounds(600, 173, 193, 30);
 			textFieldNombreUsuario.putClientProperty("JTextField.placeholderText", "Ingrese su nombre");
 			textFieldNombreUsuario.setEnabled(false);
 		}
@@ -481,6 +496,8 @@ public class GestionUsuario extends JDialog {
 	private JTextFieldCarnet getTextFieldId() {
 		if (textFieldId == null) {
 			textFieldId = new JTextFieldCarnet();
+			textFieldId.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			textFieldId.setBorder(null);
 			textFieldId.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void insertUpdate(DocumentEvent e) {
@@ -499,26 +516,32 @@ public class GestionUsuario extends JDialog {
 
 					if(textFieldId.getText().length() >= 7){
 						LocalDate fecha = obtenerFechaNacimiento(cadena);
-						LocalDate hoy = LocalDate.now();
-						int edad = Period.between(fecha, hoy).getYears();
-						lblEdad.setText("Edad: " + edad);
-						if(edad < 18 || edad > 110)
-							lblEdad.setForeground(Color.RED);
-						else
-							lblEdad.setForeground(Color.BLACK);
-					}
-					if(textFieldId.getText().length() >= 10){
-						boolean esHombre = esHombre(cadena);
-						if(esHombre){
-							lblSexo.setText("Sexo: M");
+						if(fecha != null){
+							LocalDate hoy = LocalDate.now();
+							int edad = Period.between(fecha, hoy).getYears();
+							lblEdad.setText("Edad: " + edad);
+							if(edad < 18 || edad > 110)
+								lblEdad.setForeground(Color.RED);
+							else
+								lblEdad.setForeground(Color.BLACK);
+							if(textFieldId.getText().length() >= 10){
+								boolean esHombre = esHombre(cadena);
+								if(esHombre){
+									lblSexo.setText("Sexo: M");
+								}
+								else
+									lblSexo.setText("Sexo: F");
+							}
 						}
-						else
-							lblSexo.setText("Sexo: F");
 					}
+					else{
+						textPaneError.setVisible(false);
+					}
+						
 				}
 			});
 			textFieldId.setEnabled(false);
-			textFieldId.setBounds(525, 273, 203, 30);
+			textFieldId.setBounds(598, 251, 196, 30);
 			textFieldId.setLimite(11);
 			textFieldId.putClientProperty("JTextField.placeholderText", "Ingrese su carnet");
 		}
@@ -663,5 +686,21 @@ public class GestionUsuario extends JDialog {
 			esHombre = true;
 
 		return esHombre;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+			separator.setForeground(Color.BLACK);
+			separator.setBounds(600, 203, 194, 27);
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+			separator_1.setForeground(Color.BLACK);
+			separator_1.setBounds(598, 281, 194, 27);
+		}
+		return separator_1;
 	}
 }

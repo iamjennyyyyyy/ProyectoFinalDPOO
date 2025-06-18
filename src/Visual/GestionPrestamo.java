@@ -251,6 +251,14 @@ public class GestionPrestamo extends JDialog {
 	private JButton getBtnDevolver() {
 		if (btnDevolver == null) {
 			btnDevolver = new JButton("Devolver");
+			btnDevolver.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					UsuarioAcreditado u = Biblioteca.getInstancia().buscarUsuarioPorNombre(comboBoxUsuario.getSelectedItem().toString());
+					Publicacion p = Biblioteca.getInstancia().buscarPublicacionPorNombre(comboBoxPub.getSelectedItem().toString());
+					Prestamo prest = Biblioteca.getInstancia().buscarPrestamoPorPublicacion(u, p);
+					Biblioteca.getInstancia().devolverPublicacion(prest);
+				}
+			});
 			btnDevolver.setFont(new Font("SansSerif", Font.PLAIN, 18));
 			btnDevolver.setBounds(998, 479, 115, 40);
 		}

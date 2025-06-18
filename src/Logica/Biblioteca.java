@@ -2,6 +2,7 @@ package Logica;
 import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -134,6 +135,10 @@ public class Biblioteca {
 			throw new IllegalArgumentException("La publicación no tiene suficientes ejemplares disponibles (mínimo 3 requeridos)");
 		}
 
+		if(user.getFechaPenalizacion() != null){
+			throw new IllegalArgumentException("El usuario tiene una penalización actualmente");
+		}
+
 		synchronized(user) {
 
 			if(user.getPrestamos().size() >= 3){
@@ -166,16 +171,20 @@ public class Biblioteca {
 		return prestamoNuevo;
 	}
 
-	public void devolverPublicacion(String id, Publicacion pub){
-
-		UsuarioAcreditado user = buscarUsuarioPorId(id);
-		if(user != null){
-			Prestamo prestamo = buscarPrestamoPorPublicacion(user, pub);
-			if(prestamo != null){
-				prestamo.setFechaDevolucion(LocalDate.now());
-				user.getPrestamos().remove(prestamo);
-			}
+	public void devolverPublicacion(Prestamo prestamo){
+		LocalDate hoy = LocalDate.now();
+		if(prestamo.getFechaMax().isBefore(hoy)){
+			int atraso = obtenerAtraso(prestamo.getFechaMax());
+			LocalDate fechaPenalizacion = hoy.plusDays(atraso);
+			prestamo.getUser().setFechaPenalizacion(fechaPenalizacion);
 		}
+		prestamo.setFechaDevolucion(hoy);
+		prestamo.getUser().getPrestamos().remove(prestamo);
+	}
+
+	public int obtenerAtraso(LocalDate fecha){
+		int dias = Period.between(fecha, LocalDate.now()).getDays();
+		return dias*3;
 	}
 
 	public void eliminarUsuario(UsuarioAcreditado u){
@@ -297,11 +306,14 @@ public class Biblioteca {
 
 	public Prestamo buscarPrestamoPorPublicacion(UsuarioAcreditado user, Publicacion pub){
 
+		Prestamo prestamo = null;
+		
 		for (Prestamo p : prestamosTotales){
-			if(p.getPub().equals(pub) && user != null)
-				return p;
+			if(p.getPub().equals(pub) && p.getUser().getId().equals(user.getId())){
+				prestamo = p;
+			}
 		}
-		return null;
+		return prestamo;
 	}
 
 	public boolean realizarProrroga(String id, Publicacion pub){
@@ -436,11 +448,11 @@ public class Biblioteca {
 		Prestamo p = new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo);
 		user.agregarPrestamo(p);
 	}
-	
+
 	public int posicionUsuario(UsuarioAcreditado u){
 		int posicion = -1;
 		boolean encontrado = false;
-		
+
 		for(int i = 0; i < usuarios.size() && !encontrado; i++){
 			if(usuarios.get(i).equals(u)){
 				posicion = i;
@@ -450,10 +462,10 @@ public class Biblioteca {
 		return posicion;
 	}
 	public int posicionPublicacion(Publicacion p){
-		
+
 		int posicion = -1;
 		boolean encontrado = false;
-		
+
 		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
 			if(publicaciones.get(i).equals(p)){
 				posicion = i;
@@ -462,20 +474,20 @@ public class Biblioteca {
 		}
 		return posicion;
 	}
-	
+
 	public UsuarioAcreditado buscarUsuarioPorNombre(String nombre){
 		UsuarioAcreditado u = null;
-		
+
 		for(UsuarioAcreditado user : usuarios){
 			if(user.getNombreCompleto().equals(nombre))
 				u = user;
 		}
 		return u;
 	}
-	
+
 	public Publicacion buscarPublicacionPorNombre(String nombre){
 		Publicacion u = null;
-		
+
 		for(Publicacion p : publicaciones){
 			if(p.getTitulo().equals(nombre))
 				u = p;

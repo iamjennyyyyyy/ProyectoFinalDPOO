@@ -86,8 +86,8 @@ public class Principal extends JFrame {
 
 	public Principal() {
 
-//		l = new Login(this, true);
-//		l.setVisible(true);
+		l = new Login(this, true);
+		l.setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(0, 0, 1382, 747);
