@@ -135,6 +135,10 @@ public class Biblioteca {
 			throw new IllegalArgumentException("La publicación no tiene suficientes ejemplares disponibles (mínimo 3 requeridos)");
 		}
 
+		if(user.getFechaPenalizacion().isBefore(LocalDate.now())){
+			user.setFechaPenalizacion(null);
+		}
+		
 		if(user.getFechaPenalizacion() != null){
 			throw new IllegalArgumentException("El usuario tiene una penalización actualmente");
 		}
@@ -157,6 +161,7 @@ public class Biblioteca {
 				}
 			}
 
+			
 			pub.disminuirStock();
 
 			int tiempo = pub.tiempoMaximoPrestamo();
@@ -422,17 +427,17 @@ public class Biblioteca {
 		return u;
 	}
 
-	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String editorial) {
-		publicaciones.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, editorial));
+	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, String autor, String editorial) {
+		publicaciones.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, autor, editorial));
 	}
 
 	public void agregarRevista(String id, String titulo, String materia, int numPaginas,
-			int cantEjemplares, boolean estaPrestado) {
-		publicaciones.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado));
+			int cantEjemplares, int anno, int num) {
+		publicaciones.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, anno, num));
 	}
 
-	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String arbitro) {
-		publicaciones.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, arbitro));
+	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, String autor, String arbitro) {
+		publicaciones.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, autor, arbitro));
 	}
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,
@@ -444,8 +449,8 @@ public class Biblioteca {
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, LocalDate fechaDev, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
-		prestamosTotales.add(new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo));
 		Prestamo p = new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo);
+		prestamosTotales.add(p);
 		user.agregarPrestamo(p);
 	}
 
@@ -483,6 +488,19 @@ public class Biblioteca {
 				u = user;
 		}
 		return u;
+	}
+	
+	public int buscarPosPublicacion(Publicacion p){
+		int pos = -1;
+		boolean encontrado = false;
+		
+		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
+			if(publicaciones.get(i).equals(p)){
+				pos = i;
+				encontrado = true;
+			}
+		}
+		return pos;
 	}
 
 	public Publicacion buscarPublicacionPorNombre(String nombre){

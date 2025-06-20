@@ -3,7 +3,7 @@ package Logica;
 
 public abstract class Publicacion {
 
-	protected String id;
+	protected String id = "" + 0;
 	protected String titulo;
 	protected String materia;
 	protected int numPaginas;
@@ -14,7 +14,7 @@ public abstract class Publicacion {
 		return id;
 	}
 
-	private void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -23,17 +23,14 @@ public abstract class Publicacion {
 	}
 
 	public void setTitulo(String titulo) {
-		
-		titulo = titulo.trim();
-		if (!titulo.isEmpty() && 
-		        titulo.length() >= 2 && 
-		        !titulo.matches("^[\\s\\d]+$")) {
-		        this.titulo = titulo;
-		} else {
+
+		if(titulo.isEmpty())
 			throw new IllegalArgumentException("Título no válido");
+		else{	
+			this.titulo = titulo;
 		}
 	}
-	
+
 	public String getMateria() {
 		return materia;
 	}
@@ -66,11 +63,15 @@ public abstract class Publicacion {
 	public boolean isEstaPrestado() {
 		return estaPrestado;
 	}
-	public void setEstaPrestado(boolean estaPrestado) {
-		this.estaPrestado = estaPrestado;
+	public void setEstaPrestado() {
+		this.estaPrestado = false;
 	}
 
-	public Publicacion(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado) {
+	public Publicacion(){
+
+	}
+
+	public Publicacion(String id, String titulo, String materia, int numPaginas, int cantEjemplares) {
 		super();
 
 		setId(id);
@@ -78,19 +79,13 @@ public abstract class Publicacion {
 		setMateria(materia);
 		setNumPaginas(numPaginas);
 		setCantEjemplares(cantEjemplares);
-		setEstaPrestado(estaPrestado);
+		setEstaPrestado();
 
 	}
 	@Override
 	public String toString() {
 
-		String mensaje = "Publicacion " + titulo + "\n Materia: " + materia + "\nNumero de paginas: " + numPaginas + "\nCantidad de ejemplares: " + cantEjemplares;
-		if(estaPrestado)
-			mensaje += " y no esta disponible.\n";
-		else
-			mensaje += " y esta disponible.\n";
-
-		return mensaje;
+		return titulo;
 	}
 
 	public void disminuirStock(){

@@ -20,11 +20,15 @@ public class Revista extends Publicacion {
 			this.num = num;
 		else throw new IllegalArgumentException("Numero de revista incorrecto");
 	}
+	
+	public Revista(){
+		super();
+	}
 
 	public Revista(String id, String titulo, String materia, int numPaginas,
-			int cantEjemplares, boolean estaPrestado) {
+			int cantEjemplares, int anno, int num) {
 
-		super(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado);
+		super(id, titulo, materia, numPaginas, cantEjemplares);
 		setAnno(anno);
 		setNum(num);
 	}

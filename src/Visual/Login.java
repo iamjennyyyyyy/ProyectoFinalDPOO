@@ -2,6 +2,7 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -20,9 +21,11 @@ import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import Inicializadora.Inicializar;
 import Logica.Biblioteca;
 import Logica.Trabajador;
 import Utiles.Colores;
+import Utiles.MiPersonalizacion;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -35,6 +38,7 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
@@ -60,12 +64,23 @@ public class Login extends JDialog {
 	 * Launch the application.
 	 */
 
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				MiPersonalizacion.aplicarTema();
+				UIManager.put("Component.arc", 199);
+				Inicializar.Inicio();
+				Login pantalla = new Login();
+				pantalla.setVisible(true);
+			}
+		});
+	}
+
 	/**
 	 * Create the dialog.
 	 */
-	public Login(JFrame p, boolean modal) {
-		super(p, modal);
-		this.parentFrame = p;
+	public Login() {
+
 		setBackground(Color.WHITE);
 		setAlwaysOnTop(true);
 		setUndecorated(true);
@@ -166,12 +181,13 @@ public class Login extends JDialog {
 			btnIniciarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					char[] contraseña = passwordField.getPassword();
-					char[] contraseñaValida = "jenn006".toCharArray();
+					char[] contraseñaValida = "06071267912".toCharArray();
 					try {
-						if(Arrays.equals(contraseña, contraseñaValida) && 
-								txtIngreseUnNombre.getText().equals("06071267912"))
-						dispose();
-						
+						if(Arrays.equals(contraseña, contraseñaValida) && txtIngreseUnNombre.getText().equals("jenn006")){
+							dispose();
+							Principal p = new Principal();
+							p.setVisible(true);
+						}
 						else {
 							JOptionPane.showMessageDialog(Login.this,"Credenciales incorrectas", "Error",JOptionPane.ERROR_MESSAGE);
 						}
@@ -197,7 +213,6 @@ public class Login extends JDialog {
 			btnSalir.setBackground(Colores.getColorBotonLoginNuevo());
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					parentFrame.dispose();
 					dispose();
 				}
 			});

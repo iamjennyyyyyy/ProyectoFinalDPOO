@@ -5,6 +5,7 @@ import Logica.Prestamo;
 import Logica.Publicacion;
 import Logica.Trabajador;
 import Logica.UsuarioAcreditado;
+import Visual.Login;
 
 import java.awt.List;
 import java.time.LocalDate;
@@ -27,6 +28,8 @@ public class Inicializar {
 
 		// 4. Préstamos (15 instancias)
 		inicializarPrestamos();
+		
+		inicializarUsuariosConPenalizaciones();
 
 	}
 
@@ -75,7 +78,7 @@ public class Inicializar {
 
 		for(String[] datos : usuarios) {
 			Biblioteca.getInstancia().crearUsuarioAcreditado(datos[0], datos[1]);
-			}
+		}
 	}
 
 	private static void inicializarPublicaciones() {
@@ -105,34 +108,34 @@ public class Inicializar {
 			Biblioteca.getInstancia().agregarLibro(
 					datos[0], datos[1], datos[2], 
 					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), 
-					false, datos[5], datos[6]
+					datos[5], datos[6]
 					);
 		}
 
 		// Revistas (15 instancias)
 		String[][] revistas = {
-				{"2001", "National Geographic", "Ciencias Naturales", "100", "10"},
-				{"2002", "Muy Interesante", "Divulgación Científica", "80", "8"},
-				{"2003", "Science", "Ciencias Exactas", "120", "5"},
-				{"2004", "Nature", "Ciencias Exactas", "150", "7"},
-				{"2005", "Time", "Actualidad", "60", "12"},
-				{"2006", "The Economist", "Economía", "90", "6"},
-				{"2007", "Scientific American", "Divulgación Científica", "110", "4"},
-				{"2008", "New Scientist", "Divulgación Científica", "95", "9"},
-				{"2009", "Discover", "Divulgación Científica", "85", "3"},
-				{"2010", "Popular Science", "Tecnología", "75", "11"},
-				{"2011", "Wired", "Tecnología", "65", "8"},
-				{"2012", "National Geographic History", "Historia", "100", "6"},
-				{"2013", "Psychology Today", "Ciencias Sociales", "90", "7"},
-				{"2014", "MIT Technology Review", "Tecnología", "110", "5"},
-				{"2015", "Archaeology", "Historia", "95", "4"}
+				{"R001", "National Geographic", "Ciencias Naturales", "100", "50", "2001", "10"},
+				{"R002", "Muy Interesante", "Divulgación Científica", "80", "40", "2002", "8"},
+				{"R003", "Science", "Ciencias Exactas", "120", "30", "2003", "5"},
+				{"R004", "Nature", "Ciencias Exactas", "150", "35", "2004", "7"},
+				{"R005", "Time", "Actualidad", "60", "60", "2005", "12"},
+				{"R006", "The Economist", "Economía", "90", "40", "2006", "6"},
+				{"R007", "Scientific American", "Divulgación Científica", "110", "38", "2007", "4"},
+				{"R008", "New Scientist", "Divulgación Científica", "95", "42", "2008", "9"},
+				{"R009", "Discover", "Divulgación Científica", "85", "36", "2009", "3"},
+				{"R010", "Popular Science", "Tecnología", "75", "32", "2010", "11"},
+				{"R011", "Wired", "Tecnología", "65", "28", "2011", "8"},
+				{"R012", "National Geographic History", "Historia", "100", "25", "2012", "6"},
+				{"R013", "Psychology Today", "Ciencias Sociales", "90", "27", "2013", "7"},
+				{"R014", "MIT Technology Review", "Tecnología", "110", "29", "2014", "5"},
+				{"R015", "Archaeology", "Historia", "95", "23", "2015", "4"}
 		};
 
 		for(String[] datos : revistas) {
 			Biblioteca.getInstancia().agregarRevista(
 					datos[0], datos[1], datos[2], 
-					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), false
-					);
+					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]),
+					Integer.parseInt(datos[5]), Integer.parseInt(datos[6]));
 		}
 
 		// Artículos (15 instancias)
@@ -164,7 +167,7 @@ public class Inicializar {
 			Biblioteca.getInstancia().agregarArticulo(
 					datos[0], datos[1], datos[2], 
 					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), 
-					false, datos[5], datos[6]);
+					datos[5], datos[6]);
 		}
 
 		/*
@@ -259,5 +262,16 @@ public class Inicializar {
 		ArrayList<UsuarioAcreditado> usuarios = Biblioteca.getInstancia().getUsuarios();
 		return usuarios.isEmpty() ? null : 
 			usuarios.get(random.nextInt(usuarios.size()));
+	}
+	
+	public static void inicializarUsuariosConPenalizaciones(){
+		UsuarioAcreditado u = Biblioteca.getInstancia().getUsuarios().get(5);
+		Publicacion p = Biblioteca.getInstancia().getPublicaciones().get(8);
+		LocalDate fechaP = LocalDate.of(2025, 5, 17);
+		LocalDate fechaDev = LocalDate.of(2025, 6, 20);
+		int tiempo = p.tiempoMaximoPrestamo();
+		System.out.println("tiempo maximo pub" +tiempo);
+		LocalDate fechaMax = fechaP.plusDays(tiempo);
+		Biblioteca.getInstancia().agregarPrestamo(fechaP, fechaMax, fechaDev, p, u, Login.obtenerAdmin());
 	}
 }

@@ -12,6 +12,7 @@ public class UsuarioAcreditado extends Persona {
 	}
 
 	public void setFechaPenalizacion(LocalDate fechaPenalizacion) {
+		System.out.println(fechaPenalizacion);
 		this.fechaPenalizacion = fechaPenalizacion;
 	}
 	private ArrayList<Prestamo> prestamos;

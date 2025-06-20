@@ -1,5 +1,6 @@
 package Logica;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Comparator;
 
 public class Prestamo {
@@ -72,6 +73,18 @@ public class Prestamo {
 		setPub(pub);
 		setUser(user);
 		setTrabPrestamo(trabPrestamo);
+		if(fechaDev.isAfter(fechaMax)){
+			Period p = Period.between(fechaMax, fechaDev);
+			int dias = p.getDays();
+			System.out.println(dias);
+			dias *= 3;
+			System.out.println("Fecha maxima: " + fechaMax + "+ " + dias + "\n");
+			LocalDate fechaPenalizacion = fechaDev.plusDays(dias);
+			System.out.println("fechaPenalizacion: " + fechaPenalizacion);
+			user.setFechaPenalizacion(fechaPenalizacion);
+			System.out.println("Entro al setFechaPenalizacion");
+		}
+		System.out.println("Entro al constructor");
 	}
 
 	public void concederProrroga(){
