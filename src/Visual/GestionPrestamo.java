@@ -130,8 +130,8 @@ public class GestionPrestamo extends JDialog {
 			            	Publicacion p = Biblioteca.getInstancia().buscarPublicacionPorId(idPub);
 			            	
 			            	
-			            	int posUser = Biblioteca.getInstancia().posicionUsuario(u);
-			            	int posPub = Biblioteca.getInstancia().posicionPublicacion(p);
+			            	int posUser = Biblioteca.getInstancia().buscarPosUsuario(u);
+			            	int posPub = Biblioteca.getInstancia().buscarPosPublicacion(p);
 			            	
 			            	comboBoxUsuario.setSelectedIndex(posUser);
 			            	comboBoxPub.setSelectedIndex(posPub);

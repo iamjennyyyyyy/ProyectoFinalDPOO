@@ -64,6 +64,7 @@ import java.awt.CardLayout;
 
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 
 public class GestionPublicacion extends JDialog {
 
@@ -114,6 +115,12 @@ public class GestionPublicacion extends JDialog {
 	private JRadioButton rdbtnRevistas;
 	private JRadioButton rdbtnArticulos;
 	private JRadioButton rdbtnTodos;
+	private JSeparator separator;
+	private JSeparator separator_1;
+	private JSeparator separator_2;
+	private JSeparator separator_3;
+	private JSeparator separator_4;
+	private JSeparator separator_5;
 
 	/**
 	 * Launch the application.
@@ -135,7 +142,7 @@ public class GestionPublicacion extends JDialog {
 	 */
 	public GestionPublicacion() {
 
-		setBounds(0, 80, 1149, 639);
+		setBounds(215, 80, 1149, 639);
 		setUndecorated(true);
 		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
@@ -171,6 +178,8 @@ public class GestionPublicacion extends JDialog {
 		rdbtns.add(getRdbtnLibros());
 		rdbtns.add(getRdbtnRevistas());
 		rdbtns.add(getRdbtnTodos());
+		contentPanel.add(getSeparator());
+		contentPanel.add(getSeparator_1());
 		modelo.setlstPub(Biblioteca.getInstancia().getPublicaciones());
 		modeloL.setlstLibro(Biblioteca.getInstancia().obtenerLibros());
 		modeloR.setlstRevista(Biblioteca.getInstancia().obtenerRevistas());
@@ -195,21 +204,32 @@ public class GestionPublicacion extends JDialog {
 			listPub.setToolTipText("Lista de publicaciones actualmente registradas");
 			listPub.setBorder(new LineBorder(new Color(0, 0, 0)));
 			listPub.setFont(new Font("SansSerif", Font.PLAIN, 17));
-	        listPub.setBorder(new LineBorder(new Color(0, 0, 0), 1));
-	        listPub.setBackground(Color.WHITE);
+			listPub.setBorder(new LineBorder(new Color(0, 0, 0), 1));
+			listPub.setBackground(Color.WHITE);
 			listPub.setModel(modelo);
 			listPub.setSelectedIndex(1);
 			listPub.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
 					int indice = listPub.getSelectedIndex();
 					int pos = -1;
-					
+
 					if (indice > -1) {
-						btnEditar.setVisible(false);
-						btnEliminar.setVisible(true);
-						
-						if(rdbtnLibros.isSelected()){
-							Libro l = modeloL.getLibroAt(indice);
+
+						Publicacion p = listPub.getSelectedValue();
+
+						if(p instanceof Libro){
+
+							panelLibro.setVisible(true);
+							panelRevista.setVisible(false);
+							panelArticulo.setVisible(false);
+
+							Libro l = null;
+							if(rdbtnLibros.isSelected())
+								l = modeloL.getLibroAt(indice);
+							else if(rdbtnTodos.isSelected()){
+								l = (Libro) modelo.getPubAt(indice);
+							}
+
 							textFieldTitulo.setText(l.getTitulo());
 							textFieldCarnet.setText(l.getId());
 							spinnerPag.setValue(l.getNumPaginas());
@@ -219,16 +239,26 @@ public class GestionPublicacion extends JDialog {
 									pos = i;
 							}
 							comboBoxMateria.setSelectedIndex(pos);
-							
+
 							panelLibro.setVisible(true);
 							panelRevista.setVisible(false);
 							panelArticulo.setVisible(false);
-							
+
 							textFieldEditorial.setText(l.getEditorial());
 							textFieldAutor.setText(l.getAutores().get(0));
 						}
-						if(rdbtnRevistas.isSelected()){
-							Revista r = modeloR.getRevistaAt(indice);
+						else if(p instanceof Revista){
+
+							panelLibro.setVisible(false);
+							panelRevista.setVisible(true);
+							panelArticulo.setVisible(false);
+
+							Revista r = null; 
+							if(rdbtnRevistas.isSelected())
+								r = modeloR.getRevistaAt(indice);
+							else if(rdbtnTodos.isSelected()){
+								r = (Revista) modelo.getPubAt(indice);
+							}
 							textFieldTitulo.setText(r.getTitulo());
 							textFieldCarnet.setText(r.getId());
 							spinnerPag.setValue(r.getNumPaginas());
@@ -244,8 +274,20 @@ public class GestionPublicacion extends JDialog {
 							spinnerAnno.setValue(r.getAnno());
 							spinnerNum.setValue(r.getNum());
 						}
-						if(rdbtnArticulos.isSelected()){
-							Articulo a = modeloA.getArticuloAt(indice);
+						else if(p instanceof Articulo){
+							panelLibro.setVisible(false);
+							panelRevista.setVisible(false);
+							panelArticulo.setVisible(true);
+
+							Articulo a = null;
+
+							if(rdbtnArticulos.isSelected()){
+								a = modeloA.getArticuloAt(indice);
+							}
+							if(rdbtnTodos.isSelected()){
+								a = (Articulo) modelo.getPubAt(indice);
+							}
+							modeloA.getArticuloAt(indice);
 							textFieldTitulo.setText(a.getTitulo());
 							textFieldCarnet.setText(a.getId());
 							spinnerPag.setValue(a.getNumPaginas());
@@ -261,43 +303,77 @@ public class GestionPublicacion extends JDialog {
 							textFieldAutorArt.setText(a.getAutores().get(0));
 							textFieldArbitro.setText(a.getArbitros().get(0));
 						}
-						else if(rdbtnTodos.isSelected()){
-							Publicacion p = modelo.getPubAt(indice);
-							textFieldTitulo.setText(p.getTitulo());
-							textFieldCarnet.setText(p.getId());
-							spinnerPag.setValue(p.getNumPaginas());
-							spinnerEjemp.setValue(p.getCantEjemplares());
-							for(int i = 0; i < materias.length; i++){
-								if(p.getMateria().equals(materias[i]))
-									pos = i;
-							}
-							comboBoxMateria.setSelectedIndex(pos);
-						}
-						btnEditar.setVisible(true);
+
+						btnEditar.setVisible(false);
 						btnEliminar.setVisible(true);
 
-
-//						if(rdbtnLibros.isSelected()){
-//							listPub.setModel(modeloL);
-//							panelLibro.setVisible(true);
-//							panelRevista.setVisible(false);
-//							panelArticulo.setVisible(false);	
-//						}
-//						if(rdbtnRevistas.isSelected()){
-//							listPub.setModel(modeloR);
-//							panelLibro.setVisible(false);
-//							panelRevista.setVisible(true);
-//							panelArticulo.setVisible(false);
-//						}
-//						if(rdbtnArticulos.isSelected()){
-//							listPub.setModel(modeloA);
-//							panelLibro.setVisible(false);
-//							panelRevista.setVisible(false);
-//							panelArticulo.setVisible(true);
-//						}
-//						if(rdbtnTodos.isSelected()){
-//							listPub.setModel(modelo);
-//						}
+						//						if(rdbtnLibros.isSelected()){
+						//							Libro l = modeloL.getLibroAt(indice);
+						//							textFieldTitulo.setText(l.getTitulo());
+						//							textFieldCarnet.setText(l.getId());
+						//							spinnerPag.setValue(l.getNumPaginas());
+						//							spinnerEjemp.setValue(l.getCantEjemplares());
+						//							for(int i = 0; i < materias.length; i++){
+						//								if(l.getMateria().equals(materias[i]))
+						//									pos = i;
+						//							}
+						//							comboBoxMateria.setSelectedIndex(pos);
+						//
+						//							panelLibro.setVisible(true);
+						//							panelRevista.setVisible(false);
+						//							panelArticulo.setVisible(false);
+						//
+						//							textFieldEditorial.setText(l.getEditorial());
+						//							textFieldAutor.setText(l.getAutores().get(0));
+						//						}
+						//						else if(rdbtnRevistas.isSelected()){
+						//							Revista r = modeloR.getRevistaAt(indice);
+						//							textFieldTitulo.setText(r.getTitulo());
+						//							textFieldCarnet.setText(r.getId());
+						//							spinnerPag.setValue(r.getNumPaginas());
+						//							spinnerEjemp.setValue(r.getCantEjemplares());
+						//							for(int i = 0; i < materias.length; i++){
+						//								if(r.getMateria().equals(materias[i]))
+						//									pos = i;
+						//							}
+						//							comboBoxMateria.setSelectedIndex(pos);
+						//							panelLibro.setVisible(false);
+						//							panelRevista.setVisible(true);
+						//							panelArticulo.setVisible(false);
+						//							spinnerAnno.setValue(r.getAnno());
+						//							spinnerNum.setValue(r.getNum());
+						//						}
+						//						else if(rdbtnArticulos.isSelected()){
+						//							Articulo a = modeloA.getArticuloAt(indice);
+						//							textFieldTitulo.setText(a.getTitulo());
+						//							textFieldCarnet.setText(a.getId());
+						//							spinnerPag.setValue(a.getNumPaginas());
+						//							spinnerEjemp.setValue(a.getCantEjemplares());
+						//							for(int i = 0; i < materias.length; i++){
+						//								if(a.getMateria().equals(materias[i]))
+						//									pos = i;
+						//							}
+						//							comboBoxMateria.setSelectedIndex(pos);
+						//							panelLibro.setVisible(false);
+						//							panelRevista.setVisible(false);
+						//							panelArticulo.setVisible(true);
+						//							textFieldAutorArt.setText(a.getAutores().get(0));
+						//							textFieldArbitro.setText(a.getArbitros().get(0));
+						//						}
+						//						else if(rdbtnTodos.isSelected()){
+						//							Publicacion pr = modelo.getPubAt(indice);
+						//							textFieldTitulo.setText(pr.getTitulo());
+						//							textFieldCarnet.setText(pr.getId());
+						//							spinnerPag.setValue(pr.getNumPaginas());
+						//							spinnerEjemp.setValue(pr.getCantEjemplares());
+						//							for(int i = 0; i < materias.length; i++){
+						//								if(pr.getMateria().equals(materias[i]))
+						//									pos = i;
+						//							}
+						//							comboBoxMateria.setSelectedIndex(pos);
+						//						}
+						btnEditar.setVisible(true);
+						btnEliminar.setVisible(true);
 					}
 				}
 			});
@@ -354,12 +430,16 @@ public class GestionPublicacion extends JDialog {
 			panelArticulo.add(getLabelAutorArticulo());
 			panelArticulo.add(getTextFieldArbitro());
 			panelArticulo.add(getLabelArbitroArticulo());
+			panelArticulo.add(getSeparator_2());
+			panelArticulo.add(getSeparator_3());
 		}
 		return panelArticulo;
 	}
 	private JTextField getTextFieldTitulo() {
 		if (textFieldTitulo == null) {
 			textFieldTitulo = new JTextField();
+			textFieldTitulo.setBackground(Color.WHITE);
+			textFieldTitulo.setBorder(null);
 			textFieldTitulo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			textFieldTitulo.setBounds(793, 105, 274, 30);
 			textFieldTitulo.setEnabled(false);
@@ -424,7 +504,10 @@ public class GestionPublicacion extends JDialog {
 	private JTextFieldCarnet getTextFieldCarnet() {
 		if (textFieldCarnet == null) {
 			textFieldCarnet = new JTextFieldCarnet();
+			textFieldCarnet.setBackground(Color.WHITE);
+			textFieldCarnet.setBorder(null);
 			textFieldCarnet.setFont(new Font("SansSerif", Font.PLAIN, 16));
+			textFieldCarnet.putClientProperty("JTextField.placeholderText", "Ingrese el identificador");
 			textFieldCarnet.setBounds(792, 165, 275, 30);
 			textFieldCarnet.setEnabled(false);
 		}
@@ -437,37 +520,48 @@ public class GestionPublicacion extends JDialog {
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 
-					textFieldTitulo.setEnabled(true);
-					textFieldCarnet.setEnabled(true);
-					spinnerPag.setEnabled(true);
-					spinnerEjemp.setEnabled(true);
-					comboBoxMateria.setEnabled(true);
+					if(!rdbtnTodos.isSelected()){
+						textFieldTitulo.setEnabled(true);
+						textFieldCarnet.setEnabled(true);
+						spinnerPag.setEnabled(true);
+						spinnerEjemp.setEnabled(true);
+						comboBoxMateria.setEnabled(true);
 
-					//Articulo
-					textFieldAutorArt.setEnabled(true);
-					textFieldArbitro.setEnabled(true);
+						//Articulo
+						if(panelArticulo.isVisible()){
+							textFieldAutorArt.setEnabled(true);
+							textFieldArbitro.setEnabled(true);
+						}
 
-					//Revista
-					spinnerAnno.setEnabled(true);
-					spinnerNum.setEnabled(true);
+						//Revista
+						else if(panelRevista.isVisible()){
+							spinnerAnno.setEnabled(true);
+							spinnerNum.setEnabled(true);
+						}
 
-					//Libro
-					textFieldAutor.setEnabled(true);
-					textFieldEditorial.setEnabled(true);
+						//Libro
+						else if(panelLibro.isVisible()){
+							textFieldAutor.setEnabled(true);
+							textFieldEditorial.setEnabled(true);
+						}
 
-					reiniciarComponentes();
+						reiniciarComponentes();
 
-					//Desactivar CRUD
-					btnAgregar.setVisible(false);
-					btnEditar.setVisible(false);
-					btnEliminar.setVisible(false);
+						//Desactivar CRUD
+						btnAgregar.setVisible(false);
+						btnEditar.setVisible(false);
+						btnEliminar.setVisible(false);
 
-					//Activar confirmacion
-					btnConfirmar.setVisible(true);
-					btnCancelar.setVisible(true);
+						//Activar confirmacion
+						btnConfirmar.setVisible(true);
+						btnCancelar.setVisible(true);
 
-					//Desactivar lista
-					listPub.setEnabled(false);
+						//Desactivar lista
+						listPub.setEnabled(false);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Seleccione el tipo de publicación que desea agregar", "Información", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			});
 			btnAgregar.setFont(new Font("SansSerif", Font.PLAIN, 17));
@@ -483,8 +577,7 @@ public class GestionPublicacion extends JDialog {
 			btnEditar.setFont(new Font("SansSerif", Font.PLAIN, 17));
 			btnEditar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0){
-					
-					Publicacion p = listPub.getSelectedValue();
+
 					//Desactivar CRUD
 					btnAgregar.setVisible(false);
 					btnEditar.setVisible(false);
@@ -496,18 +589,15 @@ public class GestionPublicacion extends JDialog {
 					btnCancelar.setVisible(true);
 
 					textFieldTitulo.setEnabled(true);
-					textFieldAutor.setEnabled(true);
-					textFieldEditorial.setEnabled(true);
 					textFieldCarnet.setEnabled(true);
 					spinnerPag.setEnabled(true);
 					spinnerEjemp.setEnabled(true);
 					comboBoxMateria.setEnabled(true);
 
-					int selectedIndex = listPub.getSelectedIndex();
-	                
-	                System.out.println("DEBUG: Índice seleccionado: " + selectedIndex);
-	                System.out.println("DEBUG: Publicación seleccionada: " + p);
-					
+					listPub.setEnabled(false);
+
+					Publicacion p = listPub.getSelectedValue();
+
 					if(p instanceof Libro){
 						textFieldAutor.setEnabled(true);
 						textFieldEditorial.setEnabled(true);
@@ -520,27 +610,20 @@ public class GestionPublicacion extends JDialog {
 						textFieldAutorArt.setEnabled(true);
 						textFieldArbitro.setEnabled(true);
 					}
-					listPub.setEnabled(false);
 				}
 			});
 		}
 		return btnEditar;
 	}
-	
+
 	private JButton getBtnEliminar() {
 		if (btnEliminar == null) {
 			btnEliminar = new JButton("Eliminar");
 			btnEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					int indice = listPub.getSelectedIndex();
-					if(rdbtnLibros.isSelected())
-						modeloL.removeLibro(indice);
-					else if(rdbtnRevistas.isSelected())
-						modeloR.removeRevista(indice);
-					else if(rdbtnArticulos.isSelected())
-						modeloA.removeArticulo(indice);
-					else if(rdbtnTodos.isSelected())
-						modelo.removePublicacion(indice);
+					Publicacion pub = listPub.getSelectedValue();
+					eliminarPublicacion();
 				}
 			});
 			btnEliminar.setVisible(false);
@@ -554,34 +637,38 @@ public class GestionPublicacion extends JDialog {
 			btnConfirmar = new JButton("Confirmar");
 			btnConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					Libro l = null;
-					Revista r = null;
-					Articulo a = null;
 
 					boolean exito = false;
 
 					if(rdbtnLibros.isSelected()){
-						l = agregarLibro();
+						Libro l = agregarLibro();
 						if(l != null){
 							modeloL.addLibro(l);
 							JOptionPane.showMessageDialog(null, "Libro " + l.getTitulo() + " agregado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							exito = true;
+							textFieldAutor.setEnabled(false);
+							textFieldEditorial.setEnabled(false);
 						}
 					}
 					if(rdbtnRevistas.isSelected()){
-						r = agregarRevista();
+						Revista r = agregarRevista();
 						if(r != null){
 							modeloR.addRevista(r);
-							JOptionPane.showMessageDialog(null, "Revista " + l.getTitulo() + " agregado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Revista " + r.getTitulo() + " agregado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							exito = true;
+							spinnerAnno.setEnabled(false);
+							spinnerNum.setEnabled(false);
 						}
 					}
 					if(rdbtnArticulos.isSelected()){
-						a = agregarArticulo();
+						Articulo a = agregarArticulo();
 						if(a != null){
 							modeloA.addArticulo(a);
-							JOptionPane.showMessageDialog(null, "Articulo " + l.getTitulo() + " agregado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Articulo " + a.getTitulo() + " agregado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							exito = true;
+
+							textFieldArbitro.setEnabled(false);
+							textFieldAutorArt.setEnabled(false);
 						}
 					}
 
@@ -589,6 +676,7 @@ public class GestionPublicacion extends JDialog {
 						//Esconder confirmacion
 						btnGuardar.setVisible(false);
 						btnCancelar.setVisible(false);
+						btnConfirmar.setVisible(false);
 
 						//Aparecer CRUD
 						btnAgregar.setVisible(true);
@@ -603,6 +691,9 @@ public class GestionPublicacion extends JDialog {
 						textFieldCarnet.setEnabled(false);
 						spinnerPag.setEnabled(false);
 						spinnerEjemp.setEnabled(false);
+						comboBoxMateria.setEnabled(false);
+
+						listPub.setEnabled(true);
 					}
 					else{
 						JOptionPane.showMessageDialog(null, "Algo salió mal", "Error", JOptionPane.ERROR_MESSAGE);
@@ -629,7 +720,7 @@ public class GestionPublicacion extends JDialog {
 					spinnerPag.setEnabled(false);
 					spinnerEjemp.setEnabled(false);
 					comboBoxMateria.setEnabled(false);
-					
+
 				}
 			});
 			btnCancelar.setVisible(false);
@@ -653,7 +744,7 @@ public class GestionPublicacion extends JDialog {
 					int indice = listPub.getSelectedIndex();
 					Publicacion p = listPub.getSelectedValue();
 					int indexPub = Biblioteca.getInstancia().buscarPosPublicacion(p);
-					
+
 					if(p instanceof Libro){
 						Libro l = editarLibro(indexPub);
 						System.out.println("entro a editar libro");
@@ -662,6 +753,9 @@ public class GestionPublicacion extends JDialog {
 							modelo.updatePublicacion(indice, l);
 							JOptionPane.showMessageDialog(null, "Libro " + l.getTitulo() + " modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							exito = true;
+
+							textFieldAutor.setEnabled(false);
+							textFieldEditorial.setEnabled(false);
 						}
 					}
 					else if(p instanceof Revista){
@@ -671,6 +765,8 @@ public class GestionPublicacion extends JDialog {
 							modelo.updatePublicacion(indice, r);
 							JOptionPane.showMessageDialog(null, "Revista " + r.getTitulo() + " modificada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							exito = true;
+							spinnerAnno.setEnabled(false);
+							spinnerNum.setEnabled(false);
 						}
 					}
 					else if(p instanceof Articulo){
@@ -680,6 +776,8 @@ public class GestionPublicacion extends JDialog {
 							modelo.updatePublicacion(indice, a);
 							JOptionPane.showMessageDialog(null, "Artículo " + a.getTitulo() + " modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							exito = true;
+							textFieldArbitro.setEnabled(false);
+							textFieldAutorArt.setEnabled(false);
 						}
 					}
 
@@ -701,6 +799,9 @@ public class GestionPublicacion extends JDialog {
 						textFieldCarnet.setEnabled(false);
 						spinnerPag.setEnabled(false);
 						spinnerEjemp.setEnabled(false);
+						comboBoxMateria.setEnabled(false);
+
+						listPub.setEnabled(true);
 					}
 				}
 			});
@@ -709,13 +810,15 @@ public class GestionPublicacion extends JDialog {
 	}
 
 	public void reiniciarComponentes(){
-		
+
 		textFieldTitulo.setText("");
 		textFieldAutor.setText("");
 		textFieldEditorial.setText("");
 		textFieldCarnet.setText("");
 		spinnerPag.setValue(0);
 		spinnerEjemp.setValue(0);
+		comboBoxMateria.setSelectedIndex(0);
+
 		if(panelLibro.isVisible()){
 			textFieldAutor.setText("");
 			textFieldEditorial.setText("");
@@ -736,8 +839,6 @@ public class GestionPublicacion extends JDialog {
 		boolean editado = true;
 		Libro l = (Libro)Biblioteca.getInstancia().getPublicaciones().get(indice);
 		listPub.setEnabled(false);
-		
-		System.out.println(l.getTitulo());
 
 		String titulo = textFieldTitulo.getText();
 		String id = textFieldCarnet.getText();
@@ -749,10 +850,8 @@ public class GestionPublicacion extends JDialog {
 
 		try{
 			l.setTitulo(titulo);
-			System.out.println("setTitulo" + titulo);
 			labelTitulo.setForeground(Color.BLACK);
 		}catch(IllegalArgumentException e){
-			System.out.println("ERROR en setTitulo" + titulo);
 			labelTitulo.setForeground(Color.RED);
 			editado = false;
 			textFieldTitulo.setText("");
@@ -807,7 +906,6 @@ public class GestionPublicacion extends JDialog {
 		}
 		if(!editado){
 			l = null;
-			System.out.println("Hola " + titulo);
 		}
 		return l;
 	}
@@ -967,7 +1065,7 @@ public class GestionPublicacion extends JDialog {
 		}
 		return a;
 	}
-	
+
 	// METODOS AGREGAR
 	public Libro agregarLibro(){
 
@@ -1200,10 +1298,11 @@ public class GestionPublicacion extends JDialog {
 		}
 		return a;
 	}
-	
+
 	private JSpinner getSpinnerPag() {
 		if (spinnerPag == null) {
 			spinnerPag = new JSpinner();
+			spinnerPag.setEnabled(false);
 			spinnerPag.setBounds(792, 224, 73, 30);
 			spinnerPag.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		}
@@ -1212,6 +1311,7 @@ public class GestionPublicacion extends JDialog {
 	private JSpinner getSpinnerEjemp() {
 		if (spinnerEjemp == null) {
 			spinnerEjemp = new JSpinner();
+			spinnerEjemp.setEnabled(false);
 			spinnerEjemp.setBounds(994, 225, 73, 30);
 			spinnerEjemp.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		}
@@ -1227,15 +1327,20 @@ public class GestionPublicacion extends JDialog {
 			panelLibro.add(getTextFieldEditorial());
 			panelLibro.add(getLblLibroAutor());
 			panelLibro.add(getLblEditorial());
+			panelLibro.add(getSeparator_4());
+			panelLibro.add(getSeparator_5());
 		}
 		return panelLibro;
 	}
 	private JTextField getTextFieldAutor() {
 		if (textFieldAutor == null) {
 			textFieldAutor = new JTextField();
+			textFieldAutor.setBackground(Color.WHITE);
+			textFieldAutor.setBorder(null);
 			textFieldAutor.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			textFieldAutor.setEnabled(false);
 			textFieldAutor.setColumns(10);
+			textFieldAutor.putClientProperty("JTextField.placeholderText", "Ingrese el autor");
 			textFieldAutor.setBounds(114, 11, 275, 30);
 		}
 		return textFieldAutor;
@@ -1243,6 +1348,8 @@ public class GestionPublicacion extends JDialog {
 	private JTextField getTextFieldEditorial() {
 		if (textFieldEditorial == null) {
 			textFieldEditorial = new JTextField();
+			textFieldEditorial.setBackground(Color.WHITE);
+			textFieldEditorial.setBorder(null);
 			textFieldEditorial.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			textFieldEditorial.setEnabled(false);
 			textFieldEditorial.setColumns(10);
@@ -1281,6 +1388,7 @@ public class GestionPublicacion extends JDialog {
 	private JSpinner getSpinnerAnno() {
 		if (spinnerAnno == null) {
 			spinnerAnno = new JSpinner();
+			spinnerAnno.setEnabled(false);
 			spinnerAnno.setModel(new SpinnerNumberModel(new Integer(2010), null, null, new Integer(5)));
 			spinnerAnno.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			spinnerAnno.setBounds(114, 11, 80, 30);
@@ -1300,6 +1408,7 @@ public class GestionPublicacion extends JDialog {
 	private JSpinner getSpinnerNum() {
 		if (spinnerNum == null) {
 			spinnerNum = new JSpinner();
+			spinnerNum.setEnabled(false);
 			spinnerNum.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			spinnerNum.setBounds(324, 11, 70, 30);
 		}
@@ -1308,6 +1417,8 @@ public class GestionPublicacion extends JDialog {
 	private JTextField getTextFieldAutorArt() {
 		if (textFieldAutorArt == null) {
 			textFieldAutorArt = new JTextField();
+			textFieldAutorArt.setBackground(Color.WHITE);
+			textFieldAutorArt.setBorder(null);
 			textFieldAutorArt.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			textFieldAutorArt.setEnabled(false);
 			textFieldAutorArt.setColumns(10);
@@ -1328,10 +1439,12 @@ public class GestionPublicacion extends JDialog {
 	private JTextField getTextFieldArbitro() {
 		if (textFieldArbitro == null) {
 			textFieldArbitro = new JTextField();
+			textFieldArbitro.setBorder(null);
+			textFieldArbitro.setBackground(Color.WHITE);
 			textFieldArbitro.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			textFieldArbitro.setEnabled(false);
 			textFieldArbitro.setColumns(10);
-			textFieldArbitro.setBounds(114, 68, 275, 30);
+			textFieldArbitro.setBounds(114, 62, 275, 30);
 			textFieldArbitro.putClientProperty("JTextField.placeholderText", "Ingrese el arbitro");
 		}
 		return textFieldArbitro;
@@ -1351,6 +1464,12 @@ public class GestionPublicacion extends JDialog {
 			rdbtnLibros.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					listPub.setModel(modeloL);
+					if(rdbtnLibros.isSelected()){
+						listPub.setModel(modeloL);
+						panelLibro.setVisible(true);
+						panelRevista.setVisible(false);
+						panelArticulo.setVisible(false);	
+					}
 				}
 			});
 			rdbtnLibros.setBorder(null);
@@ -1366,6 +1485,12 @@ public class GestionPublicacion extends JDialog {
 			rdbtnRevistas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					listPub.setModel(modeloR);
+					if(rdbtnRevistas.isSelected()){
+						listPub.setModel(modeloR);
+						panelLibro.setVisible(false);
+						panelRevista.setVisible(true);
+						panelArticulo.setVisible(false);
+					}
 				}
 			});
 			rdbtnRevistas.setFont(new Font("SansSerif", Font.PLAIN, 17));
@@ -1383,6 +1508,12 @@ public class GestionPublicacion extends JDialog {
 			rdbtnArticulos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					listPub.setModel(modeloA);
+					if(rdbtnArticulos.isSelected()){
+						listPub.setModel(modeloA);
+						panelLibro.setVisible(false);
+						panelRevista.setVisible(false);
+						panelArticulo.setVisible(true);
+					}
 				}
 			});
 			rdbtnArticulos.setBackground(Color.WHITE);
@@ -1399,11 +1530,102 @@ public class GestionPublicacion extends JDialog {
 			rdbtnTodos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					listPub.setModel(modelo);
+					if(rdbtnTodos.isSelected()){
+						listPub.setModel(modelo);
+					}
 				}
 			});
 			rdbtnTodos.setBackground(Color.WHITE);
 			rdbtnTodos.setBounds(493, 25, 80, 23);
 		}
 		return rdbtnTodos;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+			separator.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator.setBounds(793, 106, 274, 30);
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+			separator_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator_1.setBounds(792, 166, 274, 30);
+		}
+		return separator_1;
+	}
+	private JSeparator getSeparator_2() {
+		if (separator_2 == null) {
+			separator_2 = new JSeparator();
+			separator_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator_2.setBounds(114, 12, 275, 30);
+		}
+		return separator_2;
+	}
+	private JSeparator getSeparator_3() {
+		if (separator_3 == null) {
+			separator_3 = new JSeparator();
+			separator_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator_3.setBounds(114, 63, 275, 30);
+		}
+		return separator_3;
+	}
+	private JSeparator getSeparator_4() {
+		if (separator_4 == null) {
+			separator_4 = new JSeparator();
+			separator_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator_4.setBounds(114, 12, 275, 30);
+		}
+		return separator_4;
+	}
+	private JSeparator getSeparator_5() {
+		if (separator_5 == null) {
+			separator_5 = new JSeparator();
+			separator_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+			separator_5.setBounds(114, 69, 275, 30);
+		}
+		return separator_5;
+	}
+
+	public void eliminarPublicacion() {
+
+		if(!listPub.isSelectionEmpty()){
+			String tipo = "";
+			Publicacion p = listPub.getSelectedValue();
+			if(p instanceof Libro)
+				tipo = "Libro ";
+			if(p instanceof Revista)
+				tipo = "Revista ";
+			if(p instanceof Articulo)
+				tipo = "Artículo ";
+
+			int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar esta publicación?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+			if (option == JOptionPane.YES_OPTION) {				
+				
+				int indice = listPub.getSelectedIndex();
+
+				if(!rdbtnTodos.isSelected()){
+					Biblioteca.getInstancia().eliminarPublicacionPorId(p.getId());
+					if(rdbtnLibros.isSelected())
+						modeloL.removeLibro(indice);
+					else if(rdbtnRevistas.isSelected())
+						modeloR.removeRevista(indice);
+					else if(rdbtnArticulos.isSelected())
+						modeloA.removeArticulo(indice);
+				}
+				else{
+					modelo.removePublicacion(indice);
+				}
+				
+				JOptionPane.showMessageDialog(null,tipo + p.getTitulo() + " ha sido eliminado/a con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				reiniciarComponentes();
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Seleccione una publicación que desee borrar", "Información", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 }

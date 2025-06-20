@@ -454,25 +454,12 @@ public class Biblioteca {
 		user.agregarPrestamo(p);
 	}
 
-	public int posicionUsuario(UsuarioAcreditado u){
+	public int buscarPosUsuario(UsuarioAcreditado u){
 		int posicion = -1;
 		boolean encontrado = false;
 
 		for(int i = 0; i < usuarios.size() && !encontrado; i++){
 			if(usuarios.get(i).equals(u)){
-				posicion = i;
-				encontrado = true;
-			}
-		}
-		return posicion;
-	}
-	public int posicionPublicacion(Publicacion p){
-
-		int posicion = -1;
-		boolean encontrado = false;
-
-		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
-			if(publicaciones.get(i).equals(p)){
 				posicion = i;
 				encontrado = true;
 			}
@@ -511,5 +498,18 @@ public class Biblioteca {
 				u = p;
 		}
 		return u;
+	}
+	
+	public void eliminarPublicacionPorId(String id){
+		Publicacion pub = null;
+		boolean encontrado = false;
+		
+		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
+			if(publicaciones.get(i).getId().equals(id)){
+				pub = publicaciones.get(i);
+				encontrado = true;
+			}
+		}
+		publicaciones.remove(pub);
 	}
 }

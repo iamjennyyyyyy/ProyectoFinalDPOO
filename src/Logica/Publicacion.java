@@ -15,6 +15,9 @@ public abstract class Publicacion {
 	}
 
 	public void setId(String id) {
+		if(id.isEmpty()){
+			throw new IllegalArgumentException("Ingrese un identificador");
+		}
 		this.id = id;
 	}
 

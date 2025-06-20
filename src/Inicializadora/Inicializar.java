@@ -270,7 +270,7 @@ public class Inicializar {
 		LocalDate fechaP = LocalDate.of(2025, 5, 17);
 		LocalDate fechaDev = LocalDate.of(2025, 6, 20);
 		int tiempo = p.tiempoMaximoPrestamo();
-		System.out.println("tiempo maximo pub" +tiempo);
+//		System.out.println("tiempo maximo pub" +tiempo);
 		LocalDate fechaMax = fechaP.plusDays(tiempo);
 		Biblioteca.getInstancia().agregarPrestamo(fechaP, fechaMax, fechaDev, p, u, Login.obtenerAdmin());
 	}
