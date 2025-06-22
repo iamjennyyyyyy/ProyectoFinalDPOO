@@ -6,7 +6,8 @@ public class UsuarioAcreditado extends Persona {
 
 	private static int numUsuario = 0;
 	private LocalDate fechaPenalizacion;
-	
+	private ArrayList<Prestamo> prestamos;
+
 	public LocalDate getFechaPenalizacion() {
 		return fechaPenalizacion;
 	}
@@ -15,7 +16,6 @@ public class UsuarioAcreditado extends Persona {
 		System.out.println(fechaPenalizacion);
 		this.fechaPenalizacion = fechaPenalizacion;
 	}
-	private ArrayList<Prestamo> prestamos;
 
 	public ArrayList<Prestamo> getPrestamos() {
 		return prestamos;
@@ -32,9 +32,19 @@ public class UsuarioAcreditado extends Persona {
 	public static void setNumUsuario() {
 		numUsuario++;
 	}
-	
+
 	public void agregarPrestamo(Prestamo p){
 		prestamos.add(p);
+	}
+
+	public void eliminarPrestamo(Prestamo p){
+		int pos = -1;
+		for (int i = 0; i < prestamos.size() && pos == -1; i++) {
+			if (prestamos.get(i).equals(p)) {
+				pos = i;
+			}
+		}
+		prestamos.remove(pos);
 	}
 
 	public UsuarioAcreditado(){

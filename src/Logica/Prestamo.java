@@ -2,6 +2,7 @@ package Logica;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Prestamo {
 
@@ -89,7 +90,7 @@ public class Prestamo {
 
 	public void concederProrroga(){
 		int tiempoMax = pub.tiempoMaximoPrestamo();
-		fechaMax.plusDays(tiempoMax/2);
+		this.fechaMax = fechaMax.plusDays(tiempoMax/2);
 	}
 	@Override
 	public String toString() {
@@ -115,5 +116,15 @@ public class Prestamo {
 			mensaje += "Aun no devuelto ";
 
 		return mensaje;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (this == o) return true;
+	    if (o == null || getClass() != o.getClass()) return false;
+	    Prestamo prestamo = (Prestamo) o;
+	    return Objects.equals(fechaP, prestamo.fechaP) &&
+	           Objects.equals(user, prestamo.user) &&
+	           Objects.equals(pub, prestamo.pub);
 	}
 }

@@ -94,6 +94,10 @@ public abstract class Publicacion {
 	public void disminuirStock(){
 		cantEjemplares--;
 	}
+	
+	public void aumentarStock(){
+		cantEjemplares++;
+	}
 
 	public abstract int tiempoMaximoPrestamo();
 

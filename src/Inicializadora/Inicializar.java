@@ -194,61 +194,86 @@ public class Inicializar {
 	}
 
 	private static void inicializarPrestamos() {
-		// Asegurarse que hay un administrador
-		Trabajador admin = Biblioteca.getInstancia().getAdmin();
-		if(admin == null) {
-			admin = Biblioteca.getInstancia().getTrabajadores().get(0);
-		}
+	    // Asegurarse que hay un administrador
+	    Trabajador admin = Biblioteca.getInstancia().getAdmin();
+	    if(admin == null) {
+	        admin = Biblioteca.getInstancia().getTrabajadores().get(0);
+	    }
 
-		// Contador para préstamos próximos a vencer
-		int prestamosProximosAVencer = 0;
-		final int PRESTAMOS_PROXIMOS_OBJETIVO = 5;
-		final int DIAS_PROXIMOS_A_VENCER = 10; // Próximos 3 días
+	    // Contador para préstamos próximos a vencer
+	    int prestamosProximosAVencer = 0;
+	    final int PRESTAMOS_PROXIMOS_OBJETIVO = 5;
+	    final int DIAS_PROXIMOS_A_VENCER = 10;
+	    final int MAX_PRESTAMOS_POR_USUARIO = 3;
 
-		// Crear 15 préstamos con validación
-		for(int i = 1; i <= 15; i++) {
-			try {
-				Publicacion pub = obtenerPublicacionAleatoriaValida();
-				if(pub == null) continue;
+	    // Crear 15 préstamos con validación
+	    int prestamosCreados = 0;
+	    int intentos = 0;
+	    final int MAX_INTENTOS = 50; // Para evitar bucles infinitos
 
-				UsuarioAcreditado user = obtenerUsuarioAleatorioValido();
-				if(user == null) continue;
+	    while(prestamosCreados < 15 && intentos < MAX_INTENTOS) {
+	        intentos++;
+	        try {
+	            Publicacion pub = obtenerPublicacionAleatoriaValida();
+	            if(pub == null) continue;
 
-				LocalDate fPrest;
-				LocalDate fMax;
-				LocalDate fDev = null;
+	            UsuarioAcreditado user = obtenerUsuarioAleatorioValido();
+	            if(user == null) continue;
 
-				// Generar fechas especiales para los primeros 5 préstamos próximos a vencer
-				if(prestamosProximosAVencer < PRESTAMOS_PROXIMOS_OBJETIVO) {
-					// Crear préstamos que vencen pronto (1-3 días)
-					fPrest = LocalDate.now().minusDays(pub.tiempoMaximoPrestamo() - (random.nextInt(DIAS_PROXIMOS_A_VENCER) + 1));
-					fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
-					prestamosProximosAVencer++;
-				} else {
-					// Fechas normales para otros préstamos
-					fPrest = LocalDate.now().minusDays(random.nextInt(30));
-					fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
+	            // Contar préstamos activos del usuario
+	            int prestamosActivos = 0;
+	            for(Prestamo p : Biblioteca.getInstancia().getPrestamosTotales()) {
+	                if(p.getUser().equals(user) && p.getFechaDevolucion() == null) {
+	                    prestamosActivos++;
+	                    if(prestamosActivos >= MAX_PRESTAMOS_POR_USUARIO) {
+	                        break;
+	                    }
+	                }
+	            }
+	            
+	            // Si ya tiene 3 préstamos activos, saltar este usuario
+	            if(prestamosActivos >= MAX_PRESTAMOS_POR_USUARIO) {
+	                continue;
+	            }
 
-					// 50% de probabilidad de tener fecha de devolución
-					if(random.nextBoolean()) {
-						fDev = fPrest.plusDays(random.nextInt(pub.tiempoMaximoPrestamo()));
-					}
-				}
+	            LocalDate fPrest;
+	            LocalDate fMax;
+	            LocalDate fDev = null;
 
-				// Registrar préstamo
-				if(fDev != null) {
-					Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, fDev, pub, user, admin);
-				} else {
-					Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, pub, user, admin);
-				}
+	            // Generar fechas especiales para los primeros 5 préstamos próximos a vencer
+	            if(prestamosProximosAVencer < PRESTAMOS_PROXIMOS_OBJETIVO) {
+	                // Crear préstamos que vencen pronto (1-3 días)
+	                fPrest = LocalDate.now().minusDays(pub.tiempoMaximoPrestamo() - (random.nextInt(DIAS_PROXIMOS_A_VENCER) + 1));
+	                fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
+	                prestamosProximosAVencer++;
+	            } else {
+	                // Fechas normales para otros préstamos
+	                fPrest = LocalDate.now().minusDays(random.nextInt(30));
+	                fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
 
-			} catch(Exception e) {
-				System.err.println("Error creando préstamo #" + i + ": " + e.getMessage());
-			}
-		}
+	                // 50% de probabilidad de tener fecha de devolución
+	                if(random.nextBoolean()) {
+	                    fDev = fPrest.plusDays(random.nextInt(pub.tiempoMaximoPrestamo()));
+	                }
+	            }
 
-		// Verificación (para debug)
-		System.out.println("Préstamos próximos a vencer creados: " + prestamosProximosAVencer);
+	            // Registrar préstamo
+	            if(fDev != null) {
+	                Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, fDev, pub, user, admin);
+	            } else {
+	                Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, pub, user, admin);
+	            }
+	            
+	            prestamosCreados++;
+
+	        } catch(Exception e) {
+	            System.err.println("Error creando préstamo: " + e.getMessage());
+	        }
+	    }
+
+	    // Verificación (para debug)
+	    System.out.println("Préstamos creados: " + prestamosCreados);
+	    System.out.println("Préstamos próximos a vencer creados: " + prestamosProximosAVencer);
 	}
 
 	// Métodos auxiliares
