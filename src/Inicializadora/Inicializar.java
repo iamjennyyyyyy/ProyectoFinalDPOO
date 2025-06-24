@@ -5,14 +5,33 @@ import Logica.Prestamo;
 import Logica.Publicacion;
 import Logica.Trabajador;
 import Logica.UsuarioAcreditado;
+import Utiles.MiPersonalizacion;
 import Visual.Login;
+import Visual.Principal;
 
-import java.awt.List;
+import java.awt.EventQueue;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class Inicializar {
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MiPersonalizacion.aplicarTema();
+					Inicio();
+//					Login frame = new Login();
+					Principal frame = new Principal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	private static final Random random = new Random();
 
@@ -73,7 +92,22 @@ public class Inicializar {
 				{"79070717890","Gabriela Mistral"},
 				{"85081048901","Pablo Neruda"},
 				{"91091339012","Clarice Lispector"},
-				{"78010640123","Jorge Luis Borges"}
+				{"78010640123","Jorge Luis Borges"},
+				{"65101251231","Lucia Lima"},
+				{"82071522342","Carlos Gutierrez"},
+				{"93022833457","Anastasia Fonseca"},
+				{"75030944569","Pablo Milanés"},
+				{"88052155679","Amanda Castillo"},
+				{"69110406787","Alberto Blazco"},
+				{"95061717895","Keily Mantilla"},
+				{"72082028904","Patrick Ramírez"},
+				{"83090339011","Samantha Figueroa"},
+				{"91112640122","Liana Pérez"},
+				{"78040951233","Liz Cruz"},
+				{"85052222346","Erik Martínez"},
+				{"99030533453","Melanie Vida"},
+				{"71061824562","Rolando Soto"},
+				{"86072115673","Deisy Paredes"}
 		};
 
 		for(String[] datos : usuarios) {
@@ -111,7 +145,8 @@ public class Inicializar {
 					datos[5], datos[6]
 					);
 		}
-
+		Biblioteca.getInstancia().getPublicaciones().get(0).setDireccionImagen("src/images/portadas/cien años de soledadd.jpg");
+		
 		// Revistas (15 instancias)
 		String[][] revistas = {
 				{"R001", "National Geographic", "Ciencias Naturales", "100", "50", "2001", "10"},
@@ -142,19 +177,19 @@ public class Inicializar {
 		String[][] articulos = {
 				{"3001", "Machine Learning aplicado a diagnóstico médico", "Tecnología", "15", "2", "Dr. Alan Turing", "Dr. John McCarthy"},
 				{"3002", "Impacto del cambio climático en ecosistemas marinos", "Ciencias Naturales", "20", "3", "Dra. Sylvia Earle", "Dr. James Hansen"},
-				{"3003", "Avances en superconductividad a temperatura ambiente", "Ciencias Exactas", "25", "1", "Dr. Miguel José Yacamán", "Dr. Carlos Frenk"},
+				{"3003", "Avances en superconductividad a temperatura ambiente", "Ciencias Exactas", "25", "2", "Dr. Miguel José Yacamán", "Dr. Carlos Frenk"},
 				{"3004", "Nuevos enfoques en la enseñanza de matemáticas", "Ciencias Sociales", "18", "2", "Dra. María Montessori", "Dr. Howard Gardner"},
 				{"3005", "Nanotecnología aplicada a la medicina", "Tecnología", "22", "3", "Dr. Eric Drexler", "Dr. Richard Smalley"},
-				{"3006", "Teoría de cuerdas y la unificación de fuerzas", "Ciencias Exactas", "30", "1", "Dr. Edward Witten", "Dr. Brian Greene"},
-				{"3007", "Inteligencia artificial en la creación artística", "Tecnología", "16", "2", "Dra. Fei-Fei Li", "Dr. Yoshua Bengio"},
+				{"3006", "Teoría de cuerdas y la unificación de fuerzas", "Ciencias Exactas", "30", "3", "Dr. Edward Witten", "Dr. Brian Greene"},
+				{"3007", "Inteligencia artificial en la creación artística", "Tecnología", "16", "4", "Dra. Fei-Fei Li", "Dr. Yoshua Bengio"},
 				{"3008", "Biodiversidad en la Amazonía", "Ciencias Naturales", "24", "3", "Dra. Jane Goodall", "Dr. E.O. Wilson"},
 				{"3009", "Neuroplasticidad y aprendizaje", "Ciencias Sociales", "19", "2", "Dr. Michael Merzenich", "Dr. Norman Doidge"},
 				{"3010", "Energías renovables en países en desarrollo", "Tecnología", "21", "3", "Dr. Daniel Kammen", "Dr. Jeffrey Sachs"},
-				{"3011", "CRISPR y edición genética", "Ciencias Naturales", "28", "1", "Dra. Jennifer Doudna", "Dr. Emmanuelle Charpentier"},
+				{"3011", "CRISPR y edición genética", "Ciencias Naturales", "28", "3", "Dra. Jennifer Doudna", "Dr. Emmanuelle Charpentier"},
 				{"3012", "Arqueología subacuática en el Mediterráneo", "Historia", "17", "2", "Dr. George Bass", "Dr. Robert Ballard"},
 				{"3013", "Psicología de las redes sociales", "Ciencias Sociales", "20", "3", "Dr. Sherry Turkle", "Dr. Mihaly Csikszentmihalyi"},
 				{"3014", "Materiales 2D y sus aplicaciones", "Ciencias Exactas", "23", "2", "Dr. Andre Geim", "Dr. Konstantin Novoselov"},
-				{"3015", "Exoplanetas y la búsqueda de vida", "Ciencias Exactas", "26", "1", "Dr. Sara Seager", "Dr. Michel Mayor"}
+				{"3015", "Exoplanetas y la búsqueda de vida", "Ciencias Exactas", "26", "4", "Dr. Sara Seager", "Dr. Michel Mayor"}
 		};
 
 		for(String[] datos : articulos) {

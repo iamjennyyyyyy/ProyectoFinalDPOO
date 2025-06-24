@@ -76,7 +76,7 @@ public class Reporte1GraficoMaterias extends JDialog {
 			btnSalir.setBorder(null);
 			btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
-			btnSalir.setIcon(new ImageIcon("src/images/otroLogoBorrar50x50.png"));
+			btnSalir.setIcon(new ImageIcon("src/images/iconos/otroLogoBorrar50x50.png"));
 			btnSalir.setBackground(Color.WHITE);
 			btnSalir.setForeground(Color.WHITE);
 			btnSalir.addActionListener(new ActionListener() {
@@ -115,9 +115,9 @@ public class Reporte1GraficoMaterias extends JDialog {
         styler.setSeriesColors(coloresPastel);
         styler.setLabelsVisible(true);
         styler.setLabelType(PieStyler.LabelType.NameAndValue);;
-        styler.setLabelsDistance(1.15);
+        styler.setLabelsDistance(1.12);
         
-        Font fuente = new Font("Segoe UI", Font.PLAIN, 12);
+        Font fuente = new Font("Segoe UI", Font.PLAIN, 10);
         Font tituloFuente = new Font("Segoe UI", Font.BOLD, 18);
         Font leyendaFuente = new Font("Segoe UI", Font.PLAIN, 12);
         

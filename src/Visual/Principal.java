@@ -53,7 +53,6 @@ public class Principal extends JFrame {
 	private JMenuItem mntmReporte_1;
 	private JMenuItem mntmReporte_2;
 	private JMenuItem mntmReporte_3;
-	private Login l;
 	Biblioteca b = Biblioteca.getInstancia();
 	private JMenuItem mntmNosotros;
 	private JMenuItem mntmCentro;
@@ -68,17 +67,6 @@ public class Principal extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				MiPersonalizacion.aplicarTema();
-//				UIManager.put("Component.arc", 199);
-//				Inicializar.Inicio();
-//				Principal frame = new Principal();
-//				frame.setVisible(true);
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.

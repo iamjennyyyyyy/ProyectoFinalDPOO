@@ -118,6 +118,7 @@ public class GestionPrestamo extends JDialog {
 		if (table == null) {
 			table = new JTable();
 			table.setToolTipText("Lista de pr\u00E9stamos");
+			table.setEnabled(true);
 			table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseReleased(MouseEvent e) {
@@ -157,21 +158,21 @@ public class GestionPrestamo extends JDialog {
 							UsuarioAcreditado u = Biblioteca.getInstancia().buscarUsuarioPorId(idUser);
 							Publicacion p = Biblioteca.getInstancia().buscarPublicacionPorId(idPub);
 
+							if(u != null && p != null){
+								
+								int posUser = Biblioteca.getInstancia().buscarPosUsuario(u);
+								int posPub = Biblioteca.getInstancia().buscarPosPublicacion(p);
 
-							int posUser = Biblioteca.getInstancia().buscarPosUsuario(u);
-							int posPub = Biblioteca.getInstancia().buscarPosPublicacion(p);
-
-							comboBoxUsuario.setSelectedIndex(posUser);
-							comboBoxPub.setSelectedIndex(posPub);
-
-							//			                UsuarioAcreditado u = Biblioteca.getInstancia().buscarUsuarioPorId(valor);
-
-							numPrestamosUsuario.setVisible(true);
-							numEjempPub.setVisible(true);
-							numPrestamosUsuario.setForeground(Color.BLACK);
-							numEjempPub.setForeground(Color.BLACK);
-							numPrestamosUsuario.setText("Préstamos: " + u.getPrestamos().size());
-							numEjempPub.setText("Ejemplares: " + p.getCantEjemplares());
+								comboBoxUsuario.setSelectedIndex(posUser);
+								comboBoxPub.setSelectedIndex(posPub);
+								
+								numPrestamosUsuario.setVisible(true);
+								numEjempPub.setVisible(true);
+								numPrestamosUsuario.setForeground(Color.BLACK);
+								numEjempPub.setForeground(Color.BLACK);
+								numPrestamosUsuario.setText("Préstamos: " + u.getPrestamos().size());
+								numEjempPub.setText("Ejemplares: " + p.getCantEjemplares());
+							}
 						}
 					}
 				}
@@ -272,7 +273,7 @@ public class GestionPrestamo extends JDialog {
 			button.setBorder(null);
 			button.setBackground(Color.WHITE);
 			button.setAlignmentX(0.5f);
-			button.setIcon(new ImageIcon("src/images/otroLogoBorrar50x50.png"));
+			button.setIcon(new ImageIcon("src/images/iconos/otroLogoBorrar50x50.png"));
 			button.setBounds(1252, 26, 50, 50);
 		}
 		return button;
@@ -291,7 +292,6 @@ public class GestionPrestamo extends JDialog {
 								Biblioteca.getInstancia().devolverPublicacion(p);
 							}
 							catch(IllegalArgumentException e){
-								System.out.println("Entro al error devuelta");
 								JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 								devuelta = false;
 							}
@@ -372,7 +372,7 @@ public class GestionPrestamo extends JDialog {
 		catch(IllegalArgumentException e){
 			realizado = false;
 			String mensaje = e.getMessage();
-			JOptionPane.showMessageDialog(null, mensaje, "Info", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
 		}
 		return realizado;
 	}
@@ -402,7 +402,7 @@ public class GestionPrestamo extends JDialog {
 			});
 			btnCancelar.setToolTipText("Reiniciar formulario");
 			btnCancelar.setBorder(null);
-			btnCancelar.setIcon(new ImageIcon("src/images/reiniciar30x30.png"));
+			btnCancelar.setIcon(new ImageIcon("src/images/iconos/reiniciar30x30.png"));
 			btnCancelar.setBackground(Color.WHITE);
 			btnCancelar.setBounds(1118, 366, 30, 30);
 		}
@@ -426,7 +426,7 @@ public class GestionPrestamo extends JDialog {
 					i.setVisible(true);
 				}
 			});
-			btnInfo.setIcon(new ImageIcon("src/images/iconoInfo45x45.png"));
+			btnInfo.setIcon(new ImageIcon("src/images/iconos/iconoInfo45x45.png"));
 			btnInfo.setBounds(1239, 116, 45, 45);
 			btnInfo.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnInfo.setForeground(Color.WHITE);
@@ -450,10 +450,10 @@ public class GestionPrestamo extends JDialog {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						//			            Object itemSeleccionado = comboBox.getSelectedItem();
 
 						UsuarioAcreditado u = Biblioteca.getInstancia().buscarUsuarioPorNombre(comboBoxUsuario.getSelectedItem().toString());
-						numPrestamosUsuario.setText("Préstamos: " + u.getPrestamos().size());
+						if(u != null)
+							numPrestamosUsuario.setText("Préstamos: " + u.getPrestamos().size());
 					}
 				}
 			});
@@ -560,6 +560,14 @@ public class GestionPrestamo extends JDialog {
 	private JMenuItem getMntmDetallesDeLa() {
 		if (mntmDetallesDeLa == null) {
 			mntmDetallesDeLa = new JMenuItem("Detalles de la publicaci\u00F3n");
+			mntmDetallesDeLa.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int indice = table.getSelectedRow();
+					Prestamo p = Biblioteca.getInstancia().buscarPrestamoPorPosicion(indice);
+					InfoPublicacionTablaPrestamo i = new InfoPublicacionTablaPrestamo(p.getPub());
+					i.setVisible(true);
+				}
+			});
 		}
 		return mntmDetallesDeLa;
 	}

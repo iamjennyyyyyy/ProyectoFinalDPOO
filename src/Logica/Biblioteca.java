@@ -130,7 +130,6 @@ public class Biblioteca {
 
 		Prestamo prestamoNuevo = null;
 
-
 		if(pub.getCantEjemplares() < 3){
 			throw new IllegalArgumentException("La publicación no tiene suficientes ejemplares disponibles (mínimo 3 requeridos)");
 		}
@@ -143,10 +142,6 @@ public class Biblioteca {
 	        }
 	    }
 
-		if(user.getFechaPenalizacion() != null){
-			throw new IllegalArgumentException("El usuario tiene una penalización actualmente");
-		}
-
 		synchronized(user) {
 
 			if(user.getPrestamos().size() >= 3){
@@ -155,7 +150,7 @@ public class Biblioteca {
 
 			for(Prestamo p : prestamosTotales){
 
-				if(p.getPub().equals(pub)){
+				if(p.getUser().equals(user)&& p.getPub().equals(pub)){
 					if(p.getFechaDevolucion() == null){
 						throw new IllegalArgumentException("El usuario ya tiene un préstamo activo de esta publicación.");
 					}
@@ -210,9 +205,51 @@ public class Biblioteca {
 	}
 
 	public void eliminarUsuario(UsuarioAcreditado u){
+		
+		UsuarioAcreditado user = new UsuarioAcreditado();
+		user.setFecha(u.getFecha());
+		user.setFechaPenalizacion(u.getFechaPenalizacion());
+		user.setId(u.getId());
+		user.setNombreCompleto(u.getNombreCompleto());
+		user.setNumUsuario();
+		
+		ArrayList<Integer> posiciones = posicionesPrestamosUsuarios(u);
+		for(int i = 0; i < posiciones.size(); i++){
+			prestamosTotales.get(posiciones.get(i)).setUser(user);
+		}
 		usuarios.remove(u);
 	}
 
+	public ArrayList<Integer> posicionesPrestamosUsuarios(UsuarioAcreditado u){
+		ArrayList<Integer> posiciones = new ArrayList<Integer>();
+		for(int i = 0; i < prestamosTotales.size(); i++){
+			if(prestamosTotales.get(i).getUser().equals(u)){
+				posiciones.add(i);
+			}
+		}
+		return posiciones;
+	}
+	
+	public boolean usuarioEliminable(UsuarioAcreditado u){
+		boolean si = true;
+		
+		for(int i = 0; i < prestamosTotales.size() && si; i++){
+			if(prestamosTotales.get(i).getUser().equals(u))
+				si = false;
+		}
+		return si;
+	}
+	
+	public boolean publicacionEliminable(Publicacion u){
+		boolean si = true;
+		
+		for(int i = 0; i < prestamosTotales.size() && si; i++){
+			if(prestamosTotales.get(i).getPub().equals(u))
+				si = false;
+		}
+		return si;
+	}
+	
 	public UsuarioAcreditado buscarUsuarioPorId(String id){
 		UsuarioAcreditado usuario = null;
 

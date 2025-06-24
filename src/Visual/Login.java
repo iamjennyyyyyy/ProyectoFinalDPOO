@@ -64,18 +64,6 @@ public class Login extends JDialog {
 	 * Launch the application.
 	 */
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				MiPersonalizacion.aplicarTema();
-				UIManager.put("Component.arc", 199);
-				Inicializar.Inicio();
-				Login pantalla = new Login();
-				pantalla.setVisible(true);
-			}
-		});
-	}
-
 	/**
 	 * Create the dialog.
 	 */

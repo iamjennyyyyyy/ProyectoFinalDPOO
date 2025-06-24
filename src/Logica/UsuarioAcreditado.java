@@ -29,7 +29,7 @@ public class UsuarioAcreditado extends Persona {
 		return numUsuario;
 	}
 
-	public static void setNumUsuario() {
+	public void setNumUsuario() {
 		numUsuario++;
 	}
 

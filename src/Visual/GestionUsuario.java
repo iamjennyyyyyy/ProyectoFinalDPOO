@@ -2,6 +2,7 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
+import Inicializadora.Inicializar;
 import Logica.Biblioteca;
 import Logica.UsuarioAcreditado;
 import Utiles.ModelUsuario;
@@ -47,7 +49,10 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 import Utiles.JTextFieldMejorado;
 import Utiles.JTextFieldCarnet;
+import Utiles.MiPersonalizacion;
+
 import javax.swing.JSeparator;
+
 import java.awt.SystemColor;
 
 public class GestionUsuario extends JDialog {
@@ -80,6 +85,22 @@ public class GestionUsuario extends JDialog {
 	/**
 	 * Launch the application.
 	 */
+
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					MiPersonalizacion.aplicarTema();
+//					Inicializar.Inicio();
+//					//					Login frame = new Login();
+//					GestionUsuario frame = new GestionUsuario();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the dialog.
@@ -124,7 +145,7 @@ public class GestionUsuario extends JDialog {
 			btnSalir.setBorder(null);
 			btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
-			btnSalir.setIcon(new ImageIcon("src/images/otroLogoBorrar50x50.png"));
+			btnSalir.setIcon(new ImageIcon("src/images/iconos/otroLogoBorrar50x50.png"));
 			btnSalir.setBackground(Color.WHITE);
 			btnSalir.setForeground(Color.WHITE);
 			btnSalir.setFont(new Font("Franklin Gothic Medium", Font.PLAIN, 25));
@@ -149,9 +170,13 @@ public class GestionUsuario extends JDialog {
 					UsuarioAcreditado u = agregarUsuario();
 
 					if(u != null){
+						System.out.println("Usuario creado " + u);
 						UsuarioAcreditado user = Biblioteca.getInstancia().buscarUsuarioPorId(u.getId());
-						if(!user.equals(u)){
+						System.out.println("ID usuario creado" + u.getId());
+						if(user == null){
+							System.out.println("Usuario repetido " + user);
 							list.clearSelection();
+							System.out.println(u);
 							modelo.addUsuario(u);
 							JOptionPane.showMessageDialog(null, "Usuario registrado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
@@ -176,6 +201,9 @@ public class GestionUsuario extends JDialog {
 							lblEdad.setText("Edad: ");
 
 							reiniciarComponentes();
+							
+							list.setSelectedIndex(0);
+							
 							lblNombre.setForeground(Color.BLACK);
 							lblCi.setForeground(Color.BLACK);
 
@@ -201,15 +229,13 @@ public class GestionUsuario extends JDialog {
 				public void actionPerformed(ActionEvent arg0) {
 
 					btnAgregar.setVisible(true);
-					btnEditar.setVisible(true);
-					btnEliminar.setVisible(true);
 
 					btnConfirmar.setVisible(false);
 					btnCancelar.setVisible(false);
 					btnGuardar.setVisible(false);
 
 					reiniciarComponentes();
-
+					list.setSelectedIndex(0);
 					list.setEnabled(true);
 
 					txtpnOperacion.setVisible(false);
@@ -220,6 +246,13 @@ public class GestionUsuario extends JDialog {
 
 					lblSexo.setText("Sexo: ");
 					lblEdad.setText("Edad: ");
+					
+					lblSexo.setForeground(Color.BLACK);
+					lblEdad.setForeground(Color.BLACK);
+					lblNombre.setForeground(Color.BLACK);
+					lblCi.setForeground(Color.BLACK);
+					
+					textPaneError.setVisible(false);
 
 					lblSexo.setForeground(Color.BLACK);
 					lblEdad.setForeground(Color.BLACK);
@@ -227,7 +260,7 @@ public class GestionUsuario extends JDialog {
 			});
 			btnCancelar.setToolTipText("Reiniciar formulario");
 			btnCancelar.setBorder(null);
-			btnCancelar.setIcon(new ImageIcon("src/images/reiniciar30x30.png"));
+			btnCancelar.setIcon(new ImageIcon("src/images/iconos/reiniciar30x30.png"));
 			btnCancelar.setBackground(Color.WHITE);
 			btnCancelar.setBounds(725, 481, 30, 30);
 		}
@@ -242,6 +275,8 @@ public class GestionUsuario extends JDialog {
 
 					textFieldNombreUsuario.setEnabled(true);
 					textFieldId.setEnabled(true);
+					
+					labelPenalizaciones.setText("Penalización:     - ");
 
 					reiniciarComponentes();
 
@@ -286,7 +321,7 @@ public class GestionUsuario extends JDialog {
 					btnCancelar.setVisible(true);
 
 					textFieldNombreUsuario.setEnabled(true);
-					textFieldId.setEnabled(true);
+					textFieldId.setEnabled(false);
 
 					txtpnOperacion.setVisible(true);
 					txtpnOperacion.setText("Editar");
@@ -322,37 +357,31 @@ public class GestionUsuario extends JDialog {
 					UsuarioAcreditado u = editarUsuario();
 					int indice = list.getSelectedIndex();
 					if(u != null){
-						UsuarioAcreditado user = Biblioteca.getInstancia().buscarUsuarioPorId(u.getId());
-						if(!user.equals(u)){
-							modelo.updateUsuario(indice, u);
-							JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-							lblSexo.setText("Sexo: ");
-							lblEdad.setText("Edad: ");
+						modelo.updateUsuario(indice, u);
+						JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+						lblSexo.setText("Sexo: ");
+						lblEdad.setText("Edad: ");
+						
+						//Esconder confirmacion
+						btnGuardar.setVisible(false);
+						btnCancelar.setVisible(false);
 
-							//Esconder confirmacion
-							btnGuardar.setVisible(false);
-							btnCancelar.setVisible(false);
+						//Aparecer CRUD
+						btnAgregar.setVisible(true);
 
-							//Aparecer CRUD
-							btnAgregar.setVisible(true);
-							btnEditar.setVisible(true);
-							btnEliminar.setVisible(true);
+						txtpnOperacion.setText("");
+						txtpnOperacion.setVisible(false);
 
-							txtpnOperacion.setText("");
-							txtpnOperacion.setVisible(false);
+						reiniciarComponentes();
+						list.setSelectedIndex(0);
 
-							reiniciarComponentes();
+						textFieldNombreUsuario.setEnabled(false);
+						textFieldId.setEnabled(false);
 
-							textFieldNombreUsuario.setEnabled(false);
-							textFieldId.setEnabled(false);
+						lblSexo.setForeground(Color.BLACK);
+						lblEdad.setForeground(Color.BLACK);
 
-							lblSexo.setForeground(Color.BLACK);
-							lblEdad.setForeground(Color.BLACK);
-
-						}
-						else{
-							JOptionPane.showMessageDialog(null, "El usuario ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
-						}
+						list.setEnabled(true);
 					}
 				}
 			});
@@ -463,22 +492,41 @@ public class GestionUsuario extends JDialog {
 
 		if(!list.isSelectionEmpty()){
 
-			int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar al usuario?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			UsuarioAcreditado u = list.getSelectedValue();
 
-			if (option == JOptionPane.YES_OPTION) {
+			if(u != null){
 
-				UsuarioAcreditado u = list.getSelectedValue();
-				int indice = list.getSelectedIndex();
+				if(Biblioteca.getInstancia().usuarioEliminable(u)){
 
-				Biblioteca.getInstancia().eliminarUsuario(u);
-				modelo.removeUsuario(indice);
+					if(Biblioteca.getInstancia().getUsuarios().size() != 1){
 
-				JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-				reiniciarComponentes();
+						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar al usuario?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+						if (option == JOptionPane.YES_OPTION) {
+
+							if(u.getPrestamos().size() == 0){
+
+								Biblioteca.getInstancia().eliminarUsuario(u);
+
+								JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+								reiniciarComponentes();
+								list.setSelectedIndex(0);
+							}
+							else
+								JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " tiene actualmente " + u.getPrestamos().size() + " préstamos activos, no puede ser eliminado", "Información", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+					else
+						JOptionPane.showMessageDialog(null, "No puede eliminar a todos los usuarios de la biblioteca", "Información", JOptionPane.WARNING_MESSAGE);
+				}
+				else
+					JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " tiene un historial de préstamos, no puede ser eliminado", "Información", JOptionPane.WARNING_MESSAGE);
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Seleccione un usuario a eliminar", "Información", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
-
 	public void reiniciarComponentes(){
 
 		textFieldNombreUsuario.setText("");
@@ -629,7 +677,6 @@ public class GestionUsuario extends JDialog {
 		list.setEnabled(false);
 
 		String nombre = textFieldNombreUsuario.getText();
-		String id = textFieldId.getText();
 
 		try{
 			lblNombre.setForeground(Color.BLACK);
@@ -640,16 +687,6 @@ public class GestionUsuario extends JDialog {
 			textPaneError.setVisible(true);
 			editado = false;
 			textFieldNombreUsuario.setText("");
-		}
-		try{
-			textPaneError.setVisible(false);
-			lblCi.setForeground(Color.BLACK);
-			u.setId(id);
-		}catch(IllegalArgumentException e){
-			lblCi.setForeground(Color.RED);
-			textPaneError.setVisible(true);
-			textFieldId.setText("");
-			editado = false;
 		}
 		if(!editado){
 			u = null;
