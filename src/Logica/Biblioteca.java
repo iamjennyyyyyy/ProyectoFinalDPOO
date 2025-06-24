@@ -2,6 +2,7 @@ package Logica;
 import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -129,10 +130,17 @@ public class Biblioteca {
 
 		Prestamo prestamoNuevo = null;
 
-
 		if(pub.getCantEjemplares() < 3){
 			throw new IllegalArgumentException("La publicación no tiene suficientes ejemplares disponibles (mínimo 3 requeridos)");
 		}
+
+		if(user.getFechaPenalizacion() != null) {
+	        if(user.getFechaPenalizacion().isAfter(LocalDate.now())) {
+	            throw new IllegalArgumentException("El usuario tiene una penalización actualmente");
+	        } else {
+	            user.setFechaPenalizacion(null);
+	        }
+	    }
 
 		synchronized(user) {
 
@@ -142,7 +150,7 @@ public class Biblioteca {
 
 			for(Prestamo p : prestamosTotales){
 
-				if(p.getPub().equals(pub)){
+				if(p.getUser().equals(user)&& p.getPub().equals(pub)){
 					if(p.getFechaDevolucion() == null){
 						throw new IllegalArgumentException("El usuario ya tiene un préstamo activo de esta publicación.");
 					}
@@ -151,6 +159,7 @@ public class Biblioteca {
 					}
 				}
 			}
+
 
 			pub.disminuirStock();
 
@@ -166,22 +175,81 @@ public class Biblioteca {
 		return prestamoNuevo;
 	}
 
-	public void devolverPublicacion(String id, Publicacion pub){
+	public void devolverPublicacion(Prestamo prestamo){
 
-		UsuarioAcreditado user = buscarUsuarioPorId(id);
-		if(user != null){
-			Prestamo prestamo = buscarPrestamoPorPublicacion(user, pub);
-			if(prestamo != null){
-				prestamo.setFechaDevolucion(LocalDate.now());
-				user.getPrestamos().remove(prestamo);
+		LocalDate hoy = LocalDate.now();
+		
+		if(prestamo.getFechaDevolucion() != null){
+			throw new IllegalArgumentException("Este préstamo ya no está activo, no se puede devolver");
+		}
+		else{
+			if(prestamo.getFechaMax().isBefore(hoy)){
+				int atraso = obtenerAtraso(prestamo.getFechaMax());
+				LocalDate fechaPenalizacion = hoy.plusDays(atraso);
+				prestamo.getUser().setFechaPenalizacion(fechaPenalizacion);
 			}
+			prestamo.setFechaDevolucion(hoy);
+			prestamo.getPub().aumentarStock();
+			prestamo.getUser().eliminarPrestamo(prestamo);
 		}
 	}
 
+	public Prestamo buscarPrestamoPorPosicion(int index){
+		Prestamo p = prestamosTotales.get(index);
+		return p;
+	}
+
+	public int obtenerAtraso(LocalDate fecha){
+		int dias = Period.between(fecha, LocalDate.now()).getDays();
+		return dias*3;
+	}
+
 	public void eliminarUsuario(UsuarioAcreditado u){
+		
+		UsuarioAcreditado user = new UsuarioAcreditado();
+		user.setFecha(u.getFecha());
+		user.setFechaPenalizacion(u.getFechaPenalizacion());
+		user.setId(u.getId());
+		user.setNombreCompleto(u.getNombreCompleto());
+		user.setNumUsuario();
+		
+		ArrayList<Integer> posiciones = posicionesPrestamosUsuarios(u);
+		for(int i = 0; i < posiciones.size(); i++){
+			prestamosTotales.get(posiciones.get(i)).setUser(user);
+		}
 		usuarios.remove(u);
 	}
 
+	public ArrayList<Integer> posicionesPrestamosUsuarios(UsuarioAcreditado u){
+		ArrayList<Integer> posiciones = new ArrayList<Integer>();
+		for(int i = 0; i < prestamosTotales.size(); i++){
+			if(prestamosTotales.get(i).getUser().equals(u)){
+				posiciones.add(i);
+			}
+		}
+		return posiciones;
+	}
+	
+	public boolean usuarioEliminable(UsuarioAcreditado u){
+		boolean si = true;
+		
+		for(int i = 0; i < prestamosTotales.size() && si; i++){
+			if(prestamosTotales.get(i).getUser().equals(u))
+				si = false;
+		}
+		return si;
+	}
+	
+	public boolean publicacionEliminable(Publicacion u){
+		boolean si = true;
+		
+		for(int i = 0; i < prestamosTotales.size() && si; i++){
+			if(prestamosTotales.get(i).getPub().equals(u))
+				si = false;
+		}
+		return si;
+	}
+	
 	public UsuarioAcreditado buscarUsuarioPorId(String id){
 		UsuarioAcreditado usuario = null;
 
@@ -297,23 +365,26 @@ public class Biblioteca {
 
 	public Prestamo buscarPrestamoPorPublicacion(UsuarioAcreditado user, Publicacion pub){
 
+		Prestamo prestamo = null;
+
 		for (Prestamo p : prestamosTotales){
-			if(p.getPub().equals(pub) && user != null)
-				return p;
+			if(p.getPub().equals(pub) && p.getUser().getId().equals(user.getId())){
+				prestamo = p;
+			}
 		}
-		return null;
+		return prestamo;
 	}
 
-	public boolean realizarProrroga(String id, Publicacion pub){
+	public void realizarProrroga(Prestamo p){
 
-		boolean realizada = false;
-		UsuarioAcreditado user = buscarUsuarioPorId(id);
-		Prestamo p = buscarPrestamoPorPublicacion(user, pub);
 		if(p != null){
+			if(p.getFechaDevolucion() == null)
 			p.concederProrroga();
-			realizada = true;
+			else
+				throw new IllegalArgumentException("El préstamo no está activo, no se puede realizar la prorróga");
 		}
-		return realizada;
+		else
+			throw new IllegalArgumentException("Prestamo no encontrado");
 	}
 
 	public ArrayList<Prestamo> guardarPrestamosActivos(){
@@ -410,37 +481,36 @@ public class Biblioteca {
 		return u;
 	}
 
-	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String editorial) {
-		publicaciones.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, editorial));
+	public void agregarLibro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, String autor, String editorial) {
+		publicaciones.add(new Libro(id, titulo, materia, numPaginas, cantEjemplares, autor, editorial));
 	}
 
 	public void agregarRevista(String id, String titulo, String materia, int numPaginas,
-			int cantEjemplares, boolean estaPrestado) {
-		publicaciones.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado));
+			int cantEjemplares, int anno, int num) {
+		publicaciones.add(new Revista(id, titulo, materia, numPaginas, cantEjemplares, anno, num));
 	}
 
-	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String arbitro) {
-		publicaciones.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado, autor, arbitro));
+	public void agregarArticulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, String autor, String arbitro) {
+		publicaciones.add(new Articulo(id, titulo, materia, numPaginas, cantEjemplares, autor, arbitro));
 	}
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
 		Prestamo p = new Prestamo(fechaP, fechaMax, pub, user, trabPrestamo);
 		user.agregarPrestamo(p);
-		prestamosTotales.add(new Prestamo(fechaP, fechaMax, pub, user, trabPrestamo));
+		prestamosTotales.add(p);
 	}
 
 	public void agregarPrestamo(LocalDate fechaP, LocalDate fechaMax, LocalDate fechaDev, Publicacion pub,
 			UsuarioAcreditado user, Trabajador trabPrestamo) {
-		prestamosTotales.add(new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo));
 		Prestamo p = new Prestamo(fechaP, fechaMax, fechaDev, pub, user, trabPrestamo);
-		user.agregarPrestamo(p);
+		prestamosTotales.add(p);
 	}
-	
-	public int posicionUsuario(UsuarioAcreditado u){
+
+	public int buscarPosUsuario(UsuarioAcreditado u){
 		int posicion = -1;
 		boolean encontrado = false;
-		
+
 		for(int i = 0; i < usuarios.size() && !encontrado; i++){
 			if(usuarios.get(i).equals(u)){
 				posicion = i;
@@ -449,37 +519,50 @@ public class Biblioteca {
 		}
 		return posicion;
 	}
-	public int posicionPublicacion(Publicacion p){
-		
-		int posicion = -1;
-		boolean encontrado = false;
-		
-		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
-			if(publicaciones.get(i).equals(p)){
-				posicion = i;
-				encontrado = true;
-			}
-		}
-		return posicion;
-	}
-	
+
 	public UsuarioAcreditado buscarUsuarioPorNombre(String nombre){
 		UsuarioAcreditado u = null;
-		
+
 		for(UsuarioAcreditado user : usuarios){
 			if(user.getNombreCompleto().equals(nombre))
 				u = user;
 		}
 		return u;
 	}
-	
+
+	public int buscarPosPublicacion(Publicacion p){
+		int pos = -1;
+		boolean encontrado = false;
+
+		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
+			if(publicaciones.get(i).equals(p)){
+				pos = i;
+				encontrado = true;
+			}
+		}
+		return pos;
+	}
+
 	public Publicacion buscarPublicacionPorNombre(String nombre){
 		Publicacion u = null;
-		
+
 		for(Publicacion p : publicaciones){
 			if(p.getTitulo().equals(nombre))
 				u = p;
 		}
 		return u;
+	}
+
+	public void eliminarPublicacionPorId(String id){
+		Publicacion pub = null;
+		boolean encontrado = false;
+
+		for(int i = 0; i < publicaciones.size() && !encontrado; i++){
+			if(publicaciones.get(i).getId().equals(id)){
+				pub = publicaciones.get(i);
+				encontrado = true;
+			}
+		}
+		publicaciones.remove(pub);
 	}
 }

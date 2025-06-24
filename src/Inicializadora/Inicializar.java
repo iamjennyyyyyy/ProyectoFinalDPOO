@@ -5,13 +5,33 @@ import Logica.Prestamo;
 import Logica.Publicacion;
 import Logica.Trabajador;
 import Logica.UsuarioAcreditado;
+import Utiles.MiPersonalizacion;
+import Visual.Login;
+import Visual.Principal;
 
-import java.awt.List;
+import java.awt.EventQueue;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class Inicializar {
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MiPersonalizacion.aplicarTema();
+					Inicio();
+//					Login frame = new Login();
+					Principal frame = new Principal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	private static final Random random = new Random();
 
@@ -27,6 +47,8 @@ public class Inicializar {
 
 		// 4. Préstamos (15 instancias)
 		inicializarPrestamos();
+		
+		inicializarUsuariosConPenalizaciones();
 
 	}
 
@@ -70,12 +92,27 @@ public class Inicializar {
 				{"79070717890","Gabriela Mistral"},
 				{"85081048901","Pablo Neruda"},
 				{"91091339012","Clarice Lispector"},
-				{"78010640123","Jorge Luis Borges"}
+				{"78010640123","Jorge Luis Borges"},
+				{"65101251231","Lucia Lima"},
+				{"82071522342","Carlos Gutierrez"},
+				{"93022833457","Anastasia Fonseca"},
+				{"75030944569","Pablo Milanés"},
+				{"88052155679","Amanda Castillo"},
+				{"69110406787","Alberto Blazco"},
+				{"95061717895","Keily Mantilla"},
+				{"72082028904","Patrick Ramírez"},
+				{"83090339011","Samantha Figueroa"},
+				{"91112640122","Liana Pérez"},
+				{"78040951233","Liz Cruz"},
+				{"85052222346","Erik Martínez"},
+				{"99030533453","Melanie Vida"},
+				{"71061824562","Rolando Soto"},
+				{"86072115673","Deisy Paredes"}
 		};
 
 		for(String[] datos : usuarios) {
 			Biblioteca.getInstancia().crearUsuarioAcreditado(datos[0], datos[1]);
-			}
+		}
 	}
 
 	private static void inicializarPublicaciones() {
@@ -105,53 +142,54 @@ public class Inicializar {
 			Biblioteca.getInstancia().agregarLibro(
 					datos[0], datos[1], datos[2], 
 					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), 
-					false, datos[5], datos[6]
+					datos[5], datos[6]
 					);
 		}
-
+		Biblioteca.getInstancia().getPublicaciones().get(0).setDireccionImagen("src/images/portadas/cien años de soledadd.jpg");
+		
 		// Revistas (15 instancias)
 		String[][] revistas = {
-				{"2001", "National Geographic", "Ciencias Naturales", "100", "10"},
-				{"2002", "Muy Interesante", "Divulgación Científica", "80", "8"},
-				{"2003", "Science", "Ciencias Exactas", "120", "5"},
-				{"2004", "Nature", "Ciencias Exactas", "150", "7"},
-				{"2005", "Time", "Actualidad", "60", "12"},
-				{"2006", "The Economist", "Economía", "90", "6"},
-				{"2007", "Scientific American", "Divulgación Científica", "110", "4"},
-				{"2008", "New Scientist", "Divulgación Científica", "95", "9"},
-				{"2009", "Discover", "Divulgación Científica", "85", "3"},
-				{"2010", "Popular Science", "Tecnología", "75", "11"},
-				{"2011", "Wired", "Tecnología", "65", "8"},
-				{"2012", "National Geographic History", "Historia", "100", "6"},
-				{"2013", "Psychology Today", "Ciencias Sociales", "90", "7"},
-				{"2014", "MIT Technology Review", "Tecnología", "110", "5"},
-				{"2015", "Archaeology", "Historia", "95", "4"}
+				{"R001", "National Geographic", "Ciencias Naturales", "100", "50", "2001", "10"},
+				{"R002", "Muy Interesante", "Divulgación Científica", "80", "40", "2002", "8"},
+				{"R003", "Science", "Ciencias Exactas", "120", "30", "2003", "5"},
+				{"R004", "Nature", "Ciencias Exactas", "150", "35", "2004", "7"},
+				{"R005", "Time", "Actualidad", "60", "60", "2005", "12"},
+				{"R006", "The Economist", "Economía", "90", "40", "2006", "6"},
+				{"R007", "Scientific American", "Divulgación Científica", "110", "38", "2007", "4"},
+				{"R008", "New Scientist", "Divulgación Científica", "95", "42", "2008", "9"},
+				{"R009", "Discover", "Divulgación Científica", "85", "36", "2009", "3"},
+				{"R010", "Popular Science", "Tecnología", "75", "32", "2010", "11"},
+				{"R011", "Wired", "Tecnología", "65", "28", "2011", "8"},
+				{"R012", "National Geographic History", "Historia", "100", "25", "2012", "6"},
+				{"R013", "Psychology Today", "Ciencias Sociales", "90", "27", "2013", "7"},
+				{"R014", "MIT Technology Review", "Tecnología", "110", "29", "2014", "5"},
+				{"R015", "Archaeology", "Historia", "95", "23", "2015", "4"}
 		};
 
 		for(String[] datos : revistas) {
 			Biblioteca.getInstancia().agregarRevista(
 					datos[0], datos[1], datos[2], 
-					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), false
-					);
+					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]),
+					Integer.parseInt(datos[5]), Integer.parseInt(datos[6]));
 		}
 
 		// Artículos (15 instancias)
 		String[][] articulos = {
 				{"3001", "Machine Learning aplicado a diagnóstico médico", "Tecnología", "15", "2", "Dr. Alan Turing", "Dr. John McCarthy"},
 				{"3002", "Impacto del cambio climático en ecosistemas marinos", "Ciencias Naturales", "20", "3", "Dra. Sylvia Earle", "Dr. James Hansen"},
-				{"3003", "Avances en superconductividad a temperatura ambiente", "Ciencias Exactas", "25", "1", "Dr. Miguel José Yacamán", "Dr. Carlos Frenk"},
+				{"3003", "Avances en superconductividad a temperatura ambiente", "Ciencias Exactas", "25", "2", "Dr. Miguel José Yacamán", "Dr. Carlos Frenk"},
 				{"3004", "Nuevos enfoques en la enseñanza de matemáticas", "Ciencias Sociales", "18", "2", "Dra. María Montessori", "Dr. Howard Gardner"},
 				{"3005", "Nanotecnología aplicada a la medicina", "Tecnología", "22", "3", "Dr. Eric Drexler", "Dr. Richard Smalley"},
-				{"3006", "Teoría de cuerdas y la unificación de fuerzas", "Ciencias Exactas", "30", "1", "Dr. Edward Witten", "Dr. Brian Greene"},
-				{"3007", "Inteligencia artificial en la creación artística", "Tecnología", "16", "2", "Dra. Fei-Fei Li", "Dr. Yoshua Bengio"},
+				{"3006", "Teoría de cuerdas y la unificación de fuerzas", "Ciencias Exactas", "30", "3", "Dr. Edward Witten", "Dr. Brian Greene"},
+				{"3007", "Inteligencia artificial en la creación artística", "Tecnología", "16", "4", "Dra. Fei-Fei Li", "Dr. Yoshua Bengio"},
 				{"3008", "Biodiversidad en la Amazonía", "Ciencias Naturales", "24", "3", "Dra. Jane Goodall", "Dr. E.O. Wilson"},
 				{"3009", "Neuroplasticidad y aprendizaje", "Ciencias Sociales", "19", "2", "Dr. Michael Merzenich", "Dr. Norman Doidge"},
 				{"3010", "Energías renovables en países en desarrollo", "Tecnología", "21", "3", "Dr. Daniel Kammen", "Dr. Jeffrey Sachs"},
-				{"3011", "CRISPR y edición genética", "Ciencias Naturales", "28", "1", "Dra. Jennifer Doudna", "Dr. Emmanuelle Charpentier"},
+				{"3011", "CRISPR y edición genética", "Ciencias Naturales", "28", "3", "Dra. Jennifer Doudna", "Dr. Emmanuelle Charpentier"},
 				{"3012", "Arqueología subacuática en el Mediterráneo", "Historia", "17", "2", "Dr. George Bass", "Dr. Robert Ballard"},
 				{"3013", "Psicología de las redes sociales", "Ciencias Sociales", "20", "3", "Dr. Sherry Turkle", "Dr. Mihaly Csikszentmihalyi"},
 				{"3014", "Materiales 2D y sus aplicaciones", "Ciencias Exactas", "23", "2", "Dr. Andre Geim", "Dr. Konstantin Novoselov"},
-				{"3015", "Exoplanetas y la búsqueda de vida", "Ciencias Exactas", "26", "1", "Dr. Sara Seager", "Dr. Michel Mayor"}
+				{"3015", "Exoplanetas y la búsqueda de vida", "Ciencias Exactas", "26", "4", "Dr. Sara Seager", "Dr. Michel Mayor"}
 		};
 
 		for(String[] datos : articulos) {
@@ -164,7 +202,7 @@ public class Inicializar {
 			Biblioteca.getInstancia().agregarArticulo(
 					datos[0], datos[1], datos[2], 
 					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), 
-					false, datos[5], datos[6]);
+					datos[5], datos[6]);
 		}
 
 		/*
@@ -191,61 +229,86 @@ public class Inicializar {
 	}
 
 	private static void inicializarPrestamos() {
-		// Asegurarse que hay un administrador
-		Trabajador admin = Biblioteca.getInstancia().getAdmin();
-		if(admin == null) {
-			admin = Biblioteca.getInstancia().getTrabajadores().get(0);
-		}
+	    // Asegurarse que hay un administrador
+	    Trabajador admin = Biblioteca.getInstancia().getAdmin();
+	    if(admin == null) {
+	        admin = Biblioteca.getInstancia().getTrabajadores().get(0);
+	    }
 
-		// Contador para préstamos próximos a vencer
-		int prestamosProximosAVencer = 0;
-		final int PRESTAMOS_PROXIMOS_OBJETIVO = 5;
-		final int DIAS_PROXIMOS_A_VENCER = 10; // Próximos 3 días
+	    // Contador para préstamos próximos a vencer
+	    int prestamosProximosAVencer = 0;
+	    final int PRESTAMOS_PROXIMOS_OBJETIVO = 5;
+	    final int DIAS_PROXIMOS_A_VENCER = 10;
+	    final int MAX_PRESTAMOS_POR_USUARIO = 3;
 
-		// Crear 15 préstamos con validación
-		for(int i = 1; i <= 15; i++) {
-			try {
-				Publicacion pub = obtenerPublicacionAleatoriaValida();
-				if(pub == null) continue;
+	    // Crear 15 préstamos con validación
+	    int prestamosCreados = 0;
+	    int intentos = 0;
+	    final int MAX_INTENTOS = 50; // Para evitar bucles infinitos
 
-				UsuarioAcreditado user = obtenerUsuarioAleatorioValido();
-				if(user == null) continue;
+	    while(prestamosCreados < 15 && intentos < MAX_INTENTOS) {
+	        intentos++;
+	        try {
+	            Publicacion pub = obtenerPublicacionAleatoriaValida();
+	            if(pub == null) continue;
 
-				LocalDate fPrest;
-				LocalDate fMax;
-				LocalDate fDev = null;
+	            UsuarioAcreditado user = obtenerUsuarioAleatorioValido();
+	            if(user == null) continue;
 
-				// Generar fechas especiales para los primeros 5 préstamos próximos a vencer
-				if(prestamosProximosAVencer < PRESTAMOS_PROXIMOS_OBJETIVO) {
-					// Crear préstamos que vencen pronto (1-3 días)
-					fPrest = LocalDate.now().minusDays(pub.tiempoMaximoPrestamo() - (random.nextInt(DIAS_PROXIMOS_A_VENCER) + 1));
-					fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
-					prestamosProximosAVencer++;
-				} else {
-					// Fechas normales para otros préstamos
-					fPrest = LocalDate.now().minusDays(random.nextInt(30));
-					fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
+	            // Contar préstamos activos del usuario
+	            int prestamosActivos = 0;
+	            for(Prestamo p : Biblioteca.getInstancia().getPrestamosTotales()) {
+	                if(p.getUser().equals(user) && p.getFechaDevolucion() == null) {
+	                    prestamosActivos++;
+	                    if(prestamosActivos >= MAX_PRESTAMOS_POR_USUARIO) {
+	                        break;
+	                    }
+	                }
+	            }
+	            
+	            // Si ya tiene 3 préstamos activos, saltar este usuario
+	            if(prestamosActivos >= MAX_PRESTAMOS_POR_USUARIO) {
+	                continue;
+	            }
 
-					// 50% de probabilidad de tener fecha de devolución
-					if(random.nextBoolean()) {
-						fDev = fPrest.plusDays(random.nextInt(pub.tiempoMaximoPrestamo()));
-					}
-				}
+	            LocalDate fPrest;
+	            LocalDate fMax;
+	            LocalDate fDev = null;
 
-				// Registrar préstamo
-				if(fDev != null) {
-					Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, fDev, pub, user, admin);
-				} else {
-					Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, pub, user, admin);
-				}
+	            // Generar fechas especiales para los primeros 5 préstamos próximos a vencer
+	            if(prestamosProximosAVencer < PRESTAMOS_PROXIMOS_OBJETIVO) {
+	                // Crear préstamos que vencen pronto (1-3 días)
+	                fPrest = LocalDate.now().minusDays(pub.tiempoMaximoPrestamo() - (random.nextInt(DIAS_PROXIMOS_A_VENCER) + 1));
+	                fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
+	                prestamosProximosAVencer++;
+	            } else {
+	                // Fechas normales para otros préstamos
+	                fPrest = LocalDate.now().minusDays(random.nextInt(30));
+	                fMax = fPrest.plusDays(pub.tiempoMaximoPrestamo());
 
-			} catch(Exception e) {
-				System.err.println("Error creando préstamo #" + i + ": " + e.getMessage());
-			}
-		}
+	                // 50% de probabilidad de tener fecha de devolución
+	                if(random.nextBoolean()) {
+	                    fDev = fPrest.plusDays(random.nextInt(pub.tiempoMaximoPrestamo()));
+	                }
+	            }
 
-		// Verificación (para debug)
-		System.out.println("Préstamos próximos a vencer creados: " + prestamosProximosAVencer);
+	            // Registrar préstamo
+	            if(fDev != null) {
+	                Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, fDev, pub, user, admin);
+	            } else {
+	                Biblioteca.getInstancia().agregarPrestamo(fPrest, fMax, pub, user, admin);
+	            }
+	            
+	            prestamosCreados++;
+
+	        } catch(Exception e) {
+	            System.err.println("Error creando préstamo: " + e.getMessage());
+	        }
+	    }
+
+	    // Verificación (para debug)
+	    System.out.println("Préstamos creados: " + prestamosCreados);
+	    System.out.println("Préstamos próximos a vencer creados: " + prestamosProximosAVencer);
 	}
 
 	// Métodos auxiliares
@@ -259,5 +322,16 @@ public class Inicializar {
 		ArrayList<UsuarioAcreditado> usuarios = Biblioteca.getInstancia().getUsuarios();
 		return usuarios.isEmpty() ? null : 
 			usuarios.get(random.nextInt(usuarios.size()));
+	}
+	
+	public static void inicializarUsuariosConPenalizaciones(){
+		UsuarioAcreditado u = Biblioteca.getInstancia().getUsuarios().get(5);
+		Publicacion p = Biblioteca.getInstancia().getPublicaciones().get(8);
+		LocalDate fechaP = LocalDate.of(2025, 5, 17);
+		LocalDate fechaDev = LocalDate.of(2025, 6, 20);
+		int tiempo = p.tiempoMaximoPrestamo();
+//		System.out.println("tiempo maximo pub" +tiempo);
+		LocalDate fechaMax = fechaP.plusDays(tiempo);
+		Biblioteca.getInstancia().agregarPrestamo(fechaP, fechaMax, fechaDev, p, u, Login.obtenerAdmin());
 	}
 }

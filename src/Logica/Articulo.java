@@ -28,11 +28,15 @@ public class Articulo extends Publicacion {
 		else throw new IllegalArgumentException("El nombre no es válido.");
 	}
 
-	public Articulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String arbitro) {
-		super(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado);
+	public Articulo(String id, String titulo, String materia, int numPaginas, int cantEjemplares, String autor, String arbitro) {
+		super(id, titulo, materia, numPaginas, cantEjemplares);
 
 		agregarAutor(autor);
 		agregarArbitro(arbitro);
+	}
+	
+	public Articulo(){
+		super();
 	}
 
 	@Override

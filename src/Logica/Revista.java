@@ -1,5 +1,7 @@
 package Logica;
 
+import java.time.LocalDate;
+
 
 public class Revista extends Publicacion {
 
@@ -10,6 +12,11 @@ public class Revista extends Publicacion {
 		return anno;
 	}
 	public void setAnno(int anno) {
+		if(anno > LocalDate.now().getYear())
+			throw new IllegalArgumentException("Año incorrecto");
+		else if(anno < 1930)
+			throw new IllegalArgumentException("Año incorrecto");
+		else
 			this.anno = anno;
 	}
 	public int getNum() {
@@ -21,10 +28,14 @@ public class Revista extends Publicacion {
 		else throw new IllegalArgumentException("Numero de revista incorrecto");
 	}
 
-	public Revista(String id, String titulo, String materia, int numPaginas,
-			int cantEjemplares, boolean estaPrestado) {
+	public Revista(){
+		super();
+	}
 
-		super(id, titulo, materia, numPaginas, cantEjemplares, estaPrestado);
+	public Revista(String id, String titulo, String materia, int numPaginas,
+			int cantEjemplares, int anno, int num) {
+
+		super(id, titulo, materia, numPaginas, cantEjemplares);
 		setAnno(anno);
 		setNum(num);
 	}

@@ -1,20 +1,27 @@
 package Logica;
 
+import javax.swing.ImageIcon;
+
 
 public abstract class Publicacion {
 
-	protected String id;
+	protected String id = "" + 0;
 	protected String titulo;
 	protected String materia;
 	protected int numPaginas;
 	protected int cantEjemplares;
+	protected String direccionImagen;
+	protected ImageIcon image;
 	protected boolean estaPrestado;
 
 	public String getId(){
 		return id;
 	}
 
-	private void setId(String id) {
+	public void setId(String id) {
+		if(id.isEmpty()){
+			throw new IllegalArgumentException("Ingrese un identificador");
+		}
 		this.id = id;
 	}
 
@@ -23,15 +30,20 @@ public abstract class Publicacion {
 	}
 
 	public void setTitulo(String titulo) {
-		
-		titulo = titulo.trim();
-		if (!titulo.isEmpty() && 
-		        titulo.length() >= 2 && 
-		        !titulo.matches("^[\\s\\d]+$")) {
-		        this.titulo = titulo;
-		} else {
+
+		if(titulo.isEmpty())
 			throw new IllegalArgumentException("Título no válido");
+		else{	
+			this.titulo = titulo;
 		}
+	}
+
+	public void setDireccionImagen(String direccion){
+		this.direccionImagen = direccion;
+	}
+	
+	public ImageIcon getImage(){
+		return new ImageIcon(direccionImagen);
 	}
 	
 	public String getMateria() {
@@ -48,7 +60,7 @@ public abstract class Publicacion {
 
 	//Comprueba que este en el rango especifiado
 	public void setNumPaginas(int numPaginas) {
-		if(numPaginas >= 1)
+		if(numPaginas >= 2)
 			this.numPaginas = numPaginas;
 		else
 			throw new IllegalArgumentException("Error, el numero de paginas debe ser mayor que 1.\n");
@@ -58,7 +70,7 @@ public abstract class Publicacion {
 	}
 	public void setCantEjemplares(int cantEjemplares) {
 
-		if(cantEjemplares >= 1 && cantEjemplares <= 1000)
+		if(cantEjemplares >= 2 && cantEjemplares <= 1000)
 			this.cantEjemplares = cantEjemplares;
 		else
 			throw new IllegalArgumentException("Error, no existe tal capacidad en la biblioteca.\n");
@@ -66,11 +78,15 @@ public abstract class Publicacion {
 	public boolean isEstaPrestado() {
 		return estaPrestado;
 	}
-	public void setEstaPrestado(boolean estaPrestado) {
-		this.estaPrestado = estaPrestado;
+	public void setEstaPrestado() {
+		this.estaPrestado = false;
 	}
 
-	public Publicacion(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado) {
+	public Publicacion(){
+
+	}
+
+	public Publicacion(String id, String titulo, String materia, int numPaginas, int cantEjemplares) {
 		super();
 
 		setId(id);
@@ -78,23 +94,23 @@ public abstract class Publicacion {
 		setMateria(materia);
 		setNumPaginas(numPaginas);
 		setCantEjemplares(cantEjemplares);
-		setEstaPrestado(estaPrestado);
+		setEstaPrestado();
 
 	}
 	@Override
 	public String toString() {
 
-		String mensaje = "Publicacion " + titulo + "\n Materia: " + materia + "\nNumero de paginas: " + numPaginas + "\nCantidad de ejemplares: " + cantEjemplares;
-		if(estaPrestado)
-			mensaje += " y no esta disponible.\n";
-		else
-			mensaje += " y esta disponible.\n";
-
-		return mensaje;
+		return titulo;
 	}
+	
+	
 
 	public void disminuirStock(){
 		cantEjemplares--;
+	}
+	
+	public void aumentarStock(){
+		cantEjemplares++;
 	}
 
 	public abstract int tiempoMaximoPrestamo();

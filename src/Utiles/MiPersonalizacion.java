@@ -56,6 +56,10 @@ public class MiPersonalizacion extends FlatLightLaf {
 
 		UIManager.put("Component.arc", 199);
         
+		UIManager.put("List.background", Color.WHITE);
+		UIManager.put("List.selectionBackground", new Color(51, 153, 255));
+		UIManager.put("List.selectionForeground", Color.WHITE);
+		
         // Configuración de fuente
         Font optionPaneFont = new Font("Segoe UI", Font.PLAIN, 13);
         UIManager.put("OptionPane.font", optionPaneFont);

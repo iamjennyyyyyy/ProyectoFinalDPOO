@@ -31,11 +31,15 @@ public class Libro extends Publicacion {
 		else throw new IllegalArgumentException("El nombre no es válido.");
 	}
 
-	public Libro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, boolean estaPrestado, String autor, String editorial){
-		super(id,titulo,materia,numPaginas,cantEjemplares,estaPrestado);
+	public Libro(String id, String titulo, String materia, int numPaginas, int cantEjemplares, String autor, String editorial){
+		super(id,titulo,materia,numPaginas,cantEjemplares);
 
 		setAutores(autor);
 		setEditorial(editorial);
+	}
+	
+	public Libro(){
+		super();
 	}
 
 	@Override

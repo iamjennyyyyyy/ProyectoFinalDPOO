@@ -11,24 +11,38 @@ public class PrestamoTableModel extends DefaultTableModel {
 	public PrestamoTableModel(Prestamo[] prestamos, boolean mostrarFechaDev){
 
 		if(mostrarFechaDev){
-			String[] columnNames = {"ID Usuario", "ID Publicacion", "Fecha Prestamo", "Fecha Devolucion", "Fecha Maxima"};
+			String[] columnNames = {"ID Usuario", "ID Publicacion", "Fecha Prestamo", "Fecha Devolucion", "Fecha Maxima", "Penalizacion"};
 			setColumnIdentifiers(columnNames);
 		}
 		else{
-			String[] columnNames = {"ID Usuario", "ID Publicacion", "Fecha Prestamo", "Fecha Maxima"};
+			String[] columnNames = {"ID Usuario", "ID Publicacion", "Fecha Prestamo", "Fecha Maxima", "Penalizacion"};
 			setColumnIdentifiers(columnNames);
 		}
 
 		for (int i = 0; i < prestamos.length; i++) {
 
+			boolean tienePenalizacion = prestamos[i].getUser().getFechaPenalizacion() != null;
+
 			if(mostrarFechaDev){
 				if(prestamos[i].getFechaDevolucion() == null){
-				Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), " - ", prestamos[i].getFechaMax()};
-				addRow(newRow);
+					if(tienePenalizacion){
+						Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), " - ", prestamos[i].getFechaMax(), prestamos[i].getUser().getFechaPenalizacion()};
+						addRow(newRow);
+					}
+					else{
+						Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), " - ", prestamos[i].getFechaMax(), " - "};
+						addRow(newRow);
+					}
 				}
 				else{
-					Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), prestamos[i].getFechaDevolucion(), prestamos[i].getFechaMax()};
-					addRow(newRow);
+					if(tienePenalizacion){
+						Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), prestamos[i].getFechaDevolucion(), prestamos[i].getFechaMax(),prestamos[i].getUser().getFechaPenalizacion()};
+						addRow(newRow);
+					}
+					else{
+						Object[] newRow = new Object[]{prestamos[i].getUser().getId(), prestamos[i].getPub().getId(), prestamos[i].getFechaP(), prestamos[i].getFechaDevolucion(), prestamos[i].getFechaMax()," - "};
+						addRow(newRow);
+					}
 				}
 			}
 			else{
