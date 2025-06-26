@@ -2,9 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/flatlaf-demo-3.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/flatlaf-theme-editor-3.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/jcalendar-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/xchart-3.8.5.jar"/>
+	<classpathentry kind="lib" path="D:/Proyectos/Java/ProyectoFinalDPOO-Jenny/lib/flatlaf-demo-3.6.jar"/>
+	<classpathentry kind="lib" path="D:/Proyectos/Java/ProyectoFinalDPOO-Jenny/lib/flatlaf-theme-editor-3.6.jar"/>
+	<classpathentry kind="lib" path="D:/Proyectos/Java/ProyectoFinalDPOO-Jenny/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="D:/Proyectos/Java/ProyectoFinalDPOO-Jenny/lib/xchart-3.8.5.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
