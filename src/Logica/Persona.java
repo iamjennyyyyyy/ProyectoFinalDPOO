@@ -21,7 +21,7 @@ public class Persona {
 	    if (numId == null || numId.trim().isEmpty()) {
 	        throw new IllegalArgumentException("El carnet no puede estar vacío");
 	    }
-	    
+
 	    // Validar formato numérico y longitud
 	    if (!numId.matches("\\d{11}")) {
 	        throw new IllegalArgumentException("El carnet debe tener exactamente 11 dígitos numéricos");
