@@ -7,6 +7,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import Visual.Login;
 
@@ -240,6 +242,16 @@ public class Biblioteca {
 		return si;
 	}
 	
+	public boolean trabajadorEliminable(Trabajador u){
+		boolean si = true;
+		
+		for(int i = 0; i < prestamosTotales.size() && si; i++){
+			if(prestamosTotales.get(i).getTrabPrestamo().equals(u))
+				si = false;
+		}
+		return si;
+	}
+	
 	public boolean publicacionEliminable(Publicacion u){
 		boolean si = true;
 		
@@ -258,6 +270,16 @@ public class Biblioteca {
 				usuario = user;
 		}
 		return usuario;
+	}
+	
+	public Trabajador buscarTrabajadorPorId(String id){
+		Trabajador t = null;
+
+		for (Trabajador trab : trabajadores){
+			if(trab != null && trab.getId().equals(id))
+				t = trab;
+		}
+		return t;
 	}
 
 	public Publicacion buscarPublicacionPorId(String id){
@@ -363,6 +385,40 @@ public class Biblioteca {
 		return materias;
 	}
 
+
+	public static List<UsuarioAcreditado> obtenerTop5UsuariosConMasPrestamos() {
+		// 1) Traemos todos los usuarios
+		List<UsuarioAcreditado> todos =
+				Biblioteca.getInstancia().getUsuarios();
+
+		// 2) Copiamos para no alterar la lista original
+		ArrayList<UsuarioAcreditado> copia =
+				new ArrayList<UsuarioAcreditado>(todos);
+
+		// 3) Ordenamos de mayor a menor por cantidad de préstamos
+		Collections.sort(copia, new Comparator<UsuarioAcreditado>() {
+			@Override
+			public int compare(UsuarioAcreditado u1, UsuarioAcreditado u2) {
+				int s1 = u1.getPrestamos().size();
+				int s2 = u2.getPrestamos().size();
+				// descendente: si s2 > s1, u2 va antes
+				if (s2 > s1) return 1;
+				if (s2 < s1) return -1;
+				return 0;
+			}
+		});
+
+		// 4) Tomamos hasta 5 primeros
+		int limite = copia.size() < 5 ? copia.size() : 5;
+		List<UsuarioAcreditado> top5 = new ArrayList<UsuarioAcreditado>(limite);
+		for (int i = 0; i < limite; i++) {
+			top5.add(copia.get(i));
+		}
+
+		// 5) Devolvemos el resultado
+		return top5;
+	}
+	
 	public Prestamo buscarPrestamoPorPublicacion(UsuarioAcreditado user, Publicacion pub){
 
 		Prestamo prestamo = null;
@@ -472,7 +528,8 @@ public class Biblioteca {
 
 
 	public void agregarTrabajador(String id,String nombreCompleto,String nivelEscolar, String cargo) {
-		trabajadores.add(new Trabajador(id, nombreCompleto,nivelEscolar, cargo));
+		Trabajador t = new Trabajador(id, nombreCompleto,nivelEscolar, cargo);
+		trabajadores.add(t);
 	}
 
 	public UsuarioAcreditado crearUsuarioAcreditado(String id, String nombre) {
@@ -564,5 +621,9 @@ public class Biblioteca {
 			}
 		}
 		publicaciones.remove(pub);
+	}
+	
+	public void eliminarTrabajador(Trabajador l){
+		trabajadores.remove(l);
 	}
 }

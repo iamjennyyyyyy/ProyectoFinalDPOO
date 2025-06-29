@@ -63,6 +63,22 @@ public class Login extends JDialog {
 	/**
 	 * Launch the application.
 	 */
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MiPersonalizacion.aplicarTema();
+					Inicializar.Inicio();
+					//					Login frame = new Login();
+					Login frame = new Login();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the dialog.
@@ -221,9 +237,9 @@ public class Login extends JDialog {
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("");
-			lblNewLabel_1.setIcon(new ImageIcon("src/images/logochiquitito.jpg"));
+			lblNewLabel_1.setIcon(new ImageIcon("src/images/iconos/loginmejor3.jpg"));
 			lblNewLabel_1.setIgnoreRepaint(true);
-			lblNewLabel_1.setBounds(629, 37, 108, 95);
+			lblNewLabel_1.setBounds(576, 11, 181, 121);
 		}
 		return lblNewLabel_1;
 	}

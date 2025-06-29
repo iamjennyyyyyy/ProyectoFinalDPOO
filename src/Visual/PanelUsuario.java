@@ -1,20 +1,16 @@
 package Visual;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 
-import javax.swing.BorderFactory;
+import javafx.scene.Parent;
+
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.EmptyBorder;
 
-import Inicializadora.Inicializar;
 import Logica.Biblioteca;
 import Logica.UsuarioAcreditado;
 import Utiles.ModelUsuario;
@@ -24,41 +20,26 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
-import java.awt.Component;
-
-import javax.swing.JTextField;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.Period;
 
 import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextPane;
 
-import com.toedter.calendar.JTextFieldDateEditor;
-
 import Utiles.JTextFieldMejorado;
 import Utiles.JTextFieldCarnet;
-import Utiles.MiPersonalizacion;
 
 import javax.swing.JSeparator;
 
-import java.awt.SystemColor;
-
-public class GestionUsuario extends JDialog {
+public class PanelUsuario extends JPanel {
 
 	private final JPanel contentPanel = new JPanel();
-	private JButton btnSalir;
 	private JList<UsuarioAcreditado> list = new JList<UsuarioAcreditado>();
 	private ModelUsuario modelo = new ModelUsuario();
 	private JLabel lblNewLabel;
@@ -73,7 +54,7 @@ public class GestionUsuario extends JDialog {
 	private JButton btnEditar;
 	private JButton btnEliminar;
 	private JButton btnGuardar;
-	private JLabel label;
+	private int pos = -1;
 	private JTextPane txtpnOperacion;
 	private JTextFieldMejorado textFieldNombreUsuario;
 	private JTextFieldCarnet textFieldId;
@@ -81,89 +62,29 @@ public class GestionUsuario extends JDialog {
 	private JSeparator separator;
 	private JSeparator separator_1;
 	private JLabel labelPenalizaciones;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
 	 */
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MiPersonalizacion.aplicarTema();
-					Inicializar.Inicio();
-					//					Login frame = new Login();
-					GestionUsuario frame = new GestionUsuario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public GestionUsuario() {
-		//setBounds(400, 160, 950, 554);
-		setBounds(338, 159, 1026, 562);
-		setUndecorated(true);
-		setModal(true);
-		contentPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+	public PanelUsuario() {
+		contentPanel.setBounds(338, 138, 1028, 559);
 		contentPanel.setBackground(Color.WHITE);
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getTextPaneError());
 		contentPanel.add(getTxtpnOperacion());
-		contentPanel.add(getBtnSalir());
 		contentPanel.add(getLblNewLabel());
 		contentPanel.add(getScrollPane());
-		contentPanel.add(getLblNombre());
-		contentPanel.add(getLblEdad());
-		contentPanel.add(getLblSexo());
-		contentPanel.add(getBtnConfirmar());
-		contentPanel.add(getBtnCancelar());
-		contentPanel.add(getLblCi());
-		contentPanel.add(getBtnAgregar());
-		contentPanel.add(getBtnEditar());
-		contentPanel.add(getBtnEliminar());
-		contentPanel.add(getBtnGuardar());
-		contentPanel.add(getTextFieldNombreUsuario());
-		contentPanel.add(getTextFieldId());
-		contentPanel.add(getSeparator());
-		contentPanel.add(getSeparator_1());
-		contentPanel.add(getLabelPenalizaciones());
-		contentPanel.add(getLabel());
+		contentPanel.add(getPanel());
 		modelo.setlstUsuarios(Biblioteca.getInstancia().getUsuarios());
 	}
 
 	//BOTONES
-	private JButton getBtnSalir() {
-		if (btnSalir == null) {
-			btnSalir = new JButton("");
-			btnSalir.setBorder(null);
-			btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
-			btnSalir.setIcon(new ImageIcon("src/images/iconos/otroLogoBorrar50x50.png"));
-			btnSalir.setBackground(Color.WHITE);
-			btnSalir.setForeground(Color.WHITE);
-			btnSalir.setFont(new Font("Franklin Gothic Medium", Font.PLAIN, 25));
-			btnSalir.setBounds(966, 11, 50, 50);
-			btnSalir.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-				}
-			});
-		}
-		return btnSalir;
-	}
-
 	private JButton getBtnConfirmar() {
 		if (btnConfirmar == null) {
 			btnConfirmar = new JButton("Confirmar");
 			btnConfirmar.setVisible(false);
-			btnConfirmar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			btnConfirmar.setFont(new Font("SansSerif", Font.PLAIN, 16));
 			btnConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 
@@ -197,9 +118,9 @@ public class GestionUsuario extends JDialog {
 							lblEdad.setText("Edad: ");
 
 							reiniciarComponentes();
-							
+
 							list.setSelectedIndex(0);
-							
+
 							lblNombre.setForeground(Color.BLACK);
 							lblCi.setForeground(Color.BLACK);
 
@@ -212,7 +133,7 @@ public class GestionUsuario extends JDialog {
 					}
 				}
 			});
-			btnConfirmar.setBounds(700, 439, 151, 32);
+			btnConfirmar.setBounds(109, 363, 110, 30);
 		}
 		return btnConfirmar;
 	}
@@ -242,12 +163,12 @@ public class GestionUsuario extends JDialog {
 
 					lblSexo.setText("Sexo: ");
 					lblEdad.setText("Edad: ");
-					
+
 					lblSexo.setForeground(Color.BLACK);
 					lblEdad.setForeground(Color.BLACK);
 					lblNombre.setForeground(Color.BLACK);
 					lblCi.setForeground(Color.BLACK);
-					
+
 					textPaneError.setVisible(false);
 
 					lblSexo.setForeground(Color.BLACK);
@@ -258,7 +179,7 @@ public class GestionUsuario extends JDialog {
 			btnCancelar.setBorder(null);
 			btnCancelar.setIcon(new ImageIcon("src/images/iconos/reiniciar30x30.png"));
 			btnCancelar.setBackground(Color.WHITE);
-			btnCancelar.setBounds(874, 441, 30, 30);
+			btnCancelar.setBounds(243, 363, 30, 30);
 		}
 		return btnCancelar;
 	}
@@ -271,18 +192,18 @@ public class GestionUsuario extends JDialog {
 
 					textFieldNombreUsuario.setEnabled(true);
 					textFieldId.setEnabled(true);
-					
+
 					labelPenalizaciones.setText("Penalización:     - ");
 
 					reiniciarComponentes();
 
 					btnAgregar.setVisible(false);
-			        btnEditar.setVisible(false);
-			        btnEliminar.setVisible(false);
-			        btnConfirmar.setVisible(true);
-			        btnCancelar.setVisible(true);
-			        
-			        list.setEnabled(false);
+					btnEditar.setVisible(false);
+					btnEliminar.setVisible(false);
+					btnConfirmar.setVisible(true);
+					btnCancelar.setVisible(true);
+
+					list.setEnabled(false);
 
 					txtpnOperacion.setVisible(true);
 					txtpnOperacion.setText("Agregar");
@@ -291,8 +212,8 @@ public class GestionUsuario extends JDialog {
 					lblEdad.setText("Edad: ");
 				}
 			});
-			btnAgregar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnAgregar.setBounds(633, 420, 92, 32);
+			btnAgregar.setFont(new Font("SansSerif", Font.PLAIN, 16));
+			btnAgregar.setBounds(56, 343, 90, 30);
 		}
 		return btnAgregar;
 	}
@@ -302,6 +223,10 @@ public class GestionUsuario extends JDialog {
 			btnEditar.setVisible(false);
 			btnEditar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+
+
+					pos = list.getSelectedIndex();
+
 					//Desactivar CRUD
 					btnAgregar.setVisible(false);
 					btnEditar.setVisible(false);
@@ -321,8 +246,8 @@ public class GestionUsuario extends JDialog {
 					list.setEnabled(false);
 				}
 			});
-			btnEditar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnEditar.setBounds(748, 420, 92, 32);
+			btnEditar.setFont(new Font("SansSerif", Font.PLAIN, 16));
+			btnEditar.setBounds(161, 343, 90, 30);
 		}
 		return btnEditar;
 	}
@@ -335,8 +260,8 @@ public class GestionUsuario extends JDialog {
 					eliminarUsuario();
 				}
 			});
-			btnEliminar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnEliminar.setBounds(864, 420, 100, 32);
+			btnEliminar.setFont(new Font("SansSerif", Font.PLAIN, 16));
+			btnEliminar.setBounds(266, 343, 90, 30);
 		}
 		return btnEliminar;
 	}
@@ -353,7 +278,7 @@ public class GestionUsuario extends JDialog {
 						JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 						lblSexo.setText("Sexo: ");
 						lblEdad.setText("Edad: ");
-						
+
 						//Esconder confirmacion
 						btnGuardar.setVisible(false);
 						btnCancelar.setVisible(false);
@@ -365,7 +290,8 @@ public class GestionUsuario extends JDialog {
 						txtpnOperacion.setVisible(false);
 
 						reiniciarComponentes();
-						list.setSelectedIndex(0);
+
+						list.setSelectedIndex(pos);
 
 						textFieldNombreUsuario.setEnabled(false);
 						textFieldId.setEnabled(false);
@@ -377,8 +303,8 @@ public class GestionUsuario extends JDialog {
 					}
 				}
 			});
-			btnGuardar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnGuardar.setBounds(700, 439, 151, 32);
+			btnGuardar.setFont(new Font("SansSerif", Font.PLAIN, 16));
+			btnGuardar.setBounds(109, 363, 110, 30);
 			btnGuardar.setVisible(false);
 		}
 		return btnGuardar;
@@ -388,8 +314,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("Lista usuarios:");
-			lblNewLabel.setBounds(56, 34, 138, 27);
-			lblNewLabel.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			lblNewLabel.setBounds(20, 33, 138, 27);
+			lblNewLabel.setFont(new Font("SansSerif", Font.PLAIN, 19));
 		}
 		return lblNewLabel;
 	}
@@ -397,8 +323,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
 			lblNombre = new JLabel("Nombre:");
-			lblNombre.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblNombre.setBounds(612, 115, 85, 27);
+			lblNombre.setFont(new Font("SansSerif", Font.PLAIN, 19));
+			lblNombre.setBounds(35, 51, 73, 25);
 		}
 		return lblNombre;
 	}
@@ -406,8 +332,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblEdad() {
 		if (lblEdad == null) {
 			lblEdad = new JLabel("Edad:");
-			lblEdad.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblEdad.setBounds(633, 231, 114, 27);
+			lblEdad.setFont(new Font("SansSerif", Font.PLAIN, 19));
+			lblEdad.setBounds(50, 165, 110, 25);
 		}
 		return lblEdad;
 	}
@@ -415,8 +341,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblCi() {
 		if (lblCi == null) {
 			lblCi = new JLabel("CI:");
-			lblCi.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblCi.setBounds(658, 173, 40, 27);
+			lblCi.setFont(new Font("SansSerif", Font.PLAIN, 19));
+			lblCi.setBounds(75, 110, 25, 25);
 		}
 		return lblCi;
 	}
@@ -424,8 +350,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblSexo() {
 		if (lblSexo == null) {
 			lblSexo = new JLabel("Sexo:");
-			lblSexo.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblSexo.setBounds(633, 287, 114, 27);
+			lblSexo.setFont(new Font("SansSerif", Font.PLAIN, 19));
+			lblSexo.setBounds(50, 216, 147, 30);
 		}
 		return lblSexo;
 	}
@@ -442,7 +368,7 @@ public class GestionUsuario extends JDialog {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(56, 71, 486, 442);
+			scrollPane.setBounds(20, 71, 464, 442);
 			list.setSelectedIndices(new int[] {1});
 			list.setToolTipText("Lista de usuarios actualmente registrados");
 			list.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -501,7 +427,10 @@ public class GestionUsuario extends JDialog {
 								Biblioteca.getInstancia().eliminarUsuario(u);
 
 								JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-								list.setSelectedIndex(0);
+								if(modelo.getSize() > pos)
+									list.setSelectedIndex(pos);
+								else
+									list.setSelectedIndex(pos-1);
 							}
 							else
 								JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " tiene actualmente " + u.getPrestamos().size() + " préstamos activos, no puede ser eliminado", "Información", JOptionPane.WARNING_MESSAGE);
@@ -524,36 +453,27 @@ public class GestionUsuario extends JDialog {
 		textFieldId.setText("");	
 		lblSexo.setText("Sexo: ");
 		lblEdad.setText("Edad: ");
-	}
-
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel("");
-			label.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			label.setBounds(597, 71, 394, 442);
-			label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		}
-		return label;
+		labelPenalizaciones.setText("     - ");
 	}
 	private JTextPane getTxtpnOperacion() {
 		if (txtpnOperacion == null) {
 			txtpnOperacion = new JTextPane();
 			txtpnOperacion.setDisabledTextColor(Color.BLACK);
-			txtpnOperacion.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnOperacion.setFont(new Font("SansSerif", Font.PLAIN, 18));
 			txtpnOperacion.setDisabledTextColor(Color.BLACK);
 			txtpnOperacion.setEnabled(false);
 			txtpnOperacion.setBackground(Color.WHITE);
 			txtpnOperacion.setVisible(false);
-			txtpnOperacion.setBounds(633, 56, 85, 32);
+			txtpnOperacion.setBounds(612, 56, 85, 32);
 		}
 		return txtpnOperacion;
 	}
 	private JTextFieldMejorado getTextFieldNombreUsuario() {
 		if (textFieldNombreUsuario == null) {
 			textFieldNombreUsuario = new JTextFieldMejorado();
-			textFieldNombreUsuario.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			textFieldNombreUsuario.setFont(new Font("SansSerif", Font.PLAIN, 14));
 			textFieldNombreUsuario.setBorder(null);
-			textFieldNombreUsuario.setBounds(702, 115, 262, 30);
+			textFieldNombreUsuario.setBounds(118, 51, 273, 30);
 			textFieldNombreUsuario.putClientProperty("JTextField.placeholderText", "Ingrese su nombre");
 			textFieldNombreUsuario.setEnabled(false);
 		}
@@ -562,7 +482,7 @@ public class GestionUsuario extends JDialog {
 	private JTextFieldCarnet getTextFieldId() {
 		if (textFieldId == null) {
 			textFieldId = new JTextFieldCarnet();
-			textFieldId.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			textFieldId.setFont(new Font("SansSerif", Font.PLAIN, 14));
 			textFieldId.setBorder(null);
 			textFieldId.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
@@ -607,7 +527,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			textFieldId.setEnabled(false);
-			textFieldId.setBounds(700, 173, 264, 30);
+			textFieldId.setBounds(118, 110, 273, 30);
 			textFieldId.setLimite(11);
 			textFieldId.putClientProperty("JTextField.placeholderText", "Ingrese su carnet");
 		}
@@ -618,9 +538,9 @@ public class GestionUsuario extends JDialog {
 			textPaneError = new JTextPane();
 			textPaneError.setVisible(false);
 			textPaneError.setForeground(Color.RED);
-			textPaneError.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			textPaneError.setFont(new Font("SansSerif", Font.PLAIN, 18));
 			textPaneError.setText("Datos inv\u00E1lidos");
-			textPaneError.setBounds(826, 493, 138, 34);
+			textPaneError.setBounds(822, 493, 138, 34);
 		}
 		return textPaneError;
 	}
@@ -747,25 +667,52 @@ public class GestionUsuario extends JDialog {
 	private JSeparator getSeparator() {
 		if (separator == null) {
 			separator = new JSeparator();
+			separator.setBorder(new LineBorder(new Color(0, 0, 0)));
 			separator.setForeground(Color.BLACK);
-			separator.setBounds(702, 145, 262, 27);
+			separator.setBounds(118, 52, 273, 30);
 		}
 		return separator;
 	}
 	private JSeparator getSeparator_1() {
 		if (separator_1 == null) {
 			separator_1 = new JSeparator();
+			separator_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 			separator_1.setForeground(Color.BLACK);
-			separator_1.setBounds(700, 203, 264, 27);
+			separator_1.setBounds(118, 111, 273, 30);
 		}
 		return separator_1;
 	}
 	private JLabel getLabelPenalizaciones() {
 		if (labelPenalizaciones == null) {
 			labelPenalizaciones = new JLabel("Penalizaci\u00F3n:");
-			labelPenalizaciones.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			labelPenalizaciones.setBounds(633, 347, 229, 27);
+			labelPenalizaciones.setFont(new Font("SansSerif", Font.PLAIN, 19));
+			labelPenalizaciones.setBounds(35, 273, 111, 25);
 		}
 		return labelPenalizaciones;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel.setBackground(Color.WHITE);
+			panel.setBounds(558, 71, 432, 442);
+			panel.setLayout(null);
+			panel.add(getLblNombre());
+			panel.add(getLblEdad());
+			panel.add(getLblSexo());
+			panel.add(getBtnConfirmar());
+			panel.add(getBtnCancelar());
+			panel.add(getLblCi());
+			panel.add(getBtnAgregar());
+			panel.add(getBtnEditar());
+			panel.add(getBtnEliminar());
+			panel.add(getBtnGuardar());
+			panel.add(getTextFieldNombreUsuario());
+			panel.add(getTextFieldId());
+			panel.add(getSeparator());
+			panel.add(getSeparator_1());
+			panel.add(getLabelPenalizaciones());
+		}
+		return panel;
 	}
 }

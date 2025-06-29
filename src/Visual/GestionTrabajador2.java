@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import Inicializadora.Inicializar;
 import Logica.Biblioteca;
+import Logica.Trabajador;
 import Logica.UsuarioAcreditado;
 import Utiles.ModelUsuario;
 
@@ -50,17 +51,48 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import Utiles.JTextFieldMejorado;
 import Utiles.JTextFieldCarnet;
 import Utiles.MiPersonalizacion;
+import Utiles.ModelTrabajador;
 
 import javax.swing.JSeparator;
 
 import java.awt.SystemColor;
 
-public class GestionUsuario extends JDialog {
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+
+public class GestionTrabajador2 extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnSalir;
-	private JList<UsuarioAcreditado> list = new JList<UsuarioAcreditado>();
-	private ModelUsuario modelo = new ModelUsuario();
+	private JList<Trabajador> list = new JList<Trabajador>();
+	private ModelTrabajador modelo = new ModelTrabajador();
+	private String[] niveles = {
+			"Primaria",
+			"Secundaria",
+			"Bachillerato",
+			"Técnico Medio",
+			"Técnico Superior",
+			"Universitario",
+			"Master",
+			"Doctorado"
+	};
+	private String[] cargos = {
+			"Bibliotecario Jefe",
+			"Auxiliar de Biblioteca",
+			"Jefa de Adquisiciones",
+			"Catalogador",
+			"Asistente de Referencia",
+			"Director Técnico",
+			"Archivista",
+			"Digitador",
+			"Asistente de Circulación",
+			"Jefe de Sistemas",
+			"Conservadora",
+			"Restaurador",
+			"Bibliotecaria Infantil",
+			"Coordinador de Servicios",
+			"Referencista"
+	};
 	private JLabel lblNewLabel;
 	private JScrollPane scrollPane;
 	private JLabel lblNombre;
@@ -80,38 +112,41 @@ public class GestionUsuario extends JDialog {
 	private JTextPane textPaneError;
 	private JSeparator separator;
 	private JSeparator separator_1;
-	private JLabel labelPenalizaciones;
+	private JLabel lblCargo;
+	private JLabel lblNivelEscolar;
+	private JComboBox comboBoxCargo;
+	private JComboBox comboBoxNivel;
 
 	/**
 	 * Launch the application.
 	 */
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MiPersonalizacion.aplicarTema();
-					Inicializar.Inicio();
-					//					Login frame = new Login();
-					GestionUsuario frame = new GestionUsuario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	//			public void run() {
+	//				try {
+	//					MiPersonalizacion.aplicarTema();
+	//					Inicializar.Inicio();
+	//					//					Login frame = new Login();
+	//					GestionUsuario frame = new GestionUsuario();
+	//					frame.setVisible(true);
+	//				} catch (Exception e) {
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		});
+	//	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public GestionUsuario() {
-		//setBounds(400, 160, 950, 554);
+	public GestionTrabajador2() {
 		setBounds(338, 159, 1026, 562);
 		setUndecorated(true);
 		setModal(true);
-		contentPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.WHITE);
+		contentPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getTextPaneError());
@@ -133,9 +168,12 @@ public class GestionUsuario extends JDialog {
 		contentPanel.add(getTextFieldId());
 		contentPanel.add(getSeparator());
 		contentPanel.add(getSeparator_1());
-		contentPanel.add(getLabelPenalizaciones());
+		contentPanel.add(getLblCargo());
+		contentPanel.add(getLblNivelEscolar());
+		contentPanel.add(getComboBoxCargo());
+		contentPanel.add(getComboBoxNivel());
 		contentPanel.add(getLabel());
-		modelo.setlstUsuarios(Biblioteca.getInstancia().getUsuarios());
+		modelo.setlstTrabajadores(Biblioteca.getInstancia().getTrabajadores());
 	}
 
 	//BOTONES
@@ -167,18 +205,21 @@ public class GestionUsuario extends JDialog {
 			btnConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 
-					UsuarioAcreditado u = agregarUsuario();
+					Trabajador t = agregarTrabajador();
 
-					if(u != null){
-						UsuarioAcreditado user = Biblioteca.getInstancia().buscarUsuarioPorId(u.getId());
-						if(user == null){
+					if(t != null){
+						Trabajador trab = Biblioteca.getInstancia().buscarTrabajadorPorId(t.getId());
+						if(trab == null){
 							list.clearSelection();
-							modelo.addUsuario(u);
-							JOptionPane.showMessageDialog(null, "Usuario registrado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							modelo.addTrabajador(t);
+							JOptionPane.showMessageDialog(null, "Trabajador registrado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
 							btnGuardar.setVisible(false);
 							btnConfirmar.setVisible(false);
 							btnCancelar.setVisible(false);
+
+							comboBoxCargo.setEnabled(false);
+							comboBoxNivel.setEnabled(false);
 
 							//Aparecer CRUD
 							btnAgregar.setVisible(true);
@@ -197,9 +238,9 @@ public class GestionUsuario extends JDialog {
 							lblEdad.setText("Edad: ");
 
 							reiniciarComponentes();
-							
+
 							list.setSelectedIndex(0);
-							
+
 							lblNombre.setForeground(Color.BLACK);
 							lblCi.setForeground(Color.BLACK);
 
@@ -207,12 +248,12 @@ public class GestionUsuario extends JDialog {
 							textFieldId.setEnabled(false);
 						}
 						else{
-							JOptionPane.showMessageDialog(null, "El usuario ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "El trabajador ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
 			});
-			btnConfirmar.setBounds(700, 439, 151, 32);
+			btnConfirmar.setBounds(686, 445, 151, 32);
 		}
 		return btnConfirmar;
 	}
@@ -220,11 +261,15 @@ public class GestionUsuario extends JDialog {
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("");
+			btnCancelar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 			btnCancelar.setVisible(false);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 
 					btnAgregar.setVisible(true);
+
+					comboBoxCargo.setEnabled(false);
+					comboBoxNivel.setEnabled(false);
 
 					btnConfirmar.setVisible(false);
 					btnCancelar.setVisible(false);
@@ -242,12 +287,12 @@ public class GestionUsuario extends JDialog {
 
 					lblSexo.setText("Sexo: ");
 					lblEdad.setText("Edad: ");
-					
+
 					lblSexo.setForeground(Color.BLACK);
 					lblEdad.setForeground(Color.BLACK);
 					lblNombre.setForeground(Color.BLACK);
 					lblCi.setForeground(Color.BLACK);
-					
+
 					textPaneError.setVisible(false);
 
 					lblSexo.setForeground(Color.BLACK);
@@ -258,7 +303,7 @@ public class GestionUsuario extends JDialog {
 			btnCancelar.setBorder(null);
 			btnCancelar.setIcon(new ImageIcon("src/images/iconos/reiniciar30x30.png"));
 			btnCancelar.setBackground(Color.WHITE);
-			btnCancelar.setBounds(874, 441, 30, 30);
+			btnCancelar.setBounds(860, 447, 30, 30);
 		}
 		return btnCancelar;
 	}
@@ -271,18 +316,19 @@ public class GestionUsuario extends JDialog {
 
 					textFieldNombreUsuario.setEnabled(true);
 					textFieldId.setEnabled(true);
-					
-					labelPenalizaciones.setText("Penalización:     - ");
+
+					comboBoxCargo.setEnabled(true);
+					comboBoxNivel.setEnabled(true);
 
 					reiniciarComponentes();
 
 					btnAgregar.setVisible(false);
-			        btnEditar.setVisible(false);
-			        btnEliminar.setVisible(false);
-			        btnConfirmar.setVisible(true);
-			        btnCancelar.setVisible(true);
-			        
-			        list.setEnabled(false);
+					btnEditar.setVisible(false);
+					btnEliminar.setVisible(false);
+					btnConfirmar.setVisible(true);
+					btnCancelar.setVisible(true);
+
+					list.setEnabled(false);
 
 					txtpnOperacion.setVisible(true);
 					txtpnOperacion.setText("Agregar");
@@ -292,7 +338,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			btnAgregar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnAgregar.setBounds(633, 420, 92, 32);
+			btnAgregar.setBounds(640, 426, 92, 32);
 		}
 		return btnAgregar;
 	}
@@ -306,6 +352,9 @@ public class GestionUsuario extends JDialog {
 					btnAgregar.setVisible(false);
 					btnEditar.setVisible(false);
 					btnEliminar.setVisible(false);
+
+					comboBoxCargo.setEnabled(true);
+					comboBoxNivel.setEnabled(true);
 
 					//Activar confirmacion
 					btnGuardar.setVisible(true);
@@ -322,7 +371,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			btnEditar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnEditar.setBounds(748, 420, 92, 32);
+			btnEditar.setBounds(745, 426, 92, 32);
 		}
 		return btnEditar;
 	}
@@ -336,7 +385,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			btnEliminar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnEliminar.setBounds(864, 420, 100, 32);
+			btnEliminar.setBounds(850, 426, 92, 32);
 		}
 		return btnEliminar;
 	}
@@ -346,14 +395,17 @@ public class GestionUsuario extends JDialog {
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 
-					UsuarioAcreditado u = editarUsuario();
+					Trabajador t = editarTrabajador();
 					int indice = list.getSelectedIndex();
-					if(u != null){
-						modelo.updateUsuario(indice, u);
-						JOptionPane.showMessageDialog(null, "Usuario modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+					if(t != null){
+						modelo.updateTrabajador(indice, t);
+						JOptionPane.showMessageDialog(null, "Trabajador modificado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 						lblSexo.setText("Sexo: ");
 						lblEdad.setText("Edad: ");
-						
+
+						comboBoxCargo.setEnabled(false);
+						comboBoxNivel.setEnabled(false);
+
 						//Esconder confirmacion
 						btnGuardar.setVisible(false);
 						btnCancelar.setVisible(false);
@@ -378,7 +430,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			btnGuardar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnGuardar.setBounds(700, 439, 151, 32);
+			btnGuardar.setBounds(686, 445, 151, 32);
 			btnGuardar.setVisible(false);
 		}
 		return btnGuardar;
@@ -387,9 +439,9 @@ public class GestionUsuario extends JDialog {
 	//OTROS COMPONENTES
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("Lista usuarios:");
-			lblNewLabel.setBounds(56, 34, 138, 27);
-			lblNewLabel.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			lblNewLabel = new JLabel("Lista trabajadores:");
+			lblNewLabel.setBounds(58, 34, 166, 27);
+			lblNewLabel.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 		}
 		return lblNewLabel;
 	}
@@ -397,8 +449,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
 			lblNombre = new JLabel("Nombre:");
-			lblNombre.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblNombre.setBounds(612, 115, 85, 27);
+			lblNombre.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			lblNombre.setBounds(600, 115, 85, 27);
 		}
 		return lblNombre;
 	}
@@ -406,8 +458,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblEdad() {
 		if (lblEdad == null) {
 			lblEdad = new JLabel("Edad:");
-			lblEdad.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblEdad.setBounds(633, 231, 114, 27);
+			lblEdad.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			lblEdad.setBounds(625, 235, 114, 27);
 		}
 		return lblEdad;
 	}
@@ -415,8 +467,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblCi() {
 		if (lblCi == null) {
 			lblCi = new JLabel("CI:");
-			lblCi.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblCi.setBounds(658, 173, 40, 27);
+			lblCi.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			lblCi.setBounds(646, 170, 40, 27);
 		}
 		return lblCi;
 	}
@@ -424,8 +476,8 @@ public class GestionUsuario extends JDialog {
 	private JLabel getLblSexo() {
 		if (lblSexo == null) {
 			lblSexo = new JLabel("Sexo:");
-			lblSexo.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblSexo.setBounds(633, 287, 114, 27);
+			lblSexo.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			lblSexo.setBounds(808, 235, 114, 27);
 		}
 		return lblSexo;
 	}
@@ -442,39 +494,47 @@ public class GestionUsuario extends JDialog {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(56, 71, 486, 442);
-			list.setSelectedIndices(new int[] {1});
-			list.setToolTipText("Lista de usuarios actualmente registrados");
+			scrollPane.setBounds(58, 71, 460, 442);
+			list.setToolTipText("Lista de trabajadores actualmente registrados");
 			list.setBorder(new LineBorder(new Color(0, 0, 0)));
 			list.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
-					int indice = list.getSelectedIndex();
 
-					if (indice > -1) {
+					if (!e.getValueIsAdjusting()) { // Para evitar eventos duplicados
+						int indice = list.getSelectedIndex();
 
-						btnEditar.setVisible(true);
-						btnEliminar.setVisible(true);
+						if (indice > -1 && modelo != null && modelo.getSize() > 0) {
 
-						UsuarioAcreditado u = modelo.getUsuarioAt(indice);
+							Trabajador t = modelo.getTrabajadorAt(indice);
 
-						textFieldNombreUsuario.setText(u.getNombreCompleto());
-						lblEdad.setText("Edad: " + u.getEdad());
-						lblSexo.setText("Sexo: " + u.getSexo());
-						textFieldId.setText(u.getId());
-						if(u.getFechaPenalizacion() == null){
-							labelPenalizaciones.setForeground(Color.BLACK);
-							labelPenalizaciones.setText("Penalización: No hay");
-						}
-						else{
-							labelPenalizaciones.setForeground(Color.RED);
-							labelPenalizaciones.setText("Penalización: " + u.getFechaPenalizacion());
+							System.out.println(t.getCargo());
+							btnEditar.setVisible(true);
+							btnEliminar.setVisible(true);
+
+							textFieldNombreUsuario.setText(t.getNombreCompleto());
+							lblEdad.setText("Edad: " + t.getEdad());
+							lblSexo.setText("Sexo: " + t.getSexo());
+							textFieldId.setText(t.getId());
+							int pos = -1;
+							for(int i = 0; i < niveles.length; i++){
+								if(t.getNivelEscolar().equals(niveles[i])){
+									pos = i;
+								}
+							}
+							comboBoxNivel.setSelectedIndex(pos);
+
+							int pos2 = -1;
+							for(int i = 0; i < cargos.length; i++){
+								if(t.getCargo().equals(cargos[i]))
+									pos2 = i;
+							}
+							comboBoxCargo.setSelectedIndex(pos2);
 						}
 					}
 				}
 			});
-			list.setFont(new Font("SansSerif", Font.PLAIN, 17));
+			list.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			list.setModel(modelo);
-			list.setSelectedIndex(0);
 			scrollPane.setViewportView(list);
 		}
 		return scrollPane;
@@ -484,37 +544,31 @@ public class GestionUsuario extends JDialog {
 
 		if(!list.isSelectionEmpty()){
 
-			UsuarioAcreditado u = list.getSelectedValue();
+			Trabajador t = list.getSelectedValue();
 
-			if(u != null){
+			if(t != null){
 
-				if(Biblioteca.getInstancia().usuarioEliminable(u)){
+				if(Biblioteca.getInstancia().trabajadorEliminable(t)){
 
-					if(Biblioteca.getInstancia().getUsuarios().size() != 1){
+					if(Biblioteca.getInstancia().getTrabajadores().size() != 1){
 
-						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar al usuario?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar al trabajador?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 						if (option == JOptionPane.YES_OPTION) {
+							Biblioteca.getInstancia().eliminarTrabajador(t);
 
-							if(u.getPrestamos().size() == 0){
-
-								Biblioteca.getInstancia().eliminarUsuario(u);
-
-								JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-								list.setSelectedIndex(0);
-							}
-							else
-								JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " tiene actualmente " + u.getPrestamos().size() + " préstamos activos, no puede ser eliminado", "Información", JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Trabajador " + t.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							list.setSelectedIndex(0);
 						}
 					}
 					else
-						JOptionPane.showMessageDialog(null, "No puede eliminar a todos los usuarios de la biblioteca", "Información", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "No puede eliminar a todos los trabajadores de la biblioteca", "Información", JOptionPane.WARNING_MESSAGE);
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " tiene un historial de préstamos, no puede ser eliminado", "Información", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Trabajador " + t.getNombreCompleto() + " tiene un historial de préstamos, no puede ser eliminado", "Información", JOptionPane.WARNING_MESSAGE);
 			}
 			else{
-				JOptionPane.showMessageDialog(null, "Seleccione un usuario a eliminar", "Información", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Seleccione un trabajador a eliminar", "Información", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -524,13 +578,14 @@ public class GestionUsuario extends JDialog {
 		textFieldId.setText("");	
 		lblSexo.setText("Sexo: ");
 		lblEdad.setText("Edad: ");
+		comboBoxCargo.setSelectedIndex(0);
+		comboBoxNivel.setSelectedIndex(0);
 	}
 
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("");
-			label.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			label.setBounds(597, 71, 394, 442);
+			label.setBounds(584, 71, 407, 442);
 			label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		}
 		return label;
@@ -539,12 +594,12 @@ public class GestionUsuario extends JDialog {
 		if (txtpnOperacion == null) {
 			txtpnOperacion = new JTextPane();
 			txtpnOperacion.setDisabledTextColor(Color.BLACK);
-			txtpnOperacion.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnOperacion.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 			txtpnOperacion.setDisabledTextColor(Color.BLACK);
 			txtpnOperacion.setEnabled(false);
 			txtpnOperacion.setBackground(Color.WHITE);
 			txtpnOperacion.setVisible(false);
-			txtpnOperacion.setBounds(633, 56, 85, 32);
+			txtpnOperacion.setBounds(600, 34, 85, 32);
 		}
 		return txtpnOperacion;
 	}
@@ -553,7 +608,7 @@ public class GestionUsuario extends JDialog {
 			textFieldNombreUsuario = new JTextFieldMejorado();
 			textFieldNombreUsuario.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			textFieldNombreUsuario.setBorder(null);
-			textFieldNombreUsuario.setBounds(702, 115, 262, 30);
+			textFieldNombreUsuario.setBounds(691, 112, 273, 30);
 			textFieldNombreUsuario.putClientProperty("JTextField.placeholderText", "Ingrese su nombre");
 			textFieldNombreUsuario.setEnabled(false);
 		}
@@ -607,7 +662,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			textFieldId.setEnabled(false);
-			textFieldId.setBounds(700, 173, 264, 30);
+			textFieldId.setBounds(689, 167, 275, 30);
 			textFieldId.setLimite(11);
 			textFieldId.putClientProperty("JTextField.placeholderText", "Ingrese su carnet");
 		}
@@ -618,22 +673,22 @@ public class GestionUsuario extends JDialog {
 			textPaneError = new JTextPane();
 			textPaneError.setVisible(false);
 			textPaneError.setForeground(Color.RED);
-			textPaneError.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			textPaneError.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 			textPaneError.setText("Datos inv\u00E1lidos");
-			textPaneError.setBounds(826, 493, 138, 34);
+			textPaneError.setBounds(833, 496, 135, 34);
 		}
 		return textPaneError;
 	}
 
 	//Métodos CRUD
-	public UsuarioAcreditado agregarUsuario(){
+	public Trabajador agregarTrabajador(){
 		boolean agregado = true;
 
 		list.setEnabled(false);
 		String nombre = textFieldNombreUsuario.getText();
 		String idUsuario = textFieldId.getText();
 
-		UsuarioAcreditado u = new UsuarioAcreditado();
+		Trabajador u = new Trabajador();
 
 		try{
 			lblNombre.setForeground(Color.BLACK);
@@ -655,16 +710,20 @@ public class GestionUsuario extends JDialog {
 			textFieldId.setText("");
 			agregado = false;
 		}
+
+		u.setCargo(comboBoxCargo.getSelectedItem().toString());
+		u.setNivelEscolar(comboBoxNivel.getSelectedItem().toString());
+
 		if(!agregado){
 			u = null;
 		}
 		return u;
 	}
-	public UsuarioAcreditado editarUsuario(){
+	public Trabajador editarTrabajador(){
 
 		boolean editado = true;
 
-		UsuarioAcreditado u = list.getSelectedValue();
+		Trabajador u = list.getSelectedValue();
 
 		list.setEnabled(false);
 
@@ -680,6 +739,10 @@ public class GestionUsuario extends JDialog {
 			editado = false;
 			textFieldNombreUsuario.setText("");
 		}
+
+		u.setCargo(comboBoxCargo.getSelectedItem().toString());
+		u.setNivelEscolar(comboBoxNivel.getSelectedItem().toString());
+
 		if(!editado){
 			u = null;
 		}
@@ -748,7 +811,7 @@ public class GestionUsuario extends JDialog {
 		if (separator == null) {
 			separator = new JSeparator();
 			separator.setForeground(Color.BLACK);
-			separator.setBounds(702, 145, 262, 27);
+			separator.setBounds(691, 142, 273, 27);
 		}
 		return separator;
 	}
@@ -756,16 +819,46 @@ public class GestionUsuario extends JDialog {
 		if (separator_1 == null) {
 			separator_1 = new JSeparator();
 			separator_1.setForeground(Color.BLACK);
-			separator_1.setBounds(700, 203, 264, 27);
+			separator_1.setBounds(689, 197, 275, 27);
 		}
 		return separator_1;
 	}
-	private JLabel getLabelPenalizaciones() {
-		if (labelPenalizaciones == null) {
-			labelPenalizaciones = new JLabel("Penalizaci\u00F3n:");
-			labelPenalizaciones.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			labelPenalizaciones.setBounds(633, 347, 229, 27);
+	private JLabel getLblCargo() {
+		if (lblCargo == null) {
+			lblCargo = new JLabel("Cargo:");
+			lblCargo.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			lblCargo.setBounds(610, 292, 76, 27);
 		}
-		return labelPenalizaciones;
+		return lblCargo;
+	}
+	private JLabel getLblNivelEscolar() {
+		if (lblNivelEscolar == null) {
+			lblNivelEscolar = new JLabel("Nivel Escolar:");
+			lblNivelEscolar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			lblNivelEscolar.setBounds(610, 355, 124, 27);
+		}
+		return lblNivelEscolar;
+	}
+	private JComboBox getComboBoxCargo() {
+		if (comboBoxCargo == null) {
+			comboBoxCargo = new JComboBox();
+			comboBoxCargo.setEnabled(false);
+			comboBoxCargo.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			comboBoxCargo.setModel(new DefaultComboBoxModel(cargos));
+			comboBoxCargo.setSelectedIndex(0);
+			comboBoxCargo.setBounds(677, 289, 287, 32);
+		}
+		return comboBoxCargo;
+	}
+	private JComboBox getComboBoxNivel() {
+		if (comboBoxNivel == null) {
+			comboBoxNivel = new JComboBox();
+			comboBoxNivel.setEnabled(false);
+			comboBoxNivel.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			comboBoxNivel.setModel(new DefaultComboBoxModel(niveles));
+			comboBoxNivel.setSelectedIndex(0);
+			comboBoxNivel.setBounds(736, 354, 228, 32);
+		}
+		return comboBoxNivel;
 	}
 }
