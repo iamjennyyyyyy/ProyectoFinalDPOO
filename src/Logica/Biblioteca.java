@@ -147,7 +147,7 @@ public class Biblioteca {
 		synchronized(user) {
 
 			if(user.getPrestamos().size() >= 3){
-				throw new IllegalArgumentException("Usuario ya tiene más de 3 préstamos actualmente");
+				throw new IllegalArgumentException("Usuario ya tiene 3 préstamos actualmente");
 			}
 
 			for(Prestamo p : prestamosTotales){
@@ -199,6 +199,12 @@ public class Biblioteca {
 	public Prestamo buscarPrestamoPorPosicion(int index){
 		Prestamo p = prestamosTotales.get(index);
 		return p;
+	}
+	
+	public Prestamo buscarPrestamoSinDevolverPorPosicion(int pos){
+		ArrayList<Prestamo> prest = obtenerPrestamosNoDevueltos();
+		Prestamo pr = prest.get(pos);
+		return pr;
 	}
 
 	public int obtenerAtraso(LocalDate fecha){
@@ -451,6 +457,26 @@ public class Biblioteca {
 				prestamosActivos.add(p);
 		}
 		return prestamosActivos;
+	}
+	
+	public ArrayList<Prestamo> obtenerPrestamosDevueltos(){
+		ArrayList<Prestamo> prestamosDev = new ArrayList<Prestamo>();
+
+		for(Prestamo p : prestamosTotales){
+			if(p.getFechaDevolucion() != null)
+				prestamosDev.add(p);
+		}
+		return prestamosDev;
+	}
+	
+	public ArrayList<Prestamo> obtenerPrestamosNoDevueltos(){
+		ArrayList<Prestamo> prestamosNoDev = new ArrayList<Prestamo>();
+
+		for(Prestamo p : prestamosTotales){
+			if(p.getFechaDevolucion() == null)
+				prestamosNoDev.add(p);
+		}
+		return prestamosNoDev;
 	}
 
 	public Prestamo[] guardarPrestProximosAVencerse(int cantDias, String tipo){

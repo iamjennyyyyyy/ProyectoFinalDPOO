@@ -20,6 +20,15 @@ public class ModelArticulo extends AbstractListModel {
         return lstArticulo.size();
     }
 
+    public void eliminarArticulo(Articulo p){
+    	int indice = -1;
+    	for(int i = 0; i < lstArticulo.size() && indice == -1; i++){
+    		if(lstArticulo.get(i).equals(p))
+    			indice = i;
+    	}
+    	lstArticulo.remove(indice);
+    }
+    
     // devuelve el elemento de la posición index dentro del modelo
     public Object getElementAt(int indice) {
         Articulo x = null;

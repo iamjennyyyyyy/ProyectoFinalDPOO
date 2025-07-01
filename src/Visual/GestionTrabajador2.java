@@ -48,6 +48,7 @@ import javax.swing.JTextPane;
 
 import com.toedter.calendar.JTextFieldDateEditor;
 
+import Utiles.Colores;
 import Utiles.JTextFieldMejorado;
 import Utiles.JTextFieldCarnet;
 import Utiles.MiPersonalizacion;
@@ -253,6 +254,7 @@ public class GestionTrabajador2 extends JDialog {
 					}
 				}
 			});
+			btnConfirmar.setBackground(Colores.getBeigetabla());
 			btnConfirmar.setBounds(686, 445, 151, 32);
 		}
 		return btnConfirmar;
@@ -311,6 +313,7 @@ public class GestionTrabajador2 extends JDialog {
 	private JButton getBtnAgregar() {
 		if (btnAgregar == null) {
 			btnAgregar = new JButton("Nuevo");
+			btnAgregar.setBackground(Colores.getBeigetabla());
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 
@@ -371,6 +374,7 @@ public class GestionTrabajador2 extends JDialog {
 				}
 			});
 			btnEditar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			btnEditar.setBackground(Colores.getBeigetabla());
 			btnEditar.setBounds(745, 426, 92, 32);
 		}
 		return btnEditar;
@@ -379,6 +383,7 @@ public class GestionTrabajador2 extends JDialog {
 		if (btnEliminar == null) {
 			btnEliminar = new JButton("Eliminar");
 			btnEliminar.setVisible(false);
+			btnEliminar.setBackground(Colores.getBeigetabla());
 			btnEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					eliminarUsuario();
@@ -392,6 +397,7 @@ public class GestionTrabajador2 extends JDialog {
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar");
+			btnGuardar.setBackground(Colores.getBeigetabla());
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 

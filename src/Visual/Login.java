@@ -204,7 +204,7 @@ public class Login extends JDialog {
 				}
 			});
 			btnIniciarSesion.setForeground(Color.BLACK);
-			btnIniciarSesion.setBackground(Colores.getColorBotonLoginNuevo());
+			btnIniciarSesion.setBackground(Colores.getBeigetabla());
 			btnIniciarSesion.setFont(new Font("SansSerif", Font.PLAIN, 22));
 			btnIniciarSesion.setBounds(744, 640, 138, 48);
 		}
@@ -214,7 +214,7 @@ public class Login extends JDialog {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Salir");
 			btnSalir.setForeground(Color.BLACK);
-			btnSalir.setBackground(Colores.getColorBotonLoginNuevo());
+			btnSalir.setBackground(Colores.getBeigetabla());
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();

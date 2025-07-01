@@ -27,18 +27,12 @@ import java.awt.SystemColor;
 public class InfoUsuarioTablaPrestamo extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JLabel lblNewLabel;
-	private JTextPane textPaneNombre;
-	private JLabel lblCarnetUsuario;
-	private JLabel lblPenalizacin;
-	private JTextPane textPaneCarnet;
-	private JTextPane textPanePenalizacion;
-	private JLabel lblEdad;
-	private JTextPane textPaneEdad;
-	private JLabel lblSexo;
-	private JTextPane textPaneSexo;
-	private JLabel lblC;
-	private JTextPane textPanePrestamo;
+	private JTextPane txtpnNombre;
+	private JTextPane txtpnCarnet;
+	private JTextPane txtpnEdad;
+	private JTextPane txtpnSexo;
+	private JTextPane txtpnPenalizacin;
+	private JTextPane txtpnPrstamosActivos;
 
 	/**
 	 * Launch the application.
@@ -50,157 +44,101 @@ public class InfoUsuarioTablaPrestamo extends JDialog {
 	public InfoUsuarioTablaPrestamo(UsuarioAcreditado u) {
 		setTitle("Informaci\u00F3n Usuario");
 		setModal(true);
-		setBounds(450, 100, 458, 567);
+		setBounds(450, 100, 458, 400);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		contentPanel.add(getLblNewLabel());
-		contentPanel.add(getTextPaneNombre());
-		contentPanel.add(getLblCarnetUsuario());
-		contentPanel.add(getLblPenalizacin());
-		contentPanel.add(getTextPaneCarnet());
-		contentPanel.add(getTextPanePenalizacion());
-		contentPanel.add(getLblEdad());
-		contentPanel.add(getTextPaneEdad());
-		contentPanel.add(getLblSexo());
-		contentPanel.add(getTextPaneSexo());
-		textPaneNombre.setText(u.getNombreCompleto());
-		textPaneCarnet.setText(u.getId());
-		contentPanel.add(getLblC());
-		contentPanel.add(getTextPanePrestamo());
+		contentPanel.add(getTxtpnNombre());
+		contentPanel.add(getTxtpnCarnet());
+		contentPanel.add(getTxtpnEdad());
+		contentPanel.add(getTxtpnSexo());
+		contentPanel.add(getTxtpnPenalizacin());
+		contentPanel.add(getTxtpnPrstamosActivos());
+		txtpnNombre.setText("Nombre: " + u.getNombreCompleto());
+		txtpnCarnet.setText("Carnet: " + u.getId());
+		txtpnEdad.setText("Edad: " + u.getEdad());
+		txtpnSexo.setText("Sexo: " + u.getSexo());
 		if(u.getFechaPenalizacion() != null){
-			textPanePenalizacion.setForeground(Color.RED);
-			textPanePenalizacion.setText(u.getFechaPenalizacion().toString());
+			txtpnPenalizacin.setForeground(Color.RED);
+			txtpnPenalizacin.setText("Penalización: " + u.getFechaPenalizacion().toString());
 		}
-		else{
-			textPanePenalizacion.setForeground(SystemColor.infoText);
-			textPanePenalizacion.setText("No está penalizado");
-		}
-		textPaneEdad.setText("" + u.getEdad());
-		textPaneSexo.setText(u.getSexo());
-		if(u.getPrestamos().size() >= 3){
-			textPanePrestamo.setForeground(Color.RED);
-			textPanePrestamo.setText("" + u.getPrestamos().size());
-		}
-		else{
-			textPanePrestamo.setForeground(Color.BLACK);
-			textPanePrestamo.setText("" + u.getPrestamos().size());
-		}
+		else
+			txtpnPenalizacin.setText("No está penalizado");
+		txtpnPrstamosActivos.setText("Préstamos activos: " + u.getPrestamos().size());
+		
 	}
-	private JLabel getLblNewLabel() {
-		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("Nombre usuario:");
-			lblNewLabel.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblNewLabel.setBounds(50, 34, 159, 32);
+	private JTextPane getTxtpnNombre() {
+		if (txtpnNombre == null) {
+			txtpnNombre = new JTextPane();
+			txtpnNombre.setFocusable(false);
+			txtpnNombre.setBackground(Color.WHITE);
+			txtpnNombre.setEditable(false);
+			txtpnNombre.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnNombre.setText("Nombre:");
+			txtpnNombre.setBounds(50, 34, 330, 32);
 		}
-		return lblNewLabel;
+		return txtpnNombre;
 	}
-	private JTextPane getTextPaneNombre() {
-		if (textPaneNombre == null) {
-			textPaneNombre = new JTextPane();
-			textPaneNombre.setForeground(SystemColor.infoText);
-			textPaneNombre.setEditable(false);
-			textPaneNombre.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneNombre.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneNombre.setBounds(50, 77, 338, 32);
+	private JTextPane getTxtpnCarnet() {
+		if (txtpnCarnet == null) {
+			txtpnCarnet = new JTextPane();
+			txtpnCarnet.setFocusable(false);
+			txtpnCarnet.setBackground(Color.WHITE);
+			txtpnCarnet.setEditable(false);
+			txtpnCarnet.setText("Carnet:");
+			txtpnCarnet.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnCarnet.setBounds(50, 91, 330, 32);
 		}
-		return textPaneNombre;
+		return txtpnCarnet;
 	}
-	private JLabel getLblCarnetUsuario() {
-		if (lblCarnetUsuario == null) {
-			lblCarnetUsuario = new JLabel("Carnet usuario:");
-			lblCarnetUsuario.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblCarnetUsuario.setBounds(50, 134, 159, 32);
+	private JTextPane getTxtpnEdad() {
+		if (txtpnEdad == null) {
+			txtpnEdad = new JTextPane();
+			txtpnEdad.setFocusable(false);
+			txtpnEdad.setBackground(Color.WHITE);
+			txtpnEdad.setEditable(false);
+			txtpnEdad.setText("Edad:");
+			txtpnEdad.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnEdad.setBounds(50, 156, 130, 32);
 		}
-		return lblCarnetUsuario;
+		return txtpnEdad;
 	}
-	private JLabel getLblPenalizacin() {
-		if (lblPenalizacin == null) {
-			lblPenalizacin = new JLabel("Penalizaci\u00F3n:");
-			lblPenalizacin.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblPenalizacin.setBounds(50, 299, 159, 32);
+	private JTextPane getTxtpnSexo() {
+		if (txtpnSexo == null) {
+			txtpnSexo = new JTextPane();
+			txtpnSexo.setFocusable(false);
+			txtpnSexo.setBackground(Color.WHITE);
+			txtpnSexo.setEditable(false);
+			txtpnSexo.setText("Sexo:");
+			txtpnSexo.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnSexo.setBounds(242, 156, 130, 32);
 		}
-		return lblPenalizacin;
+		return txtpnSexo;
 	}
-	private JTextPane getTextPaneCarnet() {
-		if (textPaneCarnet == null) {
-			textPaneCarnet = new JTextPane();
-			textPaneCarnet.setForeground(SystemColor.infoText);
-			textPaneCarnet.setEditable(false);
-			textPaneCarnet.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneCarnet.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneCarnet.setBounds(50, 177, 338, 32);
+	private JTextPane getTxtpnPenalizacin() {
+		if (txtpnPenalizacin == null) {
+			txtpnPenalizacin = new JTextPane();
+			txtpnPenalizacin.setFocusable(false);
+			txtpnPenalizacin.setBackground(Color.WHITE);
+			txtpnPenalizacin.setEditable(false);
+			txtpnPenalizacin.setText("Penalizaci\u00F3n:");
+			txtpnPenalizacin.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnPenalizacin.setBounds(50, 218, 322, 32);
 		}
-		return textPaneCarnet;
+		return txtpnPenalizacin;
 	}
-	private JTextPane getTextPanePenalizacion() {
-		if (textPanePenalizacion == null) {
-			textPanePenalizacion = new JTextPane();
-			textPanePenalizacion.setForeground(SystemColor.infoText);
-			textPanePenalizacion.setEditable(false);
-			textPanePenalizacion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPanePenalizacion.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPanePenalizacion.setBounds(50, 342, 338, 32);
+	private JTextPane getTxtpnPrstamosActivos() {
+		if (txtpnPrstamosActivos == null) {
+			txtpnPrstamosActivos = new JTextPane();
+			txtpnPrstamosActivos.setFocusable(false);
+			txtpnPrstamosActivos.setBackground(Color.WHITE);
+			txtpnPrstamosActivos.setEditable(false);
+			txtpnPrstamosActivos.setText("Pr\u00E9stamos activos:");
+			txtpnPrstamosActivos.setFont(new Font("Sylfaen", Font.PLAIN, 19));
+			txtpnPrstamosActivos.setBounds(50, 283, 322, 32);
 		}
-		return textPanePenalizacion;
-	}
-	private JLabel getLblEdad() {
-		if (lblEdad == null) {
-			lblEdad = new JLabel("Edad:");
-			lblEdad.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblEdad.setBounds(50, 240, 66, 32);
-		}
-		return lblEdad;
-	}
-	private JTextPane getTextPaneEdad() {
-		if (textPaneEdad == null) {
-			textPaneEdad = new JTextPane();
-			textPaneEdad.setForeground(SystemColor.infoText);
-			textPaneEdad.setEditable(false);
-			textPaneEdad.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneEdad.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneEdad.setBounds(111, 240, 55, 32);
-		}
-		return textPaneEdad;
-	}
-	private JLabel getLblSexo() {
-		if (lblSexo == null) {
-			lblSexo = new JLabel("Sexo:");
-			lblSexo.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblSexo.setBounds(242, 240, 66, 32);
-		}
-		return lblSexo;
-	}
-	private JTextPane getTextPaneSexo() {
-		if (textPaneSexo == null) {
-			textPaneSexo = new JTextPane();
-			textPaneSexo.setForeground(SystemColor.infoText);
-			textPaneSexo.setEditable(false);
-			textPaneSexo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneSexo.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneSexo.setBounds(303, 240, 66, 32);
-		}
-		return textPaneSexo;
-	}
-	private JLabel getLblC() {
-		if (lblC == null) {
-			lblC = new JLabel("Pr\u00E9stamos activos:");
-			lblC.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblC.setBounds(50, 400, 199, 32);
-		}
-		return lblC;
-	}
-	private JTextPane getTextPanePrestamo() {
-		if (textPanePrestamo == null) {
-			textPanePrestamo = new JTextPane();
-			textPanePrestamo.setForeground(Color.BLACK);
-			textPanePrestamo.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPanePrestamo.setEditable(false);
-			textPanePrestamo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPanePrestamo.setBounds(50, 443, 338, 32);
-		}
-		return textPanePrestamo;
+		return txtpnPrstamosActivos;
 	}
 }

@@ -23,8 +23,8 @@ public class Inicializar {
 				try {
 					MiPersonalizacion.aplicarTema();
 					Inicio();
-//					Login frame = new Login();
-					Principal frame = new Principal();
+					Login frame = new Login();
+//					Principal frame2 = new Principal();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -146,24 +146,32 @@ public class Inicializar {
 					);
 		}
 		Biblioteca.getInstancia().getPublicaciones().get(0).setDireccionImagen("src/images/portadas/cien años de soledadd.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(1).setDireccionImagen("src/images/portadas/El nombre del viento.png");
+		Biblioteca.getInstancia().getPublicaciones().get(2).setDireccionImagen("src/images/portadas/Rayuela.png");
+		Biblioteca.getInstancia().getPublicaciones().get(3).setDireccionImagen("src/images/portadas/The 1984.png");
+		Biblioteca.getInstancia().getPublicaciones().get(4).setDireccionImagen("src/images/portadas/Cronica de una muerte anunciada.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(5).setDireccionImagen("src/images/portadas/El Hobbit.png");
+		Biblioteca.getInstancia().getPublicaciones().get(6).setDireccionImagen("src/images/portadas/Ficciones.png");
+		Biblioteca.getInstancia().getPublicaciones().get(7).setDireccionImagen("src/images/portadas/La sombra del viento.png");
+		Biblioteca.getInstancia().getPublicaciones().get(8).setDireccionImagen("src/images/portadas/Los juegos del hambre.jpg");
 		
 		// Revistas (15 instancias)
 		String[][] revistas = {
-				{"R001", "National Geographic", "Ciencias Naturales", "100", "50", "2001", "10"},
-				{"R002", "Muy Interesante", "Divulgación Científica", "80", "40", "2002", "8"},
-				{"R003", "Science", "Ciencias Exactas", "120", "30", "2003", "5"},
-				{"R004", "Nature", "Ciencias Exactas", "150", "35", "2004", "7"},
-				{"R005", "Time", "Actualidad", "60", "60", "2005", "12"},
-				{"R006", "The Economist", "Economía", "90", "40", "2006", "6"},
-				{"R007", "Scientific American", "Divulgación Científica", "110", "38", "2007", "4"},
-				{"R008", "New Scientist", "Divulgación Científica", "95", "42", "2008", "9"},
-				{"R009", "Discover", "Divulgación Científica", "85", "36", "2009", "3"},
-				{"R010", "Popular Science", "Tecnología", "75", "32", "2010", "11"},
-				{"R011", "Wired", "Tecnología", "65", "28", "2011", "8"},
-				{"R012", "National Geographic History", "Historia", "100", "25", "2012", "6"},
-				{"R013", "Psychology Today", "Ciencias Sociales", "90", "27", "2013", "7"},
-				{"R014", "MIT Technology Review", "Tecnología", "110", "29", "2014", "5"},
-				{"R015", "Archaeology", "Historia", "95", "23", "2015", "4"}
+				{"2001", "National Geographic", "Ciencias Naturales", "100", "50", "2001", "10"},
+				{"2002", "Muy Interesante", "Divulgación Científica", "80", "40", "2002", "8"},
+				{"2003", "Science", "Ciencias Exactas", "120", "30", "2003", "5"},
+				{"2004", "Nature", "Ciencias Exactas", "150", "35", "2004", "7"},
+				{"2005", "Time", "Actualidad", "60", "60", "2005", "12"},
+				{"2006", "The Economist", "Economía", "90", "40", "2006", "6"},
+				{"2007", "Scientific American", "Divulgación Científica", "110", "38", "2007", "4"},
+				{"2008", "New Scientist", "Divulgación Científica", "95", "42", "2008", "9"},
+				{"2009", "Discover", "Divulgación Científica", "85", "36", "2009", "3"},
+				{"2010", "Popular Science", "Tecnología", "75", "32", "2010", "11"},
+				{"2011", "Wired", "Tecnología", "65", "28", "2011", "8"},
+				{"2012", "National Geographic History", "Historia", "100", "25", "2012", "6"},
+				{"2013", "Psychology Today", "Ciencias Sociales", "90", "27", "2013", "7"},
+				{"2014", "MIT Technology Review", "Tecnología", "110", "29", "2014", "5"},
+				{"2015", "Archaeology", "Historia", "95", "23", "2015", "4"}
 		};
 
 		for(String[] datos : revistas) {
