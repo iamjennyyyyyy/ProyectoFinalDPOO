@@ -560,7 +560,7 @@ public class Biblioteca {
 
 	public UsuarioAcreditado crearUsuarioAcreditado(String id, String nombre) {
 		UsuarioAcreditado u = new UsuarioAcreditado(id, nombre);
-		usuarios.add(new UsuarioAcreditado(id, nombre));
+		usuarios.add(u);
 		return u;
 	}
 

@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * AutoSuggestor sin lambdas y con popup persistente, compatible con Java 8.
- */
+
 public class AutoSuggestor<T> {
 	private final JTextField textField;
 	private final List<T> items;
@@ -103,6 +101,9 @@ public class AutoSuggestor<T> {
 					});
 					suggestionPopup.add(menuItem);
 				}
+				suggestionPopup.revalidate();
+				suggestionPopup.repaint();
+				suggestionPopup.show(textField, 0, textField.getHeight());
 
 				try {
 					suggestionPopup.show(textField, 0, textField.getHeight());

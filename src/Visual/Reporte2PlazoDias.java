@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -52,6 +54,9 @@ import javax.swing.DefaultComboBoxModel;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+
+import javax.swing.JPopupMenu;
+import javax.swing.JMenuItem;
 
 public class Reporte2PlazoDias extends JDialog {
 
@@ -220,6 +225,7 @@ public class Reporte2PlazoDias extends JDialog {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
+			table.setToolTipText("");
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JTableHeader header = table.getTableHeader();
 			header.setFont(new Font("Segoe UI", Font.PLAIN, 14));

@@ -27,6 +27,7 @@ import java.awt.CardLayout;
 import javax.swing.UIManager;
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
+import javax.swing.JSeparator;
 
 public class InfoPublicacionTablaPrestamo extends JDialog {
 
@@ -50,6 +51,11 @@ public class InfoPublicacionTablaPrestamo extends JDialog {
 	private JLabel label_7;
 	private JLabel label_8;
 	private JTextPane txtpnLosDerechosDe;
+	private JSeparator separator;
+	private JSeparator separator_1;
+	private JSeparator separator_2;
+	private JSeparator separator_3;
+	private JSeparator separator_4;
 
 	/**
 	 * Launch the application.
@@ -61,7 +67,7 @@ public class InfoPublicacionTablaPrestamo extends JDialog {
 	public InfoPublicacionTablaPrestamo(Publicacion p) {
 		setTitle("Informaci\u00F3n Publicación");
 		setModal(true);
-		setBounds(150, 20, 799, 494);
+		setBounds(350, 190, 799, 494);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Colores.getFondo());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -92,19 +98,24 @@ public class InfoPublicacionTablaPrestamo extends JDialog {
 		contentPanel.add(getLabel_7());
 		contentPanel.add(getLabel_8());
 		contentPanel.add(getTxtpnLosDerechosDe());
+		contentPanel.add(getSeparator());
+		contentPanel.add(getSeparator_1());
+		contentPanel.add(getSeparator_2());
+		contentPanel.add(getSeparator_3());
+		contentPanel.add(getSeparator_4());
 		if(p instanceof Libro){
 			textPaneTipo.setText("Libro");
-			textPaneOtroAtributo.setText("Autor: " + ((Libro)p).getAutores().get(0));
+			textPaneOtroAtributo.setText("Autor:  " + ((Libro)p).getAutores().get(0));
 			textPaneOotroAtributo.setText("Editorial: " + ((Libro)p).getEditorial());
 		}
 		else if(p instanceof Revista){
 			textPaneTipo.setText("Revista");
-			textPaneOtroAtributo.setText("Año de publicación: " + ((Revista)p).getAnno());
-			textPaneOotroAtributo.setText("Número de revista" + ((Revista)p).getNum());
+			textPaneOtroAtributo.setText("Año:      " + ((Revista)p).getAnno());
+			textPaneOotroAtributo.setText("Número:   " + ((Revista)p).getNum());
 		}
 		else if(p instanceof Articulo){
 			textPaneTipo.setText("Artículo");
-			textPaneOtroAtributo.setText("Autor: " + ((Articulo)p).getAutores().get(0));
+			textPaneOtroAtributo.setText("Autor:  " + ((Articulo)p).getAutores().get(0));
 			textPaneOotroAtributo.setText("Árbitro: " + ((Articulo)p).getArbitros().get(0));
 		}
 	}
@@ -284,5 +295,45 @@ public class InfoPublicacionTablaPrestamo extends JDialog {
 			txtpnLosDerechosDe.setBounds(60, 373, 355, 54);
 		}
 		return txtpnLosDerechosDe;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+			separator.setBorder(new LineBorder(Colores.getCruds()));
+			separator.setBounds(116, 60, 295, 37);
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+			separator_1.setBorder(new LineBorder(Colores.getCruds()));
+			separator_1.setBounds(165, 108, 246, 37);
+		}
+		return separator_1;
+	}
+	private JSeparator getSeparator_2() {
+		if (separator_2 == null) {
+			separator_2 = new JSeparator();
+			separator_2.setBorder(new LineBorder(Colores.getCruds()));
+			separator_2.setBounds(128, 156, 283, 37);
+		}
+		return separator_2;
+	}
+	private JSeparator getSeparator_3() {
+		if (separator_3 == null) {
+			separator_3 = new JSeparator();
+			separator_3.setBorder(new LineBorder(Colores.getCruds()));
+			separator_3.setBounds(123, 252, 283, 37);
+		}
+		return separator_3;
+	}
+	private JSeparator getSeparator_4() {
+		if (separator_4 == null) {
+			separator_4 = new JSeparator();
+			separator_4.setBorder(new LineBorder(Colores.getCruds()));
+			separator_4.setBounds(138, 300, 273, 37);
+		}
+		return separator_4;
 	}
 }

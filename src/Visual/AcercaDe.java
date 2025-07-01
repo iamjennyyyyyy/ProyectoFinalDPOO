@@ -23,6 +23,7 @@ public class AcercaDe extends JDialog {
 	private JLabel lblNewLabel;
 	private JTextPane txtpnelConocimientoDebe;
 	private JTextPane txtpnEsteProyectoHa;
+	private JLabel lblalvarotamayo;
 
 	/**
 	 * Launch the application.
@@ -50,32 +51,20 @@ public class AcercaDe extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblBibliotechoffci = new JLabel("Biblio_Tech");
-			lblBibliotechoffci.setBounds(837, 506, 161, 28);
-			lblBibliotechoffci.setFont(new Font("Sylfaen", Font.PLAIN, 21));
-			contentPanel.add(lblBibliotechoffci);
-		}
-		{
-			JLabel lblbibliotech = new JLabel("@biblio_Tech");
-			lblbibliotech.setBounds(837, 457, 161, 28);
+			JLabel lblbibliotech = new JLabel("@its_jenny126");
+			lblbibliotech.setBounds(675, 491, 161, 28);
 			lblbibliotech.setFont(new Font("Sylfaen", Font.PLAIN, 21));
 			contentPanel.add(lblbibliotech);
 		}
 		{
 			JLabel label = new JLabel("");
-			label.setBounds(799, 506, 28, 28);
-			label.setIcon(new ImageIcon("src/images/iconos/Facebook.png"));
-			contentPanel.add(label);
-		}
-		{
-			JLabel label = new JLabel("");
-			label.setBounds(799, 457, 28, 28);
+			label.setBounds(637, 491, 28, 28);
 			label.setIcon(new ImageIcon("src/images/iconos/Instagram.png"));
 			contentPanel.add(label);
 		}
 		{
 			JLabel lblSguenosEn = new JLabel("S\u00EDguenos en:");
-			lblSguenosEn.setBounds(799, 418, 161, 28);
+			lblSguenosEn.setBounds(638, 448, 161, 28);
 			lblSguenosEn.setFont(new Font("Sylfaen", Font.PLAIN, 21));
 			contentPanel.add(lblSguenosEn);
 		}
@@ -83,6 +72,7 @@ public class AcercaDe extends JDialog {
 		contentPanel.add(getLblNewLabel());
 		contentPanel.add(getTxtpnelConocimientoDebe());
 		contentPanel.add(getTxtpnEsteProyectoHa());
+		contentPanel.add(getLblalvarotamayo());
 	}
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
@@ -128,5 +118,13 @@ public class AcercaDe extends JDialog {
 			txtpnEsteProyectoHa.setBounds(423, 203, 584, 193);
 		}
 		return txtpnEsteProyectoHa;
+	}
+	private JLabel getLblalvarotamayo() {
+		if (lblalvarotamayo == null) {
+			lblalvarotamayo = new JLabel("@alvaro_tamayo_");
+			lblalvarotamayo.setFont(new Font("Sylfaen", Font.PLAIN, 21));
+			lblalvarotamayo.setBounds(826, 491, 181, 28);
+		}
+		return lblalvarotamayo;
 	}
 }

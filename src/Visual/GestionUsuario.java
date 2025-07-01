@@ -108,7 +108,6 @@ public class GestionUsuario extends JDialog {
 	 * Create the dialog.
 	 */
 	public GestionUsuario() {
-		//setBounds(400, 160, 950, 554);
 		setBounds(338, 159, 1026, 562);
 		setUndecorated(true);
 		setModal(true);
@@ -176,6 +175,7 @@ public class GestionUsuario extends JDialog {
 						UsuarioAcreditado user = Biblioteca.getInstancia().buscarUsuarioPorId(u.getId());
 						if(user == null){
 							list.clearSelection();
+							u.inicializarPrestamos();
 							modelo.addUsuario(u);
 							JOptionPane.showMessageDialog(null, "Usuario registrado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
@@ -345,7 +345,6 @@ public class GestionUsuario extends JDialog {
 			btnEliminar.setVisible(false);
 			btnEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-
 					pos = list.getSelectedIndex();
 					eliminarUsuario();
 				}
@@ -539,8 +538,8 @@ public class GestionUsuario extends JDialog {
 
 								JOptionPane.showMessageDialog(null, "Usuario " + u.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 								if(pos > 0){
-								list.setSelectedIndex(pos - 1);
-								cargarComponentes(pos - 1);
+									list.setSelectedIndex(pos - 1);
+									cargarComponentes(pos - 1);
 								}
 								else{
 									list.setSelectedIndex(pos);

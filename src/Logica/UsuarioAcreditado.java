@@ -21,6 +21,10 @@ public class UsuarioAcreditado extends Persona {
 		return prestamos;
 	}
 
+	public void inicializarPrestamos(){
+		prestamos = new ArrayList<Prestamo>();
+	}
+	
 	public void setPrestamos(Prestamo prestamo) {
 		prestamos.add(prestamo);
 	}

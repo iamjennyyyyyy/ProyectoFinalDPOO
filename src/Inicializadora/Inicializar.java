@@ -154,6 +154,12 @@ public class Inicializar {
 		Biblioteca.getInstancia().getPublicaciones().get(6).setDireccionImagen("src/images/portadas/Ficciones.png");
 		Biblioteca.getInstancia().getPublicaciones().get(7).setDireccionImagen("src/images/portadas/La sombra del viento.png");
 		Biblioteca.getInstancia().getPublicaciones().get(8).setDireccionImagen("src/images/portadas/Los juegos del hambre.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(9).setDireccionImagen("src/images/portadas/el amor en los t.png");
+		Biblioteca.getInstancia().getPublicaciones().get(10).setDireccionImagen("src/images/portadas/el señor de los anillos.png");
+		Biblioteca.getInstancia().getPublicaciones().get(11).setDireccionImagen("src/images/portadas/la ciudad.png");
+		Biblioteca.getInstancia().getPublicaciones().get(12).setDireccionImagen("src/images/portadas/rebelion en la granja.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(13).setDireccionImagen("src/images/portadas/pedro paramo.png");
+		Biblioteca.getInstancia().getPublicaciones().get(14).setDireccionImagen("src/images/portadas/la casa de los espiritus.jpg");
 		
 		// Revistas (15 instancias)
 		String[][] revistas = {
@@ -180,6 +186,22 @@ public class Inicializar {
 					Integer.parseInt(datos[3]), Integer.parseInt(datos[4]),
 					Integer.parseInt(datos[5]), Integer.parseInt(datos[6]));
 		}
+		
+		Biblioteca.getInstancia().getPublicaciones().get(15).setDireccionImagen("src/images/portadas/National geografic.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(16).setDireccionImagen("src/images/portadas/muy i.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(17).setDireccionImagen("src/images/portadas/science.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(18).setDireccionImagen("src/images/portadas/Nature.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(19).setDireccionImagen("src/images/portadas/time.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(20).setDireccionImagen("src/images/portadas/The economist.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(21).setDireccionImagen("src/images/portadas/scientific a.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(22).setDireccionImagen("src/images/portadas/New scientist.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(23).setDireccionImagen("src/images/portadas/discover.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(24).setDireccionImagen("src/images/portadas/popular scu.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(25).setDireccionImagen("src/images/portadas/wired.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(26).setDireccionImagen("src/images/portadas/nghistory.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(27).setDireccionImagen("src/images/portadas/psicology.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(28).setDireccionImagen("src/images/portadas/mit.jpg");
+		Biblioteca.getInstancia().getPublicaciones().get(29).setDireccionImagen("src/images/portadas/arc.jpg");
 
 		// Artículos (15 instancias)
 		String[][] articulos = {

@@ -94,6 +94,7 @@ public class GestionTrabajador2 extends JDialog {
 			"Coordinador de Servicios",
 			"Referencista"
 	};
+	private int pos = -1;
 	private JLabel lblNewLabel;
 	private JScrollPane scrollPane;
 	private JLabel lblNombre;
@@ -122,21 +123,21 @@ public class GestionTrabajador2 extends JDialog {
 	 * Launch the application.
 	 */
 
-	//	public static void main(String[] args) {
-	//		EventQueue.invokeLater(new Runnable() {
-	//			public void run() {
-	//				try {
-	//					MiPersonalizacion.aplicarTema();
-	//					Inicializar.Inicio();
-	//					//					Login frame = new Login();
-	//					GestionUsuario frame = new GestionUsuario();
-	//					frame.setVisible(true);
-	//				} catch (Exception e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		});
-	//	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MiPersonalizacion.aplicarTema();
+					Inicializar.Inicio();
+					//					Login frame = new Login();
+					GestionUsuario frame = new GestionUsuario();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the dialog.
@@ -240,13 +241,13 @@ public class GestionTrabajador2 extends JDialog {
 
 							reiniciarComponentes();
 
-							list.setSelectedIndex(0);
-
 							lblNombre.setForeground(Color.BLACK);
 							lblCi.setForeground(Color.BLACK);
 
 							textFieldNombreUsuario.setEnabled(false);
 							textFieldId.setEnabled(false);
+
+							list.setSelectedIndex(modelo.getSize() - 1);
 						}
 						else{
 							JOptionPane.showMessageDialog(null, "El trabajador ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
@@ -278,7 +279,15 @@ public class GestionTrabajador2 extends JDialog {
 					btnGuardar.setVisible(false);
 
 					reiniciarComponentes();
-					list.setSelectedIndex(0);
+					if(btnConfirmar.isVisible()){
+						list.setSelectedIndex(0);
+						cargarComponentes(0);
+					}
+					if(btnGuardar.isVisible()){
+						list.setSelectedIndex(pos);
+						cargarComponentes(pos);
+					}
+
 					list.setEnabled(true);
 
 					txtpnOperacion.setVisible(false);
@@ -386,7 +395,8 @@ public class GestionTrabajador2 extends JDialog {
 			btnEliminar.setBackground(Colores.getBeigetabla());
 			btnEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					eliminarUsuario();
+					pos = list.getSelectedIndex();
+					eliminarTrabajador();
 				}
 			});
 			btnEliminar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
@@ -422,8 +432,8 @@ public class GestionTrabajador2 extends JDialog {
 						txtpnOperacion.setText("");
 						txtpnOperacion.setVisible(false);
 
-						reiniciarComponentes();
-						list.setSelectedIndex(0);
+						list.setSelectedIndex(indice);
+						cargarComponentes(indice);
 
 						textFieldNombreUsuario.setEnabled(false);
 						textFieldId.setEnabled(false);
@@ -440,6 +450,30 @@ public class GestionTrabajador2 extends JDialog {
 			btnGuardar.setVisible(false);
 		}
 		return btnGuardar;
+	}
+
+	public void cargarComponentes(int p){
+
+		Trabajador u = modelo.getTrabajadorAt(p);
+
+		textFieldNombreUsuario.setText(u.getNombreCompleto());
+		lblEdad.setText("Edad: " + u.getEdad());
+		lblSexo.setText("Sexo: " + u.getSexo());
+		textFieldId.setText(u.getId());
+		int posNivel = -1;
+		for(int i = 0; i < niveles.length && posNivel == -1; i++){
+			if(u.getNivelEscolar().equals(niveles[i])){
+				posNivel = i;
+			}
+		}
+		comboBoxNivel.setSelectedIndex(pos);
+
+		int posCargo = -1;
+		for(int i = 0; i < cargos.length && posCargo == -1; i++){
+			if(u.getCargo().equals(cargos[i]))
+				posCargo = i;
+		}
+		comboBoxCargo.setSelectedIndex(posCargo);
 	}
 
 	//OTROS COMPONENTES
@@ -505,48 +539,45 @@ public class GestionTrabajador2 extends JDialog {
 			list.setBorder(new LineBorder(new Color(0, 0, 0)));
 			list.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
+					int indice = list.getSelectedIndex();
 
-					if (!e.getValueIsAdjusting()) { // Para evitar eventos duplicados
-						int indice = list.getSelectedIndex();
+					if (indice > -1) {
 
-						if (indice > -1 && modelo != null && modelo.getSize() > 0) {
+						Trabajador t = modelo.getTrabajadorAt(indice);
 
-							Trabajador t = modelo.getTrabajadorAt(indice);
+						btnEditar.setVisible(true);
+						btnEliminar.setVisible(true);
 
-							System.out.println(t.getCargo());
-							btnEditar.setVisible(true);
-							btnEliminar.setVisible(true);
-
-							textFieldNombreUsuario.setText(t.getNombreCompleto());
-							lblEdad.setText("Edad: " + t.getEdad());
-							lblSexo.setText("Sexo: " + t.getSexo());
-							textFieldId.setText(t.getId());
-							int pos = -1;
-							for(int i = 0; i < niveles.length; i++){
-								if(t.getNivelEscolar().equals(niveles[i])){
-									pos = i;
-								}
+						textFieldNombreUsuario.setText(t.getNombreCompleto());
+						lblEdad.setText("Edad: " + t.getEdad());
+						lblSexo.setText("Sexo: " + t.getSexo());
+						textFieldId.setText(t.getId());
+						int pos = -1;
+						for(int i = 0; i < niveles.length; i++){
+							if(t.getNivelEscolar().equals(niveles[i])){
+								pos = i;
 							}
-							comboBoxNivel.setSelectedIndex(pos);
-
-							int pos2 = -1;
-							for(int i = 0; i < cargos.length; i++){
-								if(t.getCargo().equals(cargos[i]))
-									pos2 = i;
-							}
-							comboBoxCargo.setSelectedIndex(pos2);
 						}
+						comboBoxNivel.setSelectedIndex(pos);
+
+						int pos2 = -1;
+						for(int i = 0; i < cargos.length; i++){
+							if(t.getCargo().equals(cargos[i]))
+								pos2 = i;
+						}
+						comboBoxCargo.setSelectedIndex(pos2);
 					}
 				}
 			});
 			list.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			list.setModel(modelo);
+			list.setSelectedIndex(0);
 			scrollPane.setViewportView(list);
 		}
 		return scrollPane;
 	}
 
-	public void eliminarUsuario() {
+	public void eliminarTrabajador() {
 
 		if(!list.isSelectionEmpty()){
 
@@ -561,10 +592,18 @@ public class GestionTrabajador2 extends JDialog {
 						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar al trabajador?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 						if (option == JOptionPane.YES_OPTION) {
-							Biblioteca.getInstancia().eliminarTrabajador(t);
+							modelo.removeTrabajador(pos);
 
 							JOptionPane.showMessageDialog(null, "Trabajador " + t.getNombreCompleto() + " ha sido eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-							list.setSelectedIndex(0);
+							if(pos > 0){
+								list.setSelectedIndex(pos - 1);
+								cargarComponentes(pos - 1);
+							}
+							else{
+								list.setSelectedIndex(pos);
+								cargarComponentes(pos);
+							}
+							pos = -1;
 						}
 					}
 					else

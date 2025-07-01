@@ -126,6 +126,10 @@ public class Principal extends JFrame {
 	private JLabel label_6;
 	private JLabel label_7;
 	private JLabel label_8;
+	private JPopupMenu popupMenuSesion;
+	private JMenuItem mntmCerrarSesin;
+	private JMenuItem mntmSalir;
+	private JLabel label_9;
 
 	/**
 	 * Launch the application.
@@ -154,26 +158,6 @@ public class Principal extends JFrame {
 	public Principal() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("src/images/iconos/libroa.png"));
 		setTitle("BiblioTech Corp.");
-		
-		//		// Personalizar cursor (después de inicializar los componentes)
-		//		try {
-		//			Image cursorImg = new ImageIcon("src/images/iconos/Cursorr32x32.png").getImage();
-		//			Point hotspot = new Point(5, 5); // Ajusta según tu imagen
-		//			Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-		//					cursorImg, hotspot, "Custom");
-		//
-		//			// Aplicar a todo el JDialog
-		//			setCursor(customCursor);
-		//
-		//			// Opcional: Restaurar cursor predeterminado al salir
-		//			addWindowListener(new WindowAdapter() {
-		//				public void windowClosed(WindowEvent e) {
-		//					setCursor(Cursor.getDefaultCursor());
-		//				}
-		//			});
-		//		} catch (Exception e) {
-		//			System.err.println("Error al cargar cursor personalizado");
-		//		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -226,10 +210,18 @@ public class Principal extends JFrame {
 	private JButton getBtnSesion() {
 		if (btnSesion == null) {
 			btnSesion = new JButton("");
+			btnSesion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int x = btnSesion.getWidth() + 1;
+				    int y = 0;
+					popupMenuSesion.show(btnSesion, x, y);
+				}
+			});
 			btnSesion.setBackground(Colores.getBeigetabla());
 			btnSesion.setBorder(null);
 			btnSesion.setFont(new Font("SansSerif", Font.PLAIN, 20));
 			btnSesion.setBounds(0, 185, 338, 70);
+			addPopup(btnSesion, getPopupMenuSesion());
 		}
 		return btnSesion;
 	}
@@ -247,9 +239,9 @@ public class Principal extends JFrame {
 			btnGestion = new JButton("");
 			btnGestion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					int xPos = btnGestion.getWidth() - popupMenuGestion.getPreferredSize().width;
-					int yPos = popupMenuGestion.getPreferredSize().height;
-					popupMenuGestion.show(btnGestion, xPos, yPos);
+					int x = btnGestion.getWidth() + 1;
+				    int y = 0;
+					popupMenuGestion.show(btnGestion, x, y);
 				}
 			});
 			btnGestion.setFont(new Font("SansSerif", Font.PLAIN, 20));
@@ -265,9 +257,9 @@ public class Principal extends JFrame {
 			btnReportes = new JButton("");
 			btnReportes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					int xPos = btnReportes.getWidth() - popupMenuGestion.getPreferredSize().width;
-					int yPos = popupMenuGestion.getPreferredSize().height;
-					popupMenuReportes.show(btnReportes, xPos, yPos);
+					int x = btnReportes.getWidth() + 1;
+				    int y = 0;
+					popupMenuReportes.show(btnReportes, x, y);
 				}
 			});
 			btnReportes.setFont(new Font("SansSerif", Font.PLAIN, 20));
@@ -389,6 +381,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmUsuario_1() {
 		if (mntmUsuario_1 == null) {
 			mntmUsuario_1 = new JMenuItem("Usuario");
+			mntmUsuario_1.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmUsuario_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					labelRuta.setText("Gestión / Usuario");
@@ -405,6 +398,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmTrabajador_1() {
 		if (mntmTrabajador_1 == null) {
 			mntmTrabajador_1 = new JMenuItem("Trabajador");
+			mntmTrabajador_1.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmTrabajador_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					lblGestin.setForeground(Colores.getCruds());
@@ -420,6 +414,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmPublicacin() {
 		if (mntmPublicacin == null) {
 			mntmPublicacin = new JMenuItem("Publicaci\u00F3n");
+			mntmPublicacin.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmPublicacin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					lblGestin.setForeground(Colores.getCruds());
@@ -436,6 +431,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmPrstamo() {
 		if (mntmPrstamo == null) {
 			mntmPrstamo = new JMenuItem("Pr\u00E9stamo");
+			mntmPrstamo.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmPrstamo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					labelRuta.setText("Gestión / Préstamo");
@@ -750,6 +746,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmMateriasAs() {
 		if (mntmMateriasAs == null) {
 			mntmMateriasAs = new JMenuItem("Materias m\u00E1s solicitadas");
+			mntmMateriasAs.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmMateriasAs.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					labelRuta.setText("Reportes / Materias más solicitadas");
@@ -766,6 +763,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmPrstamosPrximosA() {
 		if (mntmPrstamosPrximosA == null) {
 			mntmPrstamosPrximosA = new JMenuItem("Pr\u00E9stamos pr\u00F3ximos a vencer");
+			mntmPrstamosPrximosA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmPrstamosPrximosA.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					lblReportes.setForeground(Colores.getCruds());
@@ -782,6 +780,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmHistorialDePrstamos() {
 		if (mntmHistorialDePrstamos == null) {
 			mntmHistorialDePrstamos = new JMenuItem("Historial de pr\u00E9stamos");
+			mntmHistorialDePrstamos.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmHistorialDePrstamos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					lblReportes.setForeground(Colores.getCruds());
@@ -798,6 +797,7 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmUsuariosMsConcurrentes() {
 		if (mntmUsuariosMsConcurrentes == null) {
 			mntmUsuariosMsConcurrentes = new JMenuItem("Usuarios con m\u00E1s pr\u00E9stamos");
+			mntmUsuariosMsConcurrentes.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 			mntmUsuariosMsConcurrentes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					lblReportes.setForeground(Colores.getCruds());
@@ -897,4 +897,28 @@ public class Principal extends JFrame {
 		}
 		return label_8;
 	}
+	private JPopupMenu getPopupMenuSesion() {
+		if (popupMenuSesion == null) {
+			popupMenuSesion = new JPopupMenu();
+			popupMenuSesion.setFont(new Font("Segoe UI", Font.PLAIN, 17));
+			popupMenuSesion.add(getMntmCerrarSesin());
+			popupMenuSesion.add(getMntmSalir());
+		}
+		return popupMenuSesion;
+	}
+	private JMenuItem getMntmCerrarSesin() {
+		if (mntmCerrarSesin == null) {
+			mntmCerrarSesin = new JMenuItem("Cerrar sesi\u00F3n");
+			mntmCerrarSesin.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		}
+		return mntmCerrarSesin;
+	}
+	private JMenuItem getMntmSalir() {
+		if (mntmSalir == null) {
+			mntmSalir = new JMenuItem("Salir");
+			mntmSalir.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		}
+		return mntmSalir;
+	}
+	
 }
