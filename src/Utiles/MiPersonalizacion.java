@@ -34,7 +34,6 @@ public class MiPersonalizacion extends FlatLightLaf {
 
 		// Botones
 		UIManager.put("Button.arc", 199);
-		UIManager.put("Button.background", Colores.getColorbeige());
 		UIManager.put("Component.arc", 199);
 
 		// Combobox

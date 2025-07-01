@@ -41,7 +41,7 @@ public abstract class Publicacion {
 	public void setDireccionImagen(String direccion){
 		this.direccionImagen = direccion;
 	}
-	
+
 	public ImageIcon getImage(){
 		return new ImageIcon(direccionImagen);
 	}

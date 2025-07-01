@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -44,11 +46,17 @@ import java.beans.PropertyChangeEvent;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.JTextPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+
+import javax.swing.JPopupMenu;
+import javax.swing.JMenuItem;
 
 public class Reporte2PlazoDias extends JDialog {
 
@@ -79,16 +87,16 @@ public class Reporte2PlazoDias extends JDialog {
 	 * Create the dialog.
 	 */
 	public Reporte2PlazoDias() {
-		setBounds(500, 100, 820, 583);
+		setBounds(338, 159, 1026, 562);
 		setUndecorated(true);
 		setModal(true);
 		setBackground(Color.WHITE);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		contentPanel.setBackground(Color.WHITE);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getTxtpnDatosPrstamo());
-		contentPanel.add(getLabel());
 		contentPanel.add(getScrollPane_1());
 		contentPanel.add(getLblCantidadDeDas());
 		contentPanel.add(getSpinner());
@@ -103,6 +111,7 @@ public class Reporte2PlazoDias extends JDialog {
 		contentPanel.add(getBtnMostrar());
 		contentPanel.add(getLblTipoDePublicacin());
 		contentPanel.add(getComboBoxTipo());
+		contentPanel.add(getLabel());
 		cargarTablaPrestamosActivos();
 		mostrarDatos(mostrarPrestActivos);
 	}
@@ -111,12 +120,13 @@ public class Reporte2PlazoDias extends JDialog {
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
 			btnSalir = new JButton("");
+			btnSalir.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			btnSalir.setBackground(Color.WHITE);
 			btnSalir.setBorder(null);
 			btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
-			btnSalir.setIcon(new ImageIcon("src/images/otroLogoBorrar50x50.png"));
-			btnSalir.setBounds(760, 11, 50, 50);
+			btnSalir.setIcon(new ImageIcon("src/images/iconos/otroLogoBorrar50x50.png"));
+			btnSalir.setBounds(966, 11, 50, 50);
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
@@ -139,8 +149,9 @@ public class Reporte2PlazoDias extends JDialog {
 					}
 				}
 			});
-			btnMostrar.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			btnMostrar.setBounds(615, 492, 123, 32);
+			btnMostrar.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			btnMostrar.setBackground(Colores.getBeigetabla());
+			btnMostrar.setBounds(764, 475, 123, 32);
 		}
 		return btnMostrar;
 	}
@@ -149,8 +160,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JLabel getLblPrestamosActivos() {
 		if (lblPrestamosActivos == null) {
 			lblPrestamosActivos = new JLabel("Prestamos activos");
-			lblPrestamosActivos.setFont(new Font("SansSerif", Font.PLAIN, 22));
-			lblPrestamosActivos.setBounds(208, 0, 194, 34);
+			lblPrestamosActivos.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			lblPrestamosActivos.setBounds(222, 27, 194, 34);
 		}
 		return lblPrestamosActivos;
 	}
@@ -158,8 +169,9 @@ public class Reporte2PlazoDias extends JDialog {
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("");
+			label.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			label.setBorder(new LineBorder(new Color(0, 0, 0)));
-			label.setBounds(555, 178, 244, 286);
+			label.setBounds(655, 178, 319, 277);
 		}
 		return label;
 	}
@@ -167,8 +179,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JLabel getLblNombreUsuario() {
 		if (lblNombreUsuario == null) {
 			lblNombreUsuario = new JLabel("Usuario:");
-			lblNombreUsuario.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			lblNombreUsuario.setBounds(574, 215, 137, 23);
+			lblNombreUsuario.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			lblNombreUsuario.setBounds(685, 215, 137, 23);
 		}
 		return lblNombreUsuario;
 	}
@@ -176,8 +188,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JLabel getLblNombrePublicacin() {
 		if (lblNombrePublicacin == null) {
 			lblNombrePublicacin = new JLabel("Publicaci\u00F3n:");
-			lblNombrePublicacin.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			lblNombrePublicacin.setBounds(574, 297, 177, 23);
+			lblNombrePublicacin.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			lblNombrePublicacin.setBounds(685, 297, 177, 23);
 		}
 		return lblNombrePublicacin;
 	}
@@ -185,8 +197,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JLabel getLblTrabajador() {
 		if (lblTrabajador == null) {
 			lblTrabajador = new JLabel("Trabajador:");
-			lblTrabajador.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			lblTrabajador.setBounds(574, 376, 137, 23);
+			lblTrabajador.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			lblTrabajador.setBounds(685, 376, 137, 23);
 		}
 		return lblTrabajador;
 	}
@@ -194,8 +206,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JLabel getLblCantidadDeDas() {
 		if (lblCantidadDeDas == null) {
 			lblCantidadDeDas = new JLabel("Cantidad de d\u00EDas:");
-			lblCantidadDeDas.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			lblCantidadDeDas.setBounds(555, 70, 129, 23);
+			lblCantidadDeDas.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			lblCantidadDeDas.setBounds(685, 67, 129, 23);
 		}
 		return lblCantidadDeDas;
 	}
@@ -203,8 +215,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JLabel getLblTipoDePublicacin() {
 		if (lblTipoDePublicacin == null) {
 			lblTipoDePublicacin = new JLabel("Tipo de \r\npublicaci\u00F3n:");
-			lblTipoDePublicacin.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			lblTipoDePublicacin.setBounds(555, 121, 149, 23);
+			lblTipoDePublicacin.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			lblTipoDePublicacin.setBounds(666, 121, 149, 23);
 		}
 		return lblTipoDePublicacin;
 	}
@@ -213,13 +225,36 @@ public class Reporte2PlazoDias extends JDialog {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
+			table.setToolTipText("");
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setBackground(Colores.getColorbeige());
-			table.setForeground(Colores.getColoroscuro());
-			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			JTableHeader header = table.getTableHeader();
+			header.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+			table.setRowHeight(28);
+			table.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+			table.setGridColor(new Color(220, 200, 180));
+			table.setSelectionBackground(new Color(181, 149, 110));
+			table.setSelectionForeground(Color.WHITE);
+			table.setShowGrid(false);
+			table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value,
+						boolean isSelected, boolean hasFocus, int row, int column) {
+
+					Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+					if (!isSelected) {
+						if (row % 2 == 0) {
+							c.setBackground(Colores.getBeigetabla()); // Fondo pastel claro
+						} else {
+							c.setBackground(Colores.getContrastetabla()); // Otro tono pastel
+						}
+						c.setForeground(Color.DARK_GRAY);
+					}
+					return c;
+				}
+			});
 			table.setGridColor(Color.WHITE);
 			table.setRowHeight(20);
-
 		}
 		return table;
 	}
@@ -227,9 +262,9 @@ public class Reporte2PlazoDias extends JDialog {
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setForeground(Colores.getColoroscuro());
-			scrollPane_1.setBackground(Colores.getColorbeige());
-			scrollPane_1.setBounds(50, 70, 452, 454);
+			scrollPane_1.setForeground(Color.BLACK);
+			scrollPane_1.setBackground(Colores.getBeigetabla());
+			scrollPane_1.setBounds(70, 70, 484, 454);
 			scrollPane_1.setViewportView(getTable());
 		}
 		return scrollPane_1;
@@ -249,9 +284,9 @@ public class Reporte2PlazoDias extends JDialog {
 					}
 				}
 			});
-			comboBoxTipo.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			comboBoxTipo.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			comboBoxTipo.setModel(new DefaultComboBoxModel(new String[] {"Todas", "Libro", "Revista", "Articulo"}));
-			comboBoxTipo.setBounds(714, 125, 85, 20);
+			comboBoxTipo.setBounds(825, 121, 106, 24);
 		}
 		return comboBoxTipo;
 	}
@@ -259,6 +294,7 @@ public class Reporte2PlazoDias extends JDialog {
 	private JSpinner getSpinner() {
 		if (spinner == null) {
 			spinner = new JSpinner();
+			spinner.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			spinner.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 
@@ -271,7 +307,7 @@ public class Reporte2PlazoDias extends JDialog {
 					cargarTablaReporte2(cantDias);
 				}
 			});
-			spinner.setBounds(714, 72, 48, 24);
+			spinner.setBounds(869, 68, 62, 26);
 		}
 		return spinner;
 	}
@@ -282,11 +318,11 @@ public class Reporte2PlazoDias extends JDialog {
 			txtpnDatosPrstamo = new JTextPane();
 			txtpnDatosPrstamo.setText("Datos pr\u00E9stamo");
 			txtpnDatosPrstamo.setDisabledTextColor(Color.BLACK);
-			txtpnDatosPrstamo.setFont(new Font("SansSerif", Font.PLAIN, 18));
+			txtpnDatosPrstamo.setFont(new Font("Sylfaen", Font.PLAIN, 17));
 			txtpnDatosPrstamo.setDisabledTextColor(Color.BLACK);
 			txtpnDatosPrstamo.setEnabled(false);
 			txtpnDatosPrstamo.setBackground(Color.WHITE);
-			txtpnDatosPrstamo.setBounds(574, 161, 137, 32);
+			txtpnDatosPrstamo.setBounds(685, 161, 137, 32);
 		}
 		return txtpnDatosPrstamo;
 	}
@@ -294,8 +330,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JTextPane getTextPanePub() {
 		if (textPanePub == null) {
 			textPanePub = new JTextPane();
-			textPanePub.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			textPanePub.setBounds(570, 331, 189, 25);
+			textPanePub.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			textPanePub.setBounds(681, 324, 250, 25);
 			textPanePub.setEditable(false);
 			textPanePub.setBackground(Color.WHITE);
 		}
@@ -306,8 +342,8 @@ public class Reporte2PlazoDias extends JDialog {
 		if (textPaneNombreUsuario == null) {
 			textPaneNombreUsuario = new JTextPane();
 			textPaneNombreUsuario.setBackground(Color.WHITE);
-			textPaneNombreUsuario.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			textPaneNombreUsuario.setBounds(570, 249, 189, 25);
+			textPaneNombreUsuario.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			textPaneNombreUsuario.setBounds(681, 242, 250, 25);
 			textPaneNombreUsuario.setEditable(false);
 		}
 		return textPaneNombreUsuario;
@@ -316,8 +352,8 @@ public class Reporte2PlazoDias extends JDialog {
 	private JTextPane getTextPaneTrabajador() {
 		if (textPaneTrabajador == null) {
 			textPaneTrabajador = new JTextPane();
-			textPaneTrabajador.setFont(new Font("SansSerif", Font.PLAIN, 16));
-			textPaneTrabajador.setBounds(570, 410, 189, 25);
+			textPaneTrabajador.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+			textPaneTrabajador.setBounds(681, 403, 250, 25);
 			textPaneTrabajador.setEditable(false);
 			textPaneTrabajador.setBackground(Color.WHITE);
 		}

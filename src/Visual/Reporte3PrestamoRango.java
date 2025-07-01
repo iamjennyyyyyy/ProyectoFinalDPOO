@@ -8,6 +8,8 @@ import Utiles.PrestamoTableModel;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -30,60 +32,70 @@ public class Reporte3PrestamoRango extends JDialog {
 		getContentPane().setLayout(null);
 		getContentPane().add(getScrollPane());
 
-		setBounds(500, 100, 773, 583);
+		setBounds(338, 159, 1026, 562);
 		setBackground(Color.WHITE);
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
 
 		fechaInicio  = new JDateChooser("dd/MM/yyyy","##/##/####",'_');
-		fechaInicio.setBounds(130, 79, 125, 26);
+		fechaInicio.setBounds(215, 76, 125, 26);
 		getContentPane().add(fechaInicio);
 
 		fechaFin  = new JDateChooser("dd/MM/yyyy","##/##/####",'_');
-		fechaFin.setBounds(352, 79, 125, 26);
+		fechaFin.setBounds(489, 76, 125, 26);
 		getContentPane().add(fechaFin);
 
 		Label inferior = new Label("Entre :");
-		inferior.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		inferior.setBounds(46, 78, 52, 27);
+		inferior.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+		inferior.setBounds(136, 76, 52, 27);
 		getContentPane().add(inferior);
 
 		Label label_1 = new Label("Y");
-		label_1.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		label_1.setBounds(298, 79, 17, 27);
+		label_1.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+		label_1.setBounds(404, 75, 17, 27);
 		getContentPane().add(label_1);
 
 		Label label_2 = new Label("Prestamos Realizados ");
-		label_2.setFont(new Font("SansSerif", Font.PLAIN, 18));
-		label_2.setBounds(217, 29, 214, 27);
+		label_2.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+		label_2.setBounds(279, 34, 214, 27);
 		getContentPane().add(label_2);
 
 		final JButton buscarButton = new JButton("Buscar");
-		buscarButton.setBounds(619, 150, 117, 35);
+		buscarButton.setFont(new Font("Sylfaen", Font.PLAIN, 17));
+		buscarButton.setBounds(777, 135, 117, 35);
+		buscarButton.setBackground(Colores.getBeigetabla());
 		buscarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				Date fechaInferior = fechaInicio.getDate();			
 				Date fechaSuperior = fechaFin.getDate();
-				if (fechaSuperior.before(fechaInferior)){
-					JOptionPane.showMessageDialog(null, "Error. Revise el orden de las fechas.");
+				if(fechaSuperior == null || fechaInferior == null){
+					JOptionPane.showMessageDialog(null, "Seleccione un rango de fechas correcto", "Información", JOptionPane.WARNING_MESSAGE);
 				}
-				else { 
-					Prestamo[] prestamosEnRango  = Biblioteca.getInstancia().rangoPrestamo(fechaInferior, fechaSuperior);
-					cargarTablaPrestamos(prestamosEnRango);
-				}	
+				else{
+					if (fechaSuperior.before(fechaInferior)){
+						JOptionPane.showMessageDialog(null, "Error. Revise el orden de las fechas.");
+					}
+					else { 
+						Prestamo[] prestamosEnRango  = Biblioteca.getInstancia().rangoPrestamo(fechaInferior, fechaSuperior);
+						cargarTablaPrestamos(prestamosEnRango);
+					}	
+				}
 			}
 		});
 		getContentPane().add(buscarButton);
 		getContentPane().add(getScrollPane());
 
-		JButton btnSalir = new JButton("Salir");
+		JButton btnSalir = new JButton("");
+		btnSalir.setBorder(null);
+		btnSalir.setBackground(Color.WHITE);
+		btnSalir.setIcon(new ImageIcon("src/images/iconos/otroLogoBorrar50x50.png"));
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 			}
 		});
-		btnSalir.setBounds(619, 220, 117, 35);
+		btnSalir.setBounds(956, 11, 60, 50);
 		getContentPane().add(btnSalir);
 	}
 
@@ -91,9 +103,32 @@ public class Reporte3PrestamoRango extends JDialog {
 		if (table == null) {
 			table = new JTable();
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setBackground(Colores.getColorbeige());
-			table.setForeground(Colores.getColoroscuro());
-			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			JTableHeader header = table.getTableHeader();
+			header.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+			table.setRowHeight(28);
+			table.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+			table.setGridColor(new Color(220, 200, 180));
+			table.setSelectionBackground(new Color(181, 149, 110));
+			table.setSelectionForeground(Color.WHITE);
+			table.setShowGrid(false);
+			table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value,
+						boolean isSelected, boolean hasFocus, int row, int column) {
+
+					Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+					if (!isSelected) {
+						if (row % 2 == 0) {
+							c.setBackground(Colores.getBeigetabla()); // Fondo pastel claro
+						} else {
+							c.setBackground(Colores.getContrastetabla()); // Otro tono pastel
+						}
+						c.setForeground(Color.DARK_GRAY);
+					}
+					return c;
+				}
+			});
 			table.setGridColor(Color.WHITE);
 			table.setRowHeight(20);
 		}
@@ -103,7 +138,7 @@ public class Reporte3PrestamoRango extends JDialog {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(49, 138, 522, 315);
+			scrollPane.setBounds(136, 135, 581, 365);
 			scrollPane.setViewportView(getTable());
 		}
 		return scrollPane;

@@ -63,6 +63,22 @@ public class Login extends JDialog {
 	/**
 	 * Launch the application.
 	 */
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MiPersonalizacion.aplicarTema();
+					Inicializar.Inicio();
+					//					Login frame = new Login();
+					Login frame = new Login();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the dialog.
@@ -188,7 +204,7 @@ public class Login extends JDialog {
 				}
 			});
 			btnIniciarSesion.setForeground(Color.BLACK);
-			btnIniciarSesion.setBackground(Colores.getColorBotonLoginNuevo());
+			btnIniciarSesion.setBackground(Colores.getBeigetabla());
 			btnIniciarSesion.setFont(new Font("SansSerif", Font.PLAIN, 22));
 			btnIniciarSesion.setBounds(744, 640, 138, 48);
 		}
@@ -198,7 +214,7 @@ public class Login extends JDialog {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Salir");
 			btnSalir.setForeground(Color.BLACK);
-			btnSalir.setBackground(Colores.getColorBotonLoginNuevo());
+			btnSalir.setBackground(Colores.getBeigetabla());
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
@@ -221,9 +237,9 @@ public class Login extends JDialog {
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("");
-			lblNewLabel_1.setIcon(new ImageIcon("src/images/logochiquitito.jpg"));
+			lblNewLabel_1.setIcon(new ImageIcon("src/images/iconos/loginmejor3.jpg"));
 			lblNewLabel_1.setIgnoreRepaint(true);
-			lblNewLabel_1.setBounds(629, 37, 108, 95);
+			lblNewLabel_1.setBounds(576, 11, 181, 121);
 		}
 		return lblNewLabel_1;
 	}

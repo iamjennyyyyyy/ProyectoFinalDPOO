@@ -1,9 +1,0 @@
-Para poder importar las librerías necesarias y que funcione
-correctamente el programa, debe seguir los siguientes pasos:
-
-1. Asegurarse de que usa la version jre 1.8.0
-2. Importar el proyecto a su workspace
-3. Hacer clic derecho en la carpeta del proyecto (en el workspace)
-4. BuildPath/Configure Path/Libreries/AddExternalLibreries
-5. Al presionar Browse, busque la direccción ProyectoFinal/lib
-6. Seleccionar todas e importar. Aplicar cambios y listo

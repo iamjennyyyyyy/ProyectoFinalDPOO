@@ -10,6 +10,7 @@ import Logica.Articulo;
 import Logica.Libro;
 import Logica.Publicacion;
 import Logica.Revista;
+import Utiles.Colores;
 
 import java.awt.Color;
 
@@ -23,37 +24,38 @@ import javax.swing.border.TitledBorder;
 import java.awt.SystemColor;
 import java.awt.CardLayout;
 
+import javax.swing.UIManager;
+import javax.swing.ImageIcon;
+import javax.swing.border.LineBorder;
+import javax.swing.JSeparator;
+
 public class InfoPublicacionTablaPrestamo extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JLabel lblNewLabel;
-	private JTextPane textPaneTitulo;
-	private JLabel lblCarnetUsuario;
-	private JLabel lblPenalizacin;
-	private JTextPane textPaneId;
-	private JTextPane textPaneMateria;
-	private JLabel lblEdad;
-	private JTextPane textPanePag;
-	private JLabel lblSexo;
-	private JTextPane textPaneEjemp;
-	private JPanel panelLibro;
-	private JTextPane textPaneAutor;
-	private JLabel lblAutor;
-	private JTextPane textPaneEditorial;
-	private JLabel lblEditorial;
-	private JPanel panel_1;
-	private JPanel panelRevista;
-	private JTextPane textPane_2;
-	private JTextPane textPane_3;
-	private JLabel lblAutor_1;
-	private JLabel lblrbitro;
-	private JPanel panel;
-	private JLabel lblAo;
-	private JTextPane textPaneAnnio;
-	private JLabel lblNmero;
-	private JTextPane textPaneNum;
-	private JLabel labelTipo;
 	private JLabel labelImagen;
+	private JTextPane txtpnTtulo;
+	private JTextPane textPaneId;
+	private JTextPane txtpnMateria;
+	private JTextPane txtpnPginas;
+	private JTextPane txtpnEjemplares;
+	private JTextPane textPaneOtroAtributo;
+	private JTextPane textPaneOotroAtributo;
+	private JTextPane textPaneTipo;
+	private JLabel label;
+	private JLabel label_1;
+	private JLabel label_2;
+	private JLabel label_3;
+	private JLabel label_4;
+	private JLabel label_5;
+	private JLabel label_6;
+	private JLabel label_7;
+	private JLabel label_8;
+	private JTextPane txtpnLosDerechosDe;
+	private JSeparator separator;
+	private JSeparator separator_1;
+	private JSeparator separator_2;
+	private JSeparator separator_3;
+	private JSeparator separator_4;
 
 	/**
 	 * Launch the application.
@@ -63,326 +65,275 @@ public class InfoPublicacionTablaPrestamo extends JDialog {
 	 * Create the dialog.
 	 */
 	public InfoPublicacionTablaPrestamo(Publicacion p) {
-		setTitle("Informaci\u00F3n Usuario");
+		setTitle("Informaci\u00F3n Publicación");
 		setModal(true);
-		setBounds(150, 20, 948, 684);
+		setBounds(350, 190, 799, 494);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(Colores.getFondo());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		contentPanel.add(getLblNewLabel());
-		contentPanel.add(getTextPaneTitulo());
-		contentPanel.add(getLblCarnetUsuario());
-		contentPanel.add(getLblPenalizacin());
-		contentPanel.add(getTextPaneId());
-		contentPanel.add(getTextPaneMateria());
-		contentPanel.add(getLblEdad());
-		contentPanel.add(getTextPanePag());
-		contentPanel.add(getLblSexo());
-		contentPanel.add(getTextPaneEjemp());
-		contentPanel.add(getPanel_1());
-		textPaneTitulo.setText(p.getTitulo());
-		textPaneId.setText(p.getId());
-		textPanePag.setText("" + p.getNumPaginas());
-		textPaneEjemp.setText("" + p.getCantEjemplares());
-		textPaneMateria.setText(p.getMateria());
 		contentPanel.add(getLabelImagen());
 		labelImagen.setIcon(p.getImage());
+		contentPanel.add(getTxtpnTtulo());
+		contentPanel.add(getTextPaneId());
+		contentPanel.add(getTxtpnMateria());
+		contentPanel.add(getTextPane_2_1());
+		contentPanel.add(getTextPane_3_1());
+		contentPanel.add(getTextPaneOtroAtributo());
+		contentPanel.add(getTextPaneOotroAtributo());
+		txtpnTtulo.setText("Título: " + p.getTitulo());
+		textPaneId.setText("Identificador: " + p.getId());
+		txtpnMateria.setText("Materia: " + p.getMateria());
+		txtpnPginas.setText("Páginas: " + p.getNumPaginas());
+		txtpnEjemplares.setText("Ejemplares: " + p.getCantEjemplares());
+		contentPanel.add(getTextPaneTipo());
+		contentPanel.add(getLabel());
+		contentPanel.add(getLabel_1());
+		contentPanel.add(getLabel_2());
+		contentPanel.add(getLabel_3());
+		contentPanel.add(getLabel_4());
+		contentPanel.add(getLabel_5());
+		contentPanel.add(getLabel_6());
+		contentPanel.add(getLabel_7());
+		contentPanel.add(getLabel_8());
+		contentPanel.add(getTxtpnLosDerechosDe());
+		contentPanel.add(getSeparator());
+		contentPanel.add(getSeparator_1());
+		contentPanel.add(getSeparator_2());
+		contentPanel.add(getSeparator_3());
+		contentPanel.add(getSeparator_4());
 		if(p instanceof Libro){
-			panelLibro.setVisible(true);
-			textPaneAutor.setText(((Libro)p).getAutores().get(0));
-			textPaneEditorial.setText(((Libro)p).getEditorial());
+			textPaneTipo.setText("Libro");
+			textPaneOtroAtributo.setText("Autor:  " + ((Libro)p).getAutores().get(0));
+			textPaneOotroAtributo.setText("Editorial: " + ((Libro)p).getEditorial());
 		}
 		else if(p instanceof Revista){
-			panelRevista.setVisible(true);
-			textPaneAnnio.setText("" + ((Revista)p).getAnno());
-			textPaneNum.setText("" + ((Revista)p).getNum());
+			textPaneTipo.setText("Revista");
+			textPaneOtroAtributo.setText("Año:      " + ((Revista)p).getAnno());
+			textPaneOotroAtributo.setText("Número:   " + ((Revista)p).getNum());
 		}
 		else if(p instanceof Articulo){
-			panelRevista.setVisible(true);
-			textPane_2.setText(((Articulo)p).getAutores().get(0));
-			textPaneNum.setText(((Articulo)p).getArbitros().get(0));
+			textPaneTipo.setText("Artículo");
+			textPaneOtroAtributo.setText("Autor:  " + ((Articulo)p).getAutores().get(0));
+			textPaneOotroAtributo.setText("Árbitro: " + ((Articulo)p).getArbitros().get(0));
 		}
-	}
-	private JLabel getLblNewLabel() {
-		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("T\u00EDtulo:");
-			lblNewLabel.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblNewLabel.setBounds(52, 31, 159, 32);
-		}
-		return lblNewLabel;
-	}
-	private JTextPane getTextPaneTitulo() {
-		if (textPaneTitulo == null) {
-			textPaneTitulo = new JTextPane();
-			textPaneTitulo.setForeground(SystemColor.infoText);
-			textPaneTitulo.setEditable(false);
-			textPaneTitulo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneTitulo.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneTitulo.setBounds(52, 74, 363, 32);
-		}
-		return textPaneTitulo;
-	}
-	private JLabel getLblCarnetUsuario() {
-		if (lblCarnetUsuario == null) {
-			lblCarnetUsuario = new JLabel("Identificador");
-			lblCarnetUsuario.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblCarnetUsuario.setBounds(52, 131, 159, 32);
-		}
-		return lblCarnetUsuario;
-	}
-	private JLabel getLblPenalizacin() {
-		if (lblPenalizacin == null) {
-			lblPenalizacin = new JLabel("Materia:");
-			lblPenalizacin.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblPenalizacin.setBounds(52, 296, 110, 32);
-		}
-		return lblPenalizacin;
-	}
-	private JTextPane getTextPaneId() {
-		if (textPaneId == null) {
-			textPaneId = new JTextPane();
-			textPaneId.setForeground(SystemColor.infoText);
-			textPaneId.setEditable(false);
-			textPaneId.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneId.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneId.setBounds(52, 174, 363, 32);
-		}
-		return textPaneId;
-	}
-	private JTextPane getTextPaneMateria() {
-		if (textPaneMateria == null) {
-			textPaneMateria = new JTextPane();
-			textPaneMateria.setForeground(SystemColor.infoText);
-			textPaneMateria.setEditable(false);
-			textPaneMateria.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneMateria.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneMateria.setBounds(52, 339, 363, 32);
-		}
-		return textPaneMateria;
-	}
-	private JLabel getLblEdad() {
-		if (lblEdad == null) {
-			lblEdad = new JLabel("P\u00E1ginas:");
-			lblEdad.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblEdad.setBounds(52, 237, 97, 32);
-		}
-		return lblEdad;
-	}
-	private JTextPane getTextPanePag() {
-		if (textPanePag == null) {
-			textPanePag = new JTextPane();
-			textPanePag.setForeground(SystemColor.infoText);
-			textPanePag.setEditable(false);
-			textPanePag.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPanePag.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPanePag.setBounds(139, 237, 55, 32);
-		}
-		return textPanePag;
-	}
-	private JLabel getLblSexo() {
-		if (lblSexo == null) {
-			lblSexo = new JLabel("Ejemplares:");
-			lblSexo.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblSexo.setBounds(237, 237, 110, 32);
-		}
-		return lblSexo;
-	}
-	private JTextPane getTextPaneEjemp() {
-		if (textPaneEjemp == null) {
-			textPaneEjemp = new JTextPane();
-			textPaneEjemp.setForeground(SystemColor.infoText);
-			textPaneEjemp.setEditable(false);
-			textPaneEjemp.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneEjemp.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneEjemp.setBounds(349, 237, 66, 32);
-		}
-		return textPaneEjemp;
-	}
-	private JPanel getPanelLibro() {
-		if (panelLibro == null) {
-			panelLibro = new JPanel();
-			panelLibro.setBackground(Color.WHITE);
-			panelLibro.setLayout(null);
-			panelLibro.add(getTextPaneAutor());
-			panelLibro.add(getLblAutor());
-			panelLibro.add(getTextPaneEditorial());
-			panelLibro.add(getLblEditorial());
-			panelLibro.setVisible(false);
-		}
-		return panelLibro;
-	}
-	private JTextPane getTextPaneAutor() {
-		if (textPaneAutor == null) {
-			textPaneAutor = new JTextPane();
-			textPaneAutor.setText((String) null);
-			textPaneAutor.setForeground(Color.BLACK);
-			textPaneAutor.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneAutor.setEditable(false);
-			textPaneAutor.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneAutor.setBounds(21, 54, 363, 32);
-		}
-		return textPaneAutor;
-	}
-	private JLabel getLblAutor() {
-		if (lblAutor == null) {
-			lblAutor = new JLabel("Autor:");
-			lblAutor.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblAutor.setBounds(21, 11, 159, 32);
-		}
-		return lblAutor;
-	}
-	private JTextPane getTextPaneEditorial() {
-		if (textPaneEditorial == null) {
-			textPaneEditorial = new JTextPane();
-			textPaneEditorial.setText((String) null);
-			textPaneEditorial.setForeground(Color.BLACK);
-			textPaneEditorial.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneEditorial.setEditable(false);
-			textPaneEditorial.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneEditorial.setBounds(21, 154, 363, 32);
-		}
-		return textPaneEditorial;
-	}
-	private JLabel getLblEditorial() {
-		if (lblEditorial == null) {
-			lblEditorial = new JLabel("Editorial:");
-			lblEditorial.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblEditorial.setBounds(21, 111, 159, 32);
-		}
-		return lblEditorial;
-	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.setBackground(Color.WHITE);
-			panel_1.setBounds(36, 400, 405, 211);
-			panel_1.setLayout(new CardLayout(0, 0));
-			panel_1.add(getPanelLibro(), "name_3391828322917800");
-			panel_1.add(getPanelRevista(), "name_3391892751200100");
-			panel_1.add(getPanel(), "name_3391964751124700");
-		}
-		return panel_1;
-	}
-	private JPanel getPanelRevista() {
-		if (panelRevista == null) {
-			panelRevista = new JPanel();
-			panelRevista.setBackground(Color.WHITE);
-			panelRevista.setLayout(null);
-			panelRevista.add(getTextPane_2());
-			panelRevista.add(getTextPane_3());
-			panelRevista.add(getLblAutor_1());
-			panelRevista.add(getLblrbitro());
-			panelRevista.setVisible(false);
-		}
-		return panelRevista;
-	}
-	private JTextPane getTextPane_2() {
-		if (textPane_2 == null) {
-			textPane_2 = new JTextPane();
-			textPane_2.setText((String) null);
-			textPane_2.setForeground(Color.BLACK);
-			textPane_2.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPane_2.setEditable(false);
-			textPane_2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPane_2.setBounds(21, 54, 363, 32);
-		}
-		return textPane_2;
-	}
-	private JTextPane getTextPane_3() {
-		if (textPane_3 == null) {
-			textPane_3 = new JTextPane();
-			textPane_3.setText((String) null);
-			textPane_3.setForeground(Color.BLACK);
-			textPane_3.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPane_3.setEditable(false);
-			textPane_3.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPane_3.setBounds(21, 153, 363, 32);
-		}
-		return textPane_3;
-	}
-	private JLabel getLblAutor_1() {
-		if (lblAutor_1 == null) {
-			lblAutor_1 = new JLabel("Autor:");
-			lblAutor_1.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblAutor_1.setBounds(21, 11, 110, 32);
-		}
-		return lblAutor_1;
-	}
-	private JLabel getLblrbitro() {
-		if (lblrbitro == null) {
-			lblrbitro = new JLabel("\u00C1rbitro:");
-			lblrbitro.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblrbitro.setBounds(21, 110, 110, 32);
-		}
-		return lblrbitro;
-	}
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setBackground(Color.WHITE);
-			panel.setLayout(null);
-			panel.add(getLblAo());
-			panel.add(getTextPaneAnnio());
-			panel.add(getLblNmero());
-			panel.add(getTextPaneNum());
-			panel.setVisible(false);
-		}
-		return panel;
-	}
-	private JLabel getLblAo() {
-		if (lblAo == null) {
-			lblAo = new JLabel("A\u00F1o de publicaci\u00F3n:");
-			lblAo.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblAo.setBounds(21, 10, 238, 32);
-		}
-		return lblAo;
-	}
-	private JTextPane getTextPaneAnnio() {
-		if (textPaneAnnio == null) {
-			textPaneAnnio = new JTextPane();
-			textPaneAnnio.setText((String) null);
-			textPaneAnnio.setForeground(Color.BLACK);
-			textPaneAnnio.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneAnnio.setEditable(false);
-			textPaneAnnio.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneAnnio.setBounds(21, 53, 340, 32);
-		}
-		return textPaneAnnio;
-	}
-	private JLabel getLblNmero() {
-		if (lblNmero == null) {
-			lblNmero = new JLabel("N\u00FAmero de revista:");
-			lblNmero.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			lblNmero.setBounds(21, 109, 176, 32);
-		}
-		return lblNmero;
-	}
-	private JTextPane getTextPaneNum() {
-		if (textPaneNum == null) {
-			textPaneNum = new JTextPane();
-			textPaneNum.setText((String) null);
-			textPaneNum.setForeground(Color.BLACK);
-			textPaneNum.setFont(new Font("SansSerif", Font.PLAIN, 18));
-			textPaneNum.setEditable(false);
-			textPaneNum.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			textPaneNum.setBounds(21, 152, 340, 32);
-		}
-		return textPaneNum;
-	}
-	private JLabel getLabelTipo() {
-		if (labelTipo == null) {
-			labelTipo = new JLabel("");
-			labelTipo.setFont(new Font("SansSerif", Font.PLAIN, 19));
-			labelTipo.setBounds(51, 22, 159, 32);
-		}
-		return labelTipo;
 	}
 	private JLabel getLabelImagen() {
 		if (labelImagen == null) {
 			labelImagen = new JLabel("");
-			labelImagen.setBounds(533, 47, 363, 562);
+			labelImagen.setBorder(new LineBorder(Colores.getCruds()));
+			labelImagen.setBounds(445, 18, 312, 412);
 		}
 		return labelImagen;
+	}
+	private JTextPane getTxtpnTtulo() {
+		if (txtpnTtulo == null) {
+			txtpnTtulo = new JTextPane();
+			txtpnTtulo.setText("T\u00EDtulo:");
+			txtpnTtulo.setFocusable(false);
+			txtpnTtulo.setBackground(Colores.getFondo());
+			txtpnTtulo.setEditable(false);
+			txtpnTtulo.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			txtpnTtulo.setBounds(60, 59, 351, 37);
+		}
+		return txtpnTtulo;
+	}
+	private JTextPane getTextPaneId() {
+		if (textPaneId == null) {
+			textPaneId = new JTextPane();
+			textPaneId.setText("Identificador:");
+			textPaneId.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			textPaneId.setFocusable(false);
+			textPaneId.setEditable(false);
+			textPaneId.setBackground(Colores.getFondo());
+			textPaneId.setBounds(60, 107, 351, 37);
+		}
+		return textPaneId;
+	}
+	private JTextPane getTxtpnMateria() {
+		if (txtpnMateria == null) {
+			txtpnMateria = new JTextPane();
+			txtpnMateria.setText("Materia:");
+			txtpnMateria.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			txtpnMateria.setFocusable(false);
+			txtpnMateria.setEditable(false);
+			txtpnMateria.setBackground(Colores.getFondo());
+			txtpnMateria.setBounds(60, 155, 355, 37);
+		}
+		return txtpnMateria;
+	}
+	private JTextPane getTextPane_2_1() {
+		if (txtpnPginas == null) {
+			txtpnPginas = new JTextPane();
+			txtpnPginas.setText("P\u00E1ginas:");
+			txtpnPginas.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			txtpnPginas.setFocusable(false);
+			txtpnPginas.setEditable(false);
+			txtpnPginas.setBackground(Colores.getFondo());
+			txtpnPginas.setBounds(60, 203, 169, 37);
+		}
+		return txtpnPginas;
+	}
+	private JTextPane getTextPane_3_1() {
+		if (txtpnEjemplares == null) {
+			txtpnEjemplares = new JTextPane();
+			txtpnEjemplares.setText("Ejemplares:");
+			txtpnEjemplares.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			txtpnEjemplares.setFocusable(false);
+			txtpnEjemplares.setEditable(false);
+			txtpnEjemplares.setBackground(Colores.getFondo());
+			txtpnEjemplares.setBounds(246, 203, 169, 37);
+		}
+		return txtpnEjemplares;
+	}
+	private JTextPane getTextPaneOtroAtributo() {
+		if (textPaneOtroAtributo == null) {
+			textPaneOtroAtributo = new JTextPane();
+			textPaneOtroAtributo.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			textPaneOtroAtributo.setFocusable(false);
+			textPaneOtroAtributo.setEditable(false);
+			textPaneOtroAtributo.setBackground(Colores.getFondo());
+			textPaneOtroAtributo.setBounds(60, 251, 351, 37);
+		}
+		return textPaneOtroAtributo;
+	}
+	private JTextPane getTextPaneOotroAtributo() {
+		if (textPaneOotroAtributo == null) {
+			textPaneOotroAtributo = new JTextPane();
+			textPaneOotroAtributo.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			textPaneOotroAtributo.setFocusable(false);
+			textPaneOotroAtributo.setEditable(false);
+			textPaneOotroAtributo.setBackground(Colores.getFondo());
+			textPaneOotroAtributo.setBounds(60, 299, 351, 37);
+		}
+		return textPaneOotroAtributo;
+	}
+	private JTextPane getTextPaneTipo() {
+		if (textPaneTipo == null) {
+			textPaneTipo = new JTextPane();
+			textPaneTipo.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			textPaneTipo.setFocusable(false);
+			textPaneTipo.setEditable(false);
+			textPaneTipo.setBackground(Colores.getFondo());
+			textPaneTipo.setBounds(60, 11, 351, 37);
+		}
+		return textPaneTipo;
+	}
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("");
+			label.setBounds(20, 18, 30, 30);
+		}
+		return label;
+	}
+	private JLabel getLabel_1() {
+		if (label_1 == null) {
+			label_1 = new JLabel("");
+			label_1.setBounds(20, 66, 30, 30);
+		}
+		return label_1;
+	}
+	private JLabel getLabel_2() {
+		if (label_2 == null) {
+			label_2 = new JLabel("");
+			label_2.setBounds(20, 114, 30, 30);
+		}
+		return label_2;
+	}
+	private JLabel getLabel_3() {
+		if (label_3 == null) {
+			label_3 = new JLabel("");
+			label_3.setBounds(20, 162, 30, 30);
+		}
+		return label_3;
+	}
+	private JLabel getLabel_4() {
+		if (label_4 == null) {
+			label_4 = new JLabel("");
+			label_4.setBounds(20, 210, 30, 30);
+		}
+		return label_4;
+	}
+	private JLabel getLabel_5() {
+		if (label_5 == null) {
+			label_5 = new JLabel("");
+			label_5.setBounds(246, 210, 30, 30);
+		}
+		return label_5;
+	}
+	private JLabel getLabel_6() {
+		if (label_6 == null) {
+			label_6 = new JLabel("");
+			label_6.setBounds(20, 258, 30, 30);
+		}
+		return label_6;
+	}
+	private JLabel getLabel_7() {
+		if (label_7 == null) {
+			label_7 = new JLabel("");
+			label_7.setBounds(20, 306, 30, 30);
+		}
+		return label_7;
+	}
+	private JLabel getLabel_8() {
+		if (label_8 == null) {
+			label_8 = new JLabel("");
+			label_8.setIcon(new ImageIcon("src/images/iconos/Info.png"));
+			label_8.setBounds(20, 376, 38, 38);
+		}
+		return label_8;
+	}
+	private JTextPane getTxtpnLosDerechosDe() {
+		if (txtpnLosDerechosDe == null) {
+			txtpnLosDerechosDe = new JTextPane();
+			txtpnLosDerechosDe.setText("Los derechos de la portada pertenecen a sus respectivos due\u00F1os");
+			txtpnLosDerechosDe.setFont(new Font("Sylfaen", Font.PLAIN, 18));
+			txtpnLosDerechosDe.setFocusable(false);
+			txtpnLosDerechosDe.setEditable(false);
+			txtpnLosDerechosDe.setBackground(Colores.getFondo());
+			txtpnLosDerechosDe.setBounds(60, 373, 355, 54);
+		}
+		return txtpnLosDerechosDe;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+			separator.setBorder(new LineBorder(Colores.getCruds()));
+			separator.setBounds(116, 60, 295, 37);
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+			separator_1.setBorder(new LineBorder(Colores.getCruds()));
+			separator_1.setBounds(165, 108, 246, 37);
+		}
+		return separator_1;
+	}
+	private JSeparator getSeparator_2() {
+		if (separator_2 == null) {
+			separator_2 = new JSeparator();
+			separator_2.setBorder(new LineBorder(Colores.getCruds()));
+			separator_2.setBounds(128, 156, 283, 37);
+		}
+		return separator_2;
+	}
+	private JSeparator getSeparator_3() {
+		if (separator_3 == null) {
+			separator_3 = new JSeparator();
+			separator_3.setBorder(new LineBorder(Colores.getCruds()));
+			separator_3.setBounds(123, 252, 283, 37);
+		}
+		return separator_3;
+	}
+	private JSeparator getSeparator_4() {
+		if (separator_4 == null) {
+			separator_4 = new JSeparator();
+			separator_4.setBorder(new LineBorder(Colores.getCruds()));
+			separator_4.setBounds(138, 300, 273, 37);
+		}
+		return separator_4;
 	}
 }

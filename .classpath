@@ -6,5 +6,7 @@
 	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/flatlaf-theme-editor-3.6.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/xchart-3.8.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/jcommon-1.0.24.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jenny/Desktop/Eclipse/ProyectoFinal/lib/jfreechart-1.0.19 (1).jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

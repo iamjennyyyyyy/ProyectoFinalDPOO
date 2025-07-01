@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.border.LineBorder;
 
 public class Reporte1GraficoMaterias extends JDialog {
 
@@ -31,13 +32,13 @@ public class Reporte1GraficoMaterias extends JDialog {
     public Reporte1GraficoMaterias() {
     	getContentPane().setBackground(Color.WHITE);
         setTitle("Materias más solicitadas - Biblioteca");
-		setBounds(480, 100, 860, 583);
+        setBounds(338, 159, 1026, 562);
 		setModal(true);
 		setUndecorated(true);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBackground(Color.WHITE);
         contentPanel.setLayout(new BorderLayout());
-        contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        contentPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         inicializarGrafico();
@@ -65,14 +66,14 @@ public class Reporte1GraficoMaterias extends JDialog {
         chartPanel.setPreferredSize(new Dimension(750, 600));
         chartPanel.add(getBtnSalir());
         
-        contentPanel.add(chartPanel, BorderLayout.CENTER);
+        contentPanel.add(chartPanel, BorderLayout.NORTH);
         chartPanel.setLayout(null);        
     }
     
     private JButton getBtnSalir() {
 		if (btnSalir == null) {
 			btnSalir = new JButton("");
-			btnSalir.setBounds(740, 11, 50, 50);
+			btnSalir.setBounds(964, 11, 50, 50);
 			btnSalir.setBorder(null);
 			btnSalir.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);

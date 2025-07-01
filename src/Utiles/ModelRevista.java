@@ -20,6 +20,15 @@ public class ModelRevista extends AbstractListModel {
         return lstRevista.size();
     }
 
+    public void eliminarRevista(Revista p){
+    	int indice = -1;
+    	for(int i = 0; i < lstRevista.size() && indice == -1; i++){
+    		if(lstRevista.get(i).equals(p))
+    			indice = i;
+    	}
+    	lstRevista.remove(indice);
+    }
+    
     // devuelve el elemento de la posición index dentro del modelo
     public Object getElementAt(int indice) {
         Revista x = null;
