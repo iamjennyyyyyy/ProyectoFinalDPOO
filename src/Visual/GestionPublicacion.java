@@ -133,17 +133,6 @@ public class GestionPublicacion extends JDialog {
 	 * Launch the application.
 	 */
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				MiPersonalizacion.aplicarTema();
-				Inicializar.Inicio();
-				GestionPublicacion frame = new GestionPublicacion();
-				frame.setVisible(true);
-			}
-		});
-	}
-
 	/**
 	 * Create the dialog.
 	 */
@@ -611,7 +600,7 @@ public class GestionPublicacion extends JDialog {
 	private JButton getBtnConfirmar() {
 		if (btnConfirmar == null) {
 			btnConfirmar = new JButton("Confirmar");
-			btnConfirmar.setBounds(136, 383, 105, 35);
+			btnConfirmar.setBounds(136, 383, 132, 34);
 			btnConfirmar.setBackground(Colores.getBeigetabla());
 			btnConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -747,6 +736,7 @@ public class GestionPublicacion extends JDialog {
 					btnConfirmar.setVisible(false);
 
 					labelTitulo.setForeground(Color.BLACK);
+					lblIdentificador.setForeground(Color.BLACK);
 					lblEjemplares.setForeground(Color.BLACK);
 					labelMateria.setForeground(Color.BLACK);
 					lblNumPag.setForeground(Color.BLACK);
@@ -785,8 +775,9 @@ public class GestionPublicacion extends JDialog {
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar");
-			btnGuardar.setBounds(147, 383, 105, 35);
+			btnGuardar.setBounds(147, 383, 132, 34);
 			btnGuardar.setVisible(false);
+			btnGuardar.setBackground(Colores.getBeigetabla());
 			btnGuardar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -1429,58 +1420,71 @@ public class GestionPublicacion extends JDialog {
 			a.setTitulo(titulo);
 			labelTitulo.setForeground(Color.BLACK);
 			labelTitulo.repaint();
+			textPaneError.setVisible(false);
 		}catch(IllegalArgumentException e){
 			labelTitulo.setForeground(Color.RED);
 			editado = false;
 			textFieldTitulo.setText("");
+			textPaneError.setVisible(true);
 		}
 		try{
 			a.setId(id);
 			lblIdentificador.setForeground(Color.BLACK);
+			textPaneError.setVisible(false);
 		}catch(IllegalArgumentException e){
 			lblIdentificador.setForeground(Color.RED);
 			textFieldCarnet.setText("");
+			textPaneError.setVisible(true);
 			editado = false;
 		}
 		try{
 			a.setCantEjemplares(cantE);
+			textPaneError.setVisible(false);
 			lblEjemplares.setForeground(Color.BLACK);
 		}catch(IllegalArgumentException e){
 			lblEjemplares.setForeground(Color.RED);
+			textPaneError.setVisible(true);
 			spinnerEjemp.setValue(0);
 			editado = false;
 		}
 		try{
 			a.setMateria(materia);
 			labelMateria.setForeground(Color.BLACK);
+			textPaneError.setVisible(false);
 		}catch(IllegalArgumentException e){
 			labelMateria.setForeground(Color.RED);
 			comboBoxMateria.setSelectedIndex(0);
+			textPaneError.setVisible(true);
 			editado = false;
 		}
 		try{
 			a.setNumPaginas(numPag);
 			lblNumPag.setForeground(Color.BLACK);
+			textPaneError.setVisible(false);
 		}catch(IllegalArgumentException e){
 			lblNumPag.setForeground(Color.RED);
 			spinnerPag.setValue(0);
+			textPaneError.setVisible(true);
 			editado = false;
 		}
 		try{
 			a.agregarArbitro(arbitro);
+			textPaneError.setVisible(false);
 			labelArbitroArticulo.setForeground(Color.BLACK);
-
 		}catch(IllegalArgumentException e){
 			labelArbitroArticulo.setForeground(Color.RED);
 			editado = false;
+			textPaneError.setVisible(true);
 			textFieldArbitro.setText("");
 		}
 		try{
 			a.agregarAutor(autor);
+			textPaneError.setVisible(false);
 			labelAutorArticulo.setForeground(Color.BLACK);
 		}catch(IllegalArgumentException e){
 			labelAutorArticulo.setForeground(Color.RED);
 			textFieldAutorArt.setText("");
+			textPaneError.setVisible(true);
 			editado = false;
 		}
 		if(!editado){
@@ -1875,7 +1879,7 @@ public class GestionPublicacion extends JDialog {
 			textPaneTipo.setBackground(Color.WHITE);
 			textPaneTipo.setFocusable(false);
 			textPaneTipo.setEditable(false);
-			textPaneTipo.setBounds(554, 11, 85, 38);
+			textPaneTipo.setBounds(543, 11, 85, 38);
 			textPaneTipo.setVisible(false);
 			textPaneTipo.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 		}
@@ -1892,9 +1896,9 @@ public class GestionPublicacion extends JDialog {
 	private JTextPane getTextPaneError() {
 		if (textPaneError == null) {
 			textPaneError = new JTextPane();
+			textPaneError.setVisible(false);
 			textPaneError.setEditable(false);
 			textPaneError.setFocusable(false);
-			textPaneError.setVisible(false);
 			textPaneError.setForeground(Color.RED);
 			textPaneError.setFont(new Font("SansSerif", Font.PLAIN, 18));
 			textPaneError.setText("Datos inv\u00E1lidos");

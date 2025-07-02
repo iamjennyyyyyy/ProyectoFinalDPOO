@@ -302,7 +302,7 @@ public class GestionUsuario extends JDialog {
 			});
 			btnAgregar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 			btnAgregar.setBackground(Colores.getBeigetabla());
-			btnAgregar.setBounds(633, 420, 92, 32);
+			btnAgregar.setBounds(612, 420, 106, 34);
 		}
 		return btnAgregar;
 	}
@@ -334,7 +334,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			btnEditar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnEditar.setBounds(748, 420, 92, 32);
+			btnEditar.setBounds(738, 420, 106, 34);
 		}
 		return btnEditar;
 	}
@@ -350,7 +350,7 @@ public class GestionUsuario extends JDialog {
 				}
 			});
 			btnEliminar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnEliminar.setBounds(864, 420, 100, 32);
+			btnEliminar.setBounds(864, 420, 106, 34);
 		}
 		return btnEliminar;
 	}
@@ -443,7 +443,7 @@ public class GestionUsuario extends JDialog {
 		if (lblEdad == null) {
 			lblEdad = new JLabel("Edad:");
 			lblEdad.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblEdad.setBounds(633, 231, 114, 27);
+			lblEdad.setBounds(643, 229, 114, 27);
 		}
 		return lblEdad;
 	}
@@ -461,7 +461,7 @@ public class GestionUsuario extends JDialog {
 		if (lblSexo == null) {
 			lblSexo = new JLabel("Sexo:");
 			lblSexo.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			lblSexo.setBounds(633, 287, 114, 27);
+			lblSexo.setBounds(643, 285, 114, 27);
 		}
 		return lblSexo;
 	}
@@ -478,7 +478,7 @@ public class GestionUsuario extends JDialog {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(56, 71, 486, 442);
+			scrollPane.setBounds(56, 71, 466, 442);
 			list.setSelectedIndices(new int[] {1});
 			list.setToolTipText("Lista de usuarios actualmente registrados");
 			list.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -574,7 +574,7 @@ public class GestionUsuario extends JDialog {
 		if (label == null) {
 			label = new JLabel("");
 			label.setFont(new Font("Sylfaen", Font.PLAIN, 19));
-			label.setBounds(597, 71, 394, 442);
+			label.setBounds(584, 71, 407, 442);
 			label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		}
 		return label;
