@@ -118,7 +118,6 @@ public class Principal extends JFrame {
 	private JMenuItem mntmUsuariosMsConcurrentes;
 	private JButton btnGaleria;
 	private JLabel lblGalera;
-	private JPanel panelCont;
 	private JLabel labelRuta;
 	private JLabel label_3;
 	private JLabel label_4;
@@ -129,34 +128,18 @@ public class Principal extends JFrame {
 	private JPopupMenu popupMenuSesion;
 	private JMenuItem mntmCerrarSesin;
 	private JMenuItem mntmSalir;
-	private JLabel label_9;
 
 	/**
 	 * Launch the application.
 	 */
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MiPersonalizacion.aplicarTema();
-					Inicializar.Inicio();
-					//					Login frame = new Login();
-					Principal frame = new Principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 
 	public Principal() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("src/images/iconos/libroa.png"));
+		setBackground(new Color(245, 245, 220));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src/images/icons8-literature-50.png"));
 		setTitle("BiblioTech Corp.");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -909,6 +892,13 @@ public class Principal extends JFrame {
 	private JMenuItem getMntmCerrarSesin() {
 		if (mntmCerrarSesin == null) {
 			mntmCerrarSesin = new JMenuItem("Cerrar sesi\u00F3n");
+			mntmCerrarSesin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					Login g = new Login();
+					g.setVisible(true);
+				}
+			});
 			mntmCerrarSesin.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		}
 		return mntmCerrarSesin;
@@ -917,6 +907,11 @@ public class Principal extends JFrame {
 		if (mntmSalir == null) {
 			mntmSalir = new JMenuItem("Salir");
 			mntmSalir.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+			mntmSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
 		}
 		return mntmSalir;
 	}

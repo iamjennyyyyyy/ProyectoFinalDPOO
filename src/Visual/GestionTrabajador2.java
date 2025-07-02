@@ -123,22 +123,6 @@ public class GestionTrabajador2 extends JDialog {
 	 * Launch the application.
 	 */
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MiPersonalizacion.aplicarTema();
-					Inicializar.Inicio();
-					//					Login frame = new Login();
-					GestionUsuario frame = new GestionUsuario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the dialog.
 	 */
@@ -256,7 +240,7 @@ public class GestionTrabajador2 extends JDialog {
 				}
 			});
 			btnConfirmar.setBackground(Colores.getBeigetabla());
-			btnConfirmar.setBounds(686, 445, 151, 32);
+			btnConfirmar.setBounds(710, 443, 132, 34);
 		}
 		return btnConfirmar;
 	}
@@ -350,7 +334,7 @@ public class GestionTrabajador2 extends JDialog {
 				}
 			});
 			btnAgregar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnAgregar.setBounds(640, 426, 92, 32);
+			btnAgregar.setBounds(614, 425, 106, 34);
 		}
 		return btnAgregar;
 	}
@@ -384,7 +368,7 @@ public class GestionTrabajador2 extends JDialog {
 			});
 			btnEditar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 			btnEditar.setBackground(Colores.getBeigetabla());
-			btnEditar.setBounds(745, 426, 92, 32);
+			btnEditar.setBounds(736, 425, 106, 34);
 		}
 		return btnEditar;
 	}
@@ -400,7 +384,7 @@ public class GestionTrabajador2 extends JDialog {
 				}
 			});
 			btnEliminar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnEliminar.setBounds(850, 426, 92, 32);
+			btnEliminar.setBounds(860, 426, 106, 34);
 		}
 		return btnEliminar;
 	}
@@ -446,7 +430,7 @@ public class GestionTrabajador2 extends JDialog {
 				}
 			});
 			btnGuardar.setFont(new Font("Sylfaen", Font.PLAIN, 18));
-			btnGuardar.setBounds(686, 445, 151, 32);
+			btnGuardar.setBounds(710, 444, 132, 32);
 			btnGuardar.setVisible(false);
 		}
 		return btnGuardar;
@@ -630,7 +614,7 @@ public class GestionTrabajador2 extends JDialog {
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("");
-			label.setBounds(584, 71, 407, 442);
+			label.setBounds(584, 71, 407, 431);
 			label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		}
 		return label;
@@ -720,7 +704,7 @@ public class GestionTrabajador2 extends JDialog {
 			textPaneError.setForeground(Color.RED);
 			textPaneError.setFont(new Font("Sylfaen", Font.PLAIN, 18));
 			textPaneError.setText("Datos inv\u00E1lidos");
-			textPaneError.setBounds(833, 496, 135, 34);
+			textPaneError.setBounds(832, 479, 135, 34);
 		}
 		return textPaneError;
 	}
